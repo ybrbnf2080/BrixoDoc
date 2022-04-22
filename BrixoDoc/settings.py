@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'SiteBrixo',
     'import_export',
     'pandas',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

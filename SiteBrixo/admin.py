@@ -78,6 +78,16 @@ class VehicleToArticleAdmin(ModelAdmin):
     search_fields = ['ExternalId']
 
 
+class DisplayBraAdmin(ModelAdmin):
+    list_display = ['id',
+                    'bra_brand_no',
+                    'bra_short_name',
+                    'view_term_plain',
+                    ]
+    search_fields = ['bra_brand_no', 'bra_short_name', 'view_term_plain',]
+
+
+
 admin.site.register(VehicleBrands, VehicleBrandAdmin)
 admin.site.register(VehicleModels, VehicleModelAdmin)
 admin.site.register(Vehicles, VehiclesAdmin)
@@ -87,3 +97,4 @@ admin.site.register(File)
 admin.site.register(ArticlesToVehicle, VehicleToArticleAdmin)
 admin.site.register(ArticleOem, OemAdmin)
 admin.site.register(Marketplaces)
+admin.site.register(DisplayBra, DisplayBraAdmin)

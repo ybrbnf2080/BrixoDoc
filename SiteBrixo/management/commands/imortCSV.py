@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 import pandas as pd
-from ...models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleModels, Vehicles, ArticlesToVehicle, File
+from ...models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleModels, Vehicles, ArticlesToVehicle, File, \
+    DisplayBra
 
 
 def get_articles():
@@ -127,6 +128,23 @@ def get_file():
     print('------add FILE PATH--------')
 
 
+def get_display_bra():
+    DisplayBra.objects.all().delete()
+    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/display_bra.csv',
+                           sep=';')
+    display_bra = [
+        DisplayBra(
+            #VehicleId=Vehicles.objects.filter(TypeNumber=tmp_data.loc[row]['ART_ID']).first(),
+            bra_brand_no=tmp_data.loc[row]['BRA_BRAND_NO'],
+            bra_short_name=tmp_data.loc[row]['BRA_SHORT_NAME'],
+            view_term_plain=tmp_data.loc[row]['VIEW_TERM_PLAIN'],
+        )
+        for row in tmp_data.index
+    ]
+    DisplayBra.objects.bulk_create(display_bra)
+    print('------add DisplayBra--------')
+
+
 def clear_data():
     Articles.objects.all().delete()
     ArticleOem.objects.all().delete()
@@ -155,7 +173,8 @@ class Command(BaseCommand):
         # get_vehicle_model()
         # get_vehicle()
         # get_articles_to_vehicle()
-        get_file()
+        # get_file()
+        # get_display_bra()
 
 
         print("-------------CSV IN DB WAS ADDED-------------")

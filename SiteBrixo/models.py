@@ -104,3 +104,12 @@ class Marketplaces(models.Model):
 
     def __str__(self):
         return self.ArticleId
+
+
+class DisplayBra(models.Model):
+    bra_brand_no = models.CharField(max_length=255, verbose_name="bra_brand_no", blank=True, null=True)
+    bra_short_name = models.CharField(max_length=255, verbose_name="bra_short_name", blank=True, null=True)
+    view_term_plain = models.CharField(max_length=255, verbose_name="view_term_plain", blank=True, null=True)
+
+    def __str__(self):
+        return self.bra_short_name

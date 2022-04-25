@@ -2,10 +2,13 @@ from django.core.management.base import BaseCommand
 import pandas as pd
 from ...models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleModels, Vehicles, ArticlesToVehicle, File, \
     DisplayBra
+from pathlib import Path
+import os
+BASE_DIR = '/usr/src/app/'
 
 
 def get_articles():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/articles.csv', sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/articles.csv'), sep=';')
     articles = [
         Articles(
             ExternalId=tmp_data.loc[row]['ART_ID'],
@@ -24,7 +27,7 @@ def get_articles():
 
 
 def get_oem():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/articles_oem.csv', sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR, 'ImportCSV/articles_oem.csv'), sep=';')
     oem = [
         ArticleOem(
             Brand=tmp_data.loc[row]['OEM_BRAND'],
@@ -41,8 +44,7 @@ def get_oem():
 
 
 def get_vehicle_brand():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/vehicles.csv',
-                           sep=';').drop_duplicates(["VEH_BRAND"])
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR, 'ImportCSV/vehicles.csv'), sep=';').drop_duplicates(["VEH_BRAND"])
     vehicle_brand = [
         VehicleBrands(
             Name=tmp_data.loc[row]['VEH_BRAND']
@@ -55,8 +57,7 @@ def get_vehicle_brand():
 
 
 def get_vehicle_model():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/vehicles.csv',
-                           sep=';').drop_duplicates(["VEH_MODEL_INTL"])
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/vehicles.csv'), sep=';').drop_duplicates(["VEH_MODEL_INTL"])
     vehicle_model = [
         VehicleModels(
             VehicleBrandId=VehicleBrands.objects.filter(Name=tmp_data.loc[row]['VEH_BRAND']).first(),
@@ -70,7 +71,7 @@ def get_vehicle_model():
 
 
 def get_vehicle():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/vehicles.csv', sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/vehicles.csv'), sep=';')
     vehicle = [
         Vehicles(
             VehicleModelId=VehicleModels.objects.filter(Name=tmp_data.loc[row]['VEH_MODEL_INTL']).first(),
@@ -97,8 +98,7 @@ def get_vehicle():
 
 
 def get_articles_to_vehicle():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/article_vehicle_links.csv',
-                           sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/article_vehicle_links.csv'), sep=';')
     articles_to_vehicle = [
         ArticlesToVehicle(
             ArticleId=Articles.objects.filter(ExternalId=tmp_data.loc[row]['ART_ID']).first(),
@@ -113,8 +113,7 @@ def get_articles_to_vehicle():
 
 
 def get_file():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/article_files.csv',
-                           sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/article_files.csv'), sep=';')
     files = [
         File(
             #VehicleId=Vehicles.objects.filter(TypeNumber=tmp_data.loc[row]['ART_ID']).first(),
@@ -130,8 +129,7 @@ def get_file():
 
 def get_display_bra():
     DisplayBra.objects.all().delete()
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/display_bra.csv',
-                           sep=';')
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR,'ImportCSV/display_bra.csv'), sep=';')
     display_bra = [
         DisplayBra(
             #VehicleId=Vehicles.objects.filter(TypeNumber=tmp_data.loc[row]['ART_ID']).first(),
@@ -166,15 +164,15 @@ def start():
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        # clear_data()
-        # get_articles()
-        # get_oem()
-        # get_vehicle_brand()
-        # get_vehicle_model()
-        # get_vehicle()
-        # get_articles_to_vehicle()
-        # get_file()
-        # get_display_bra()
+        clear_data()
+        get_articles()
+        get_oem()
+        get_vehicle_brand()
+        get_vehicle_model()
+        get_vehicle()
+        get_articles_to_vehicle()
+        get_file()
+        get_display_bra()
 
 
         print("-------------CSV IN DB WAS ADDED-------------")

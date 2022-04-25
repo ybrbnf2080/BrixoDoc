@@ -1,7 +1,5 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-from import_export import resources
-from import_export.fields import Field
 
 from .models import *
 

@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dfhzdfgzdfgnmxc%&*%&^*&#$@@^*dkjfg'lg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
+#ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.5.35', '93.174.133.155']
 
 
 
@@ -80,14 +81,21 @@ WSGI_APPLICATION = 'BrixoDoc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+#         'NAME': os.environ.get("SQL_DATABASE", "sqlite3"),
+#         'USER': os.environ.get("SQL_USER", "debt_user"),
+#         'PASSWORD': os.environ.get("SQL_PASSWORD", "123456"),
+#         'HOST': os.environ.get("SQL_HOST", "localhost"),
+#         'PORT': os.environ.get("SQL_PORT", "5432"),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        'NAME': os.environ.get("SQL_DATABASE", "sqlite3"),
-        'USER': os.environ.get("SQL_USER", "debt_user"),
-        'PASSWORD': os.environ.get("SQL_PASSWORD", "123456"),
-        'HOST': os.environ.get("SQL_HOST", "localhost"),
-        'PORT': os.environ.get("SQL_PORT", "5432"),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -127,19 +135,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-#STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-
-if DEBUG == True:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static')
-    ]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "/static/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+#
+#
+# if DEBUG == True:
+#     STATICFILES_DIRS = [
+#         os.path.join(BASE_DIR, 'static')
+#     ]
+# else:
+#     STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_URL = "/static/"
 
 
 # Default primary key field type

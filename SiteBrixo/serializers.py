@@ -56,13 +56,16 @@ class ArticleOemSerializer(serializers.ModelSerializer):
         ]
 
 
-class VehicleBrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VehicleBrands
-        fields = [
-            'id',
-            'Name',
-        ]
+# class VehicleBrandSerializer(serializers.ModelSerializer):
+#     Name = VehicleModelSerializer(many=True)
+#
+#
+#     class Meta:
+#         model = VehicleBrands
+#         fields = [
+#             'id',
+#             'Name',
+#         ]
 
 
 class VehicleModelSerializer(serializers.ModelSerializer):
@@ -72,9 +75,19 @@ class VehicleModelSerializer(serializers.ModelSerializer):
         model = VehicleModels
         fields = [
             'id',
-            'VehicleBrandId',
             'Name',
+            'VehicleBrandId',
             'ModelNumber',
+        ]
+
+
+class VehicleBrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleBrands
+        fields = [
+            'id',
+            'Name',
+            'VehicleModels',
         ]
 
 

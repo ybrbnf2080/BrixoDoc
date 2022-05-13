@@ -4,6 +4,9 @@ from django.db import models
 class VehicleBrands(models.Model):
     Name = models.TextField(verbose_name="Name", blank=True, null=True)
 
+    class Meta:
+        default_related_name = 'VehicleBrands'
+
     def __str__(self):
         return self.Name
 
@@ -13,6 +16,9 @@ class VehicleModels(models.Model):
                                        blank=True, null=True)
     Name = models.TextField(verbose_name="Name", blank=True, null=True)
     ModelNumber = models.IntegerField(verbose_name="ModelNumber", blank=True, null=True)
+
+    class Meta:
+        default_related_name = 'VehicleModels'
 
     def __str__(self):
         return self.Name

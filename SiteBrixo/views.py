@@ -59,7 +59,7 @@ class VehicleModelList(generics.ListAPIView):
 
 
 class BrandModelList(viewsets.ModelViewSet):
-    queryset = VehicleBrands.objects.prefetch_related('VehicleModels')
+    queryset = VehicleBrands.objects.all()
     serializer_class = serializers.VehicleBrandSerializer
 
 class VehicleModelDetail(generics.RetrieveAPIView):

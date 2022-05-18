@@ -66,16 +66,29 @@ class ArticleOemSerializer(serializers.ModelSerializer):
 #             'id',
 #             'Name',
 #         ]
+class VehicleSerializer(serializers.ModelSerializer):
+    VehicleModelId = serializers.ReadOnlyField(source='VehicleModelId.Name')
 
-
-class VehicleModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = VehicleModels
+        model = Vehicles
         fields = "__all__"
 
 
+class VehicleModelSerializer(serializers.ModelSerializer):
+    Vehicles = serializers.StringRelatedField(many=True)
+
+    class Meta:
+        model = VehicleModels
+        fields = [
+            'VehicleBrandId',
+            'Name',
+            'ModelNumber',
+            'Vehicles',
+        ]
+
+
 class VehicleBrandSerializer(serializers.ModelSerializer):
-    VehicleModels = serializers.StringRelatedField(many=True)
+    VehicleModels = VehicleModelSerializer(many=True)
 
     class Meta:
         model = VehicleBrands
@@ -83,30 +96,4 @@ class VehicleBrandSerializer(serializers.ModelSerializer):
             'id',
             'Name',
             'VehicleModels',
-        ]
-
-
-class VehicleSerializer(serializers.ModelSerializer):
-    VehicleModelId = serializers.ReadOnlyField(source='VehicleModelId.Name')
-
-    class Meta:
-        model = Vehicles
-        fields = [
-            'id',
-            'VehicleModelId',
-            'TypeNumber',
-            'Year',
-            'BodyType',
-            'DriveType',
-            'EngineType',
-            'ValvesPerChamber',
-            'Cylinders',
-            'Volume',
-            'CcmTech',
-            'FuelType',
-            'FuelMixtureFormation',
-            'HorsePowers',
-            'KiloWatts',
-            'Engines',
-            'TypeName',
         ]

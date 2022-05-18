@@ -1,6 +1,4 @@
 from rest_framework import generics, viewsets
-from rest_framework.response import Response
-
 from . import serializers
 from .models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleModels, Vehicles, DisplayBra
 
@@ -63,7 +61,6 @@ class VehicleModelList(generics.ListAPIView):
 class BrandModelList(viewsets.ModelViewSet):
     queryset = VehicleBrands.objects.prefetch_related('VehicleModels')
     serializer_class = serializers.VehicleBrandSerializer
-
 
 class VehicleModelDetail(generics.RetrieveAPIView):
     queryset = VehicleModels.objects.all()

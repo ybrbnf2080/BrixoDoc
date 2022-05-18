@@ -7,7 +7,7 @@ from .views import BrandModelList
 router = SimpleRouter(trailing_slash=False)
 
 
-router.register('model', BrandModelList)
+router.register('model', BrandModelList, basename='name')
 
 urlpatterns = [
     path('suppliers/', views.SuppliersList.as_view()),   #производитель

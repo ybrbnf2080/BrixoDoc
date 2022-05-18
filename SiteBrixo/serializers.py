@@ -69,19 +69,14 @@ class ArticleOemSerializer(serializers.ModelSerializer):
 
 
 class VehicleModelSerializer(serializers.ModelSerializer):
-    VehicleBrandId = serializers.ReadOnlyField(source='VehicleBrandId.Name')
-
     class Meta:
         model = VehicleModels
-        fields = [
-            'id',
-            'Name',
-            'VehicleBrandId',
-            'ModelNumber',
-        ]
+        fields = "__all__"
 
 
 class VehicleBrandSerializer(serializers.ModelSerializer):
+    VehicleModels = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = VehicleBrands
         fields = [

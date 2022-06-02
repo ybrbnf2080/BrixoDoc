@@ -4,7 +4,7 @@ from ...models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleMod
     DisplayBra
 from pathlib import Path
 import os
-BASE_DIR = '/usr/src/app/'
+BASE_DIR = 'C:/Users/s.m/PycharmProjects/BrixoDoc/'
 
 
 def get_articles():

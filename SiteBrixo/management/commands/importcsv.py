@@ -1,32 +1,66 @@
 from django.core.management.base import BaseCommand
-from django.conf import settings
-from ...models import Suppliers, Articles
+from ...models import Suppliers, Articles, ArticleOem, VehicleBrands
 import os.path
 import csv
-import pandas as pd
+
+BASE_DIR = 'C:/Users/Sirius_McLine/Desktop/Brixo Doc/BrixoDoc/'
 
 
-def create_product():
-    tmp_data = pd.read_csv('C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/ImportCSV/articles.csv', sep=';')
-    product_db = Articles(
-        ExternalId=tmp_data[0],
-        SupplierId=Suppliers.objects.get(id=tmp_data[3]),
-        AssemblyGroup=tmp_data[4],
-        GenericArticle=tmp_data[5],
-        ArticleNumber=tmp_data[1],
-        Type=1,
-        GenericArticleNumber=8,
-    )
-    product_db.save()
+def get_article():
+    path = os.path.join(BASE_DIR, 'ImportCSV/articles.csv')
+    with open(path, "r", encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=';')
+        next(reader, None)
+        for row in reader:
+            _, created = Articles.objects.get_or_create(
+                ExternalId=row[0],
+                SupplierId=Suppliers.objects.get(Name=row[3]),
+                AssemblyGroup=row[4],
+                GenericArticle=row[5],
+                ArticleNumber=row[1],
+                Type=1,
+                GenericArticleNumber=row[2],
+                Attributes=row[6],
+            )
+
+
+def get_oem():
+    path = os.path.join(BASE_DIR, 'ImportCSV/articles_oem.csv')
+    with open(path, "r", encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=';')
+        next(reader, None)
+        for row in reader:
+            _, created = ArticleOem.objects.get_or_create(
+                Brand=row[1],
+                OemNumber=row[3].upper(),
+                ArticleId=Articles.objects.get(ExternalId=row[0]),
+                IsOriginal=row[2],
+                NormalizerOemNumber=row[3].lower(),
+                IsReplacer=row[4],
+            )
+
+
+def get_vehicle_brand():
+    path = os.path.join(BASE_DIR, 'ImportCSV/vehicles.csv')
+    with open(path, "r", encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=';')
+        next(reader, None)
+        for row in reader:
+            _, created = VehicleBrands.objects.get_or_create(
+                Name=row[2]
+            )
 
 
 def clear_data():
     """
-    Очистить все записи в таблице Product
+    Очистить все записи в таблице
     """
-    Articles.objects.all().delete()
+    # Articles.objects.all().delete()
+    ArticleOem.objects.all().delete()
+
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         clear_data()
-        create_product()
+        # get_article()
+        get_oem()

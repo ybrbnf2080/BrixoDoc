@@ -14,7 +14,7 @@ class ArticleAdmin(ModelAdmin):
                     'Type',
                     'GenericArticleNumber',
                     ]
-    search_fields = ['ArticleNumber']
+    search_fields = ['ArticleNumber', 'ExternalId']
 
 
 class OemAdmin(ModelAdmin):
@@ -26,7 +26,7 @@ class OemAdmin(ModelAdmin):
                     'NormalizerOemNumber',
                     'IsReplacer'
                     ]
-    search_fields = ['OemNumber']
+    search_fields = ['OemNumber', 'Brand']
 
 
 class VehicleModelAdmin(ModelAdmin):

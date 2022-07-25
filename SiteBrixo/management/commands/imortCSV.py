@@ -4,7 +4,7 @@ from ...models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleMod
     DisplayBra
 from pathlib import Path
 import os
-BASE_DIR = 'C:/Users/s.m/PycharmProjects/BrixoDoc/'
+BASE_DIR = 'C:/Users/Sirius_McLine/Desktop/Brixo Doc/BrixoDoc/'
 
 
 def get_articles():
@@ -27,21 +27,30 @@ def get_articles():
 
 
 def get_oem():
-    tmp_data = pd.read_csv(os.path.join(BASE_DIR, 'ImportCSV/articles_oem.csv'), sep=';')
-    oem = [
-        ArticleOem(
-            Brand=tmp_data.loc[row]['OEM_BRAND'],
-            OemNumber=tmp_data.loc[row]['OEM_NUM'],
-            ArticleId=Articles.objects.get(ExternalId=tmp_data.loc[row]['ART_ID']),
-            IsOriginal=tmp_data.loc[row]['OEM_COMPETITOR'],
-            NormalizerOemNumber=tmp_data.loc[row]['OEM_NUM'],
-            IsReplacer=tmp_data.loc[row]['REPLACE'],
-        )
-        for row in tmp_data.index
-    ]
-    ArticleOem.objects.bulk_create(oem)
-    print('------add OEM--------')
-
+    tmp_data = pd.read_csv(os.path.join(BASE_DIR, 'ImportCSV/articles_oem.csv'), sep=';').drop_duplicates(["ART_ID"])
+    # oem = [
+    #     ArticleOem(
+    #         Brand=tmp_data.loc[row]['OEM_BRAND'],
+    #         OemNumber=tmp_data.loc[row]['OEM_NUM'],
+    #         ArticleId=Articles.objects.filter(ExternalId=tmp_data.loc[row]['ART_ID']).first(),
+    #         IsOriginal=tmp_data.loc[row]['OEM_COMPETITOR'],
+    #         NormalizerOemNumber=tmp_data.loc[row]['OEM_NUM'],
+    #         IsReplacer=tmp_data.loc[row]['REPLACE'],
+    #     )
+    #     for row in tmp_data.index
+    # ]
+    # ArticleOem.objects.bulk_create(oem)
+    # print('------add OEM--------')
+    for row in tmp_data:
+        Brand = tmp_data.loc[row]['OEM_BRAND']
+        OemNumber=tmp_data.loc[row]['OEM_NUM']
+        ArticleId=Articles.objects.filter(ExternalId=tmp_data.loc[row]['ART_ID']).first()
+        IsOriginal=tmp_data.loc[row]['OEM_COMPETITOR']
+        NormalizerOemNumber=tmp_data.loc[row]['OEM_NUM']
+        IsReplacer=tmp_data.loc[row]['REPLACE']
+        art = ArticleOem.objects.create(Brand=Brand, OemNumber=OemNumber, ArticleId=ArticleId, IsOriginal=IsOriginal,
+                                  NormalizerOemNumber=NormalizerOemNumber, IsReplacer=IsReplacer)
+        print('ArticleId', ArticleId)
 
 def get_vehicle_brand():
     tmp_data = pd.read_csv(os.path.join(BASE_DIR, 'ImportCSV/vehicles.csv'), sep=';').drop_duplicates(["VEH_BRAND"])

@@ -24,7 +24,7 @@ class SuppliersDetail(generics.RetrieveAPIView):
 
 
 class ArticlesList(generics.ListAPIView):
-    queryset = Articles.objects.all()
+    queryset = Articles.objects.filter(SupplierId__Name="FIT").values('ArticleNumber', 'ArticleOem__NormalizerOemNumber')[:3] #ArticleOem__NormalizerOemNumber=
     serializer_class = serializers.ArticlesSerializer
 
 

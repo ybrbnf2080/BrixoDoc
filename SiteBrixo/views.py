@@ -1,4 +1,5 @@
 from rest_framework import generics, viewsets
+from rest_framework.views import APIView
 from . import serializers
 from .models import Suppliers, Articles, ArticleOem, VehicleBrands, VehicleModels, Vehicles, DisplayBra
 
@@ -76,3 +77,41 @@ class VehicleList(generics.ListAPIView):
 class VehicleDetail(generics.RetrieveAPIView):
     queryset = Vehicles.objects.all()
     serializer_class = serializers.VehicleSerializer
+
+
+#Сортировка по производителям запчастей
+class FitList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="FIT")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+class BrixoList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="BRIXO")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+class SureList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="SURE FILTER")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+class NiBKList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="NiBK")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+class JSList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="JS ASAKASHI")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+class SacuraList(generics.ListAPIView):
+    queryset = Articles.objects.filter(SupplierId__Name="SAKURA Automotive")[:3]
+    serializer_class = serializers.ArticlesSerializer
+
+
+#Связанные артикулы с авто
+
+
+class ArtInCar(generics.ListAPIView):
+    pass

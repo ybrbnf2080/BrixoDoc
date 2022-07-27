@@ -24,6 +24,12 @@ urlpatterns = [
     path('vehicles/<int:pk>/', views.VehicleDetail.as_view()),
     path('displaybra/', views.DisplayBraList.as_view()),
     path('displaybra/<int:pk>/', views.DisplayBraDetail.as_view()),
+    path('fit/', views.FitList.as_view()),
+    path('brixo/', views.BrixoList.as_view()),
+    path('sure/', views.SureList.as_view()),
+    path('nibk/', views.NiBKList.as_view()),
+    path('js/', views.JSList.as_view()),
+    path('sacura/', views.SacuraList.as_view()),
 ]
 
 urlpatterns += router.urls

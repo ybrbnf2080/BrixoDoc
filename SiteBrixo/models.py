@@ -49,6 +49,7 @@ class Vehicles(models.Model):
 
 class Suppliers(models.Model):
     Name = models.CharField(max_length=255, verbose_name="Name", blank=True, null=True)
+    BrandNo = models.IntegerField(verbose_name="BrandNo", blank=True, null=True)
 
     def __str__(self):
         return self.Name
@@ -63,7 +64,6 @@ class Articles(models.Model):
     Type = models.IntegerField(verbose_name="Type", blank=True, null=True)
     GenericArticleNumber = models.CharField(max_length=255, verbose_name="GenericArticleNumber", blank=True, null=True)
     Attributes = models.JSONField(verbose_name='Attributes', blank=True, null=True)
-    BrandNo = models.IntegerField(verbose_name="BrandNo", blank=True, null=True)
     Gtin = models.CharField(max_length=255, verbose_name="Gtin", blank=True, null=True)
     GenArtNo = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True)
     StatusDat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True)

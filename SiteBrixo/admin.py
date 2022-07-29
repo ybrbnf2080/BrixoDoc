@@ -93,11 +93,18 @@ class DisplayBraAdmin(ModelAdmin):
     search_fields = ['bra_brand_no', 'bra_short_name', 'view_term_plain',]
 
 
+class SuppliersAdmin(ModelAdmin):
+    list_display = ['id',
+                    'Name',
+                    'BrandNo',
+                    ]
+    search_fields = ['Name', 'BrandNo']
+
 
 admin.site.register(VehicleBrands, VehicleBrandAdmin)
 admin.site.register(VehicleModels, VehicleModelAdmin)
 admin.site.register(Vehicles, VehiclesAdmin)
-admin.site.register(Suppliers)
+admin.site.register(Suppliers, SuppliersAdmin)
 admin.site.register(Articles, ArticleAdmin)
 admin.site.register(File)
 admin.site.register(ArticlesToVehicle, VehicleToArticleAdmin)

@@ -63,9 +63,73 @@ class Articles(models.Model):
     Type = models.IntegerField(verbose_name="Type", blank=True, null=True)
     GenericArticleNumber = models.CharField(max_length=255, verbose_name="GenericArticleNumber", blank=True, null=True)
     Attributes = models.JSONField(verbose_name='Attributes', blank=True, null=True)
+    BrandNo = models.IntegerField(verbose_name="BrandNo", blank=True, null=True)
+    Gtin = models.CharField(max_length=255, verbose_name="Gtin", blank=True, null=True)
+    GenArtNo = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True)
+    StatusDat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True)
 
     def __str__(self):
         return self.ArticleNumber
+
+
+class Country(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Articles', blank=True, null=True)
+    CountryCode = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True)
+
+    def __str__(self):
+        return self.CountryCode
+
+
+class Supers(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Article', blank=True, null=True)
+    SupersNo = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.SupersNo
+
+
+class Trade(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Articl', blank=True, null=True)
+    TradeNo = models.CharField(max_length=255, verbose_name="TradeNo", blank=True, null=True)
+    FirstPage = models.IntegerField(verbose_name="FirstPage", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.TradeNo
+
+
+class Crit(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Artic', blank=True, null=True)
+    CritNo = models.IntegerField(verbose_name="CritNo", blank=True, null=True)
+    CritVal = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True)
+    FirstPage = models.IntegerField(verbose_name="FirstPage", blank=True, null=True)
+
+    def __str__(self):
+        return self.CritNo
+
+
+class Doc(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Arti', blank=True, null=True)
+    DocNo = models.IntegerField(verbose_name="DocNo", blank=True, null=True)
+    LangNo = models.IntegerField( verbose_name="LangNo", blank=True, null=True)
+    DocName = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True)
+    DocContentType = models.IntegerField(verbose_name="DocContentType", blank=True, null=True)
+    DocTermNorm = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True)
+    DocType = models.IntegerField(verbose_name="DocType", blank=True, null=True)
+
+    def __str__(self):
+        return self.DocName
+
+
+class LnkTarget(models.Model):
+    Article = models.ForeignKey(Articles, on_delete=models.CASCADE, related_name='Art', blank=True, null=True)
+    LnkTargetType = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True)
+    LnkTargetNo = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True)
+    SeqNo = models.IntegerField(verbose_name="SeqNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.LnkTargetNo
 
 
 class File(models.Model):
@@ -97,6 +161,8 @@ class ArticleOem(models.Model):
     IsOriginal = models.IntegerField(verbose_name="IsOriginal", blank=True, null=True)
     NormalizerOemNumber = models.CharField(max_length=255, verbose_name="NormalizerOemNumber", blank=True, null=True)
     IsReplacer = models.IntegerField(verbose_name="IsReplacer", blank=True, null=True)
+    ManNo = models.IntegerField(verbose_name="ManNo", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
 
     def __str__(self):
         return self.Brand

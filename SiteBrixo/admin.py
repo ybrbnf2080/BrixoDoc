@@ -17,6 +17,14 @@ class ArticleAdmin(ModelAdmin):
     search_fields = ['ArticleNumber', 'ExternalId']
 
 
+class CountryAdmin(ModelAdmin):
+    list_display = ['id',
+                    'Article',
+                    'CountryCode'
+                    ]
+    search_fields = ['Article', 'CountryCode']
+
+
 class OemAdmin(ModelAdmin):
     list_display = ['id',
                     'Brand',
@@ -96,3 +104,9 @@ admin.site.register(ArticlesToVehicle, VehicleToArticleAdmin)
 admin.site.register(ArticleOem, OemAdmin)
 admin.site.register(Marketplaces)
 admin.site.register(DisplayBra, DisplayBraAdmin)
+admin.site.register(Country, CountryAdmin)
+admin.site.register(Supers)
+admin.site.register(Trade)
+admin.site.register(Crit)
+admin.site.register(Doc)
+admin.site.register(LnkTarget)

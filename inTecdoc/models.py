@@ -9,32 +9,9 @@ class Supliers_200(models.Model):
         return self.Name
 
 
-class GenArt_211(models.Model):
-    GenArtNo = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True)
-    ArtNo = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True)
-
-    def __str__(self):
-        return self.GenArtNo
-
-
-class Article_200(models.Model):
-    GenArtNoId = models.ForeignKey(GenArt_211, on_delete=models.CASCADE, related_name='GenArtNoArticle_200', blank=True, null=True)
-    BrandNoId = models.ForeignKey(Supliers_200, on_delete=models.CASCADE, related_name='BrandNoArticle_200', blank=True, null=True)
-    GTIN = models.IntegerField(verbose_name="GTIN", blank=True, null=True)
-    ArtNo = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True)
-    QuantUnit = models.IntegerField(verbose_name="QuantUnit", blank=True, null=True)
-    QuantPerUnit = models.IntegerField(verbose_name="QuantPerUnit", blank=True, null=True)
-    ArtStat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True)
-    StatusDat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True)
-
-    def __str__(self):
-        return self.ArtNo
-
-
 class Country_202(models.Model):
     CountryCode = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True)
     CountryName = models.CharField(max_length=255, verbose_name="CountryName", blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoCountry_202', blank=True, null=True)
 
     def __str__(self):
         return self.CountryCode
@@ -52,11 +29,26 @@ class Manufacture_203(models.Model):
 class Ref_203(models.Model):
     RefNo = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True)
     ManNoId = models.ForeignKey(Manufacture_203, on_delete=models.CASCADE, related_name='ManNoRef_203', blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoRef_203', blank=True, null=True)
     SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
 
     def __str__(self):
         return self.RefNo
+
+
+class Article_200(models.Model):
+    Country = models.ManyToManyField(Country_202, blank=True)
+    GenArtNo = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True)
+    BrandNoId = models.ForeignKey(Supliers_200, on_delete=models.CASCADE, related_name='BrandNoArticle_200', blank=True, null=True)
+    GTIN = models.IntegerField(verbose_name="GTIN", blank=True, null=True)
+    ArtNo = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True)
+    QuantUnit = models.IntegerField(verbose_name="QuantUnit", blank=True, null=True)
+    QuantPerUnit = models.IntegerField(verbose_name="QuantPerUnit", blank=True, null=True)
+    ArtStat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True)
+    StatusDat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True)
+    RefNoId = models.ManyToManyField(Ref_203, blank=True)
+
+    def __str__(self):
+        return self.ArtNo
 
 
 class Supers_204(models.Model):

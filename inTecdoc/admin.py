@@ -4,7 +4,6 @@ from .models import *
 
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Supliers_200)
-admin.site.register(GenArt_211)
 admin.site.register(Article_200)
 admin.site.register(Country_202)
 admin.site.register(Manufacture_203)

@@ -4,7 +4,7 @@ from shutil import rmtree
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from inTecdoc.models import (Supliers_200, GenArt_211, Article_200, Country_202, Manufacture_203, Ref_203,
+from inTecdoc.models import (Supliers_200, Article_200, Country_202, Manufacture_203, Ref_203,
                              Supers_204, CritName_210, Crit_210,
                              Trade_207, Doc_231_232, Lnk, Table_404, Table_410)
 
@@ -139,7 +139,7 @@ def generate_200(brand_no: str):
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'200.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                obj.ArticleNumber.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '200'.ljust(3),  # TableNo
                 ''.ljust(9),  # TermNo
@@ -180,18 +180,19 @@ def generate_201(brand_no: str):
 
 
 def generate_202(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                Article_200.objects.filter().ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '202'.ljust(3),  # TableNo
-                ''.ljust(3),  # CountryCode
+                # obj.Country,  # CountryCode
                 ''.ljust(1),  # Exclude
                 ''.ljust(1),  # DeleteFlag
             ]
             file.write(''.join(data) + '\n')
+            # print('data', data)
 
 
 def generate_203(brand_no: str):
@@ -635,11 +636,36 @@ def generate_432(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
+
+
+# def test_get(brand_no: str):
+#     objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country')
+#     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
+#         for obj in objects:
+#             data = [
+#                 obj.ArtNo.ljust(22),  # ArtNo
+#                 str(brand_no).ljust(4),  # BrandNo
+#                 '202'.ljust(3),  # TableNo
+#                 obj.Country,  # CountryCode
+#                 ''.ljust(1),  # Exclude
+#                 ''.ljust(1),  # DeleteFlag
+#             ]
+#             print('data', data)
+#             file.write(''.join(data) + '\n')
+
+
+# def test_get():
+#     objects = Article_200.objects.prefetch_related('Country')
+#     for i in objects:
+#         print(i)
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
-            generate_001(comp.BrandNo)
+            # test_get(comp.BrandNo)
+            # generate_001(comp.BrandNo)
             # generate_030(comp.BrandNo)
             # generate_035(comp.BrandNo)
             # generate_040(comp.BrandNo)
@@ -647,7 +673,7 @@ class Command(BaseCommand):
             # generate_043(comp.BrandNo)
             # generate_200(comp.BrandNo)
             # generate_201(comp.BrandNo)
-            # generate_202(comp.BrandNo)
+            generate_202(comp.BrandNo)
             # generate_203(comp.BrandNo)
             # generate_204(comp.BrandNo)
             # generate_205(comp.BrandNo)

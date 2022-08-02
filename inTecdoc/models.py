@@ -36,7 +36,7 @@ class Ref_203(models.Model):
 
 
 class Article_200(models.Model):
-    Country = models.ManyToManyField(Country_202, blank=True)
+    Country = models.ManyToManyField(Country_202, blank=True, related_name='CountryArticle_200')
     GenArtNo = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True)
     BrandNoId = models.ForeignKey(Supliers_200, on_delete=models.CASCADE, related_name='BrandNoArticle_200', blank=True, null=True)
     GTIN = models.IntegerField(verbose_name="GTIN", blank=True, null=True)

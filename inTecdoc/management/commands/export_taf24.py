@@ -180,19 +180,20 @@ def generate_201(brand_no: str):
 
 
 def generate_202(brand_no: str):
-    objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country')
+    objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country').all()
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
+            # for con in country:
             data = [
                 obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '202'.ljust(3),  # TableNo
-                # obj.Country,  # CountryCode
+                " ".join(obj.Country.values_list("CountryCode", flat=True)),  # CountryCode
                 ''.ljust(1),  # Exclude
                 ''.ljust(1),  # DeleteFlag
             ]
+            # print(con)
             file.write(''.join(data) + '\n')
-            # print('data', data)
 
 
 def generate_203(brand_no: str):

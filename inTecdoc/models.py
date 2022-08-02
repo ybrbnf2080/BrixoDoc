@@ -18,8 +18,8 @@ class GenArt_211(models.Model):
 
 
 class Article_200(models.Model):
-    GenArtNoId = models.ForeignKey(GenArt_211, on_delete=models.CASCADE, related_name='GenArtNo', blank=True, null=True)
-    BrandNoId = models.ForeignKey(Supliers_200, on_delete=models.CASCADE, related_name='BrandNo', blank=True, null=True)
+    GenArtNoId = models.ForeignKey(GenArt_211, on_delete=models.CASCADE, related_name='GenArtNoArticle_200', blank=True, null=True)
+    BrandNoId = models.ForeignKey(Supliers_200, on_delete=models.CASCADE, related_name='BrandNoArticle_200', blank=True, null=True)
     GTIN = models.IntegerField(verbose_name="GTIN", blank=True, null=True)
     ArtNo = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True)
     QuantUnit = models.IntegerField(verbose_name="QuantUnit", blank=True, null=True)
@@ -34,7 +34,7 @@ class Article_200(models.Model):
 class Country_202(models.Model):
     CountryCode = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True)
     CountryName = models.CharField(max_length=255, verbose_name="CountryName", blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoCountry_202', blank=True, null=True)
 
     def __str__(self):
         return self.CountryCode
@@ -51,8 +51,8 @@ class Manufacture_203(models.Model):
 
 class Ref_203(models.Model):
     RefNo = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True)
-    ManNoId = models.ForeignKey(Manufacture_203, on_delete=models.CASCADE, related_name='ManNo', blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ManNoId = models.ForeignKey(Manufacture_203, on_delete=models.CASCADE, related_name='ManNoRef_203', blank=True, null=True)
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoRef_203', blank=True, null=True)
     SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
 
     def __str__(self):
@@ -61,13 +61,36 @@ class Ref_203(models.Model):
 
 class Supers_204(models.Model):
     SupersNo = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoSupers_204', blank=True, null=True)
     SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.SupersNo
+
+
+class CritName_210(models.Model):
+    CritNo = models.CharField(max_length=255, verbose_name="CrtNo", blank=True, null=True)
+    CritName = models.CharField(max_length=255, verbose_name="CrtName", blank=True, null=True)
+    Description = models.TextField(verbose_name="Description", blank=True, null=True)
+
+    def __str__(self):
+        return self.CritNo
+
+
+class Crit_210(models.Model):
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoCrit_210', blank=True, null=True)
+    CritNoId = models.ForeignKey(CritName_210, on_delete=models.CASCADE, related_name='CritNoCrit_210', blank=True, null=True)
+    CritVal = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True)
+    FirstPage = models.IntegerField(verbose_name="FirstPage", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.CritVal
 
 
 class Trade_207(models.Model):
     TradeNo = models.CharField(max_length=255, verbose_name="TradeNo", blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoTrade_207', blank=True, null=True)
     FirstPage = models.IntegerField(verbose_name="FirstPage", blank=True, null=True)
     SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
 
@@ -76,7 +99,7 @@ class Trade_207(models.Model):
 
 
 class Doc_231_232(models.Model):
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoDoc_231_232', blank=True, null=True)
     DocNo = models.IntegerField(verbose_name="DocNo", blank=True, null=True)
     LangNo = models.IntegerField(verbose_name="LangNo", blank=True, null=True)
     DocName = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True)
@@ -89,6 +112,34 @@ class Doc_231_232(models.Model):
 
 
 class Lnk(models.Model):
-    ArtNo = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNo', blank=True, null=True)
+    ArtNo = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoLnk', blank=True, null=True)
     LnkTargetNo = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True)
-    LnkTargetType = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True)
+    LnkTargetType = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True)
+    SeqNo = models.IntegerField(verbose_name="SeqNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.LnkTargetNo
+
+
+class Table_404(models.Model):
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoTable_404', blank=True, null=True)
+    LnkTargetType = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True)
+    LnkTargetNo = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.LnkTargetNo
+
+
+class Table_410(models.Model):
+    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoTable_410', blank=True, null=True)
+    LnkTargetType = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True)
+    LnkTargetNo = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True)
+    SeqNo = models.IntegerField(verbose_name="SeqNo", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+    CritNo = models.CharField(max_length=255, verbose_name="CritNo", blank=True, null=True)
+    CritVal = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True)
+    FirstPage = models.IntegerField(verbose_name="FirstPage", blank=True, null=True)
+
+    def __str__(self):
+        return self.LnkTargetNo

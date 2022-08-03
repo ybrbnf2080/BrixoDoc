@@ -1,6 +1,7 @@
 import os
 from shutil import rmtree
 
+from django.db.models import *
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -17,7 +18,7 @@ def update_dirs():
         rmtree(f'{BASE_DIR}/converted_db')
     os.mkdir(f'{BASE_DIR}/converted_db')
     for comp in COMPANIES:
-        os.mkdir(f'{BASE_DIR}/converted_db/{comp.BrandNo}')
+        os.mkdir(f'{BASE_DIR}/converted_db/{comp.brand_no}')
 
 
 def generate_001(brand_no: str):
@@ -67,7 +68,8 @@ def generate_035(brand_no: str):
         ]
         file.write(''.join(data))
 
-#Сделать условие в зависимость от бренда
+
+# Сделать условие в зависимость от бренда
 def generate_040(brand_no: str):
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'040.{brand_no}', 'w', encoding='utf-8') as file:
         data = [
@@ -135,7 +137,7 @@ def generate_043(brand_no: str):
 
 
 def generate_200(brand_no: str):
-    objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no)
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'200.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -180,28 +182,30 @@ def generate_201(brand_no: str):
 
 
 def generate_202(brand_no: str):
-    objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country').all()
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)\
+        .values('art_no', 'country__country_code').filter(pk__gt=0)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
-            # for con in country:
+            print(obj.get('art_no'))
+
             data = [
-                obj.ArtNo.ljust(22),  # ArtNo
-                str(brand_no).ljust(4),  # BrandNo
+                obj.get('art_no').ljust(22, ' '),  # ArtNo
+                str(brand_no).rjust(4, '0'),  # BrandNo
                 '202'.ljust(3),  # TableNo
-                " ".join(obj.Country.values_list("CountryCode", flat=True)),  # CountryCode
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
+                obj.get('country__country_code').ljust(3),  # CountryCode
+                '0'.ljust(1),  # Exclude
+                '0'.ljust(1),  # DeleteFlag
             ]
-            # print(con)
+            # print('data', data)
             file.write(''.join(data) + '\n')
 
 
 def generate_203(brand_no: str):
-    objects = Ref_203.objects.filter()
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'203.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '203'.ljust(3),  # TableNo
                 ''.ljust(6),  # ManNo
@@ -217,11 +221,11 @@ def generate_203(brand_no: str):
 
 
 def generate_204(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'204.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '204'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -234,11 +238,11 @@ def generate_204(brand_no: str):
 
 
 def generate_205(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'205.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '205'.ljust(3),  # TableNo
                 ''.ljust(5),  # PartGenArtNo
@@ -251,11 +255,11 @@ def generate_205(brand_no: str):
 
 
 def generate_206(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'206.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '206'.ljust(3),  # TableNo
                 ''.ljust(5),  # Reserved
@@ -271,11 +275,11 @@ def generate_206(brand_no: str):
 
 
 def generate_207(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'207.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '207'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -289,11 +293,11 @@ def generate_207(brand_no: str):
 
 
 def generate_208(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'208.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '208'.ljust(3),  # TableNo
                 ''.ljust(3),  # Reserved
@@ -309,11 +313,11 @@ def generate_208(brand_no: str):
 
 
 def generate_209(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'209.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '209'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -325,11 +329,11 @@ def generate_209(brand_no: str):
 
 
 def generate_210(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'210.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '210'.ljust(3),  # TableNo
                 ''.ljust(5),  # Reserved
@@ -345,11 +349,11 @@ def generate_210(brand_no: str):
 
 
 def generate_211(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'211.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '211'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -359,11 +363,11 @@ def generate_211(brand_no: str):
 
 
 def generate_212(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'212.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '212'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -377,11 +381,11 @@ def generate_212(brand_no: str):
 
 
 def generate_215(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'215.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '215'.ljust(3),  # TableNo
                 ''.ljust(3),  # SeqNo
@@ -393,11 +397,11 @@ def generate_215(brand_no: str):
 
 
 def generate_217(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'217.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '217'.ljust(3),  # TableNo
                 ''.ljust(3),  # SeqNo
@@ -411,11 +415,11 @@ def generate_217(brand_no: str):
 
 
 def generate_222(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'222.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '222'.ljust(3),  # TableNo
                 ''.ljust(1),  # LnkType
@@ -433,11 +437,11 @@ def generate_222(brand_no: str):
 
 
 def generate_228(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'228.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '228'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -453,11 +457,11 @@ def generate_228(brand_no: str):
 
 
 def generate_231(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'231.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # Reserved
+                obj.ArtNo.ljust(22),  # Reserved
                 str(brand_no).ljust(4),  # BrandNo
                 '231'.ljust(3),  # TableNo
                 ''.ljust(9),  # DocNo
@@ -477,11 +481,11 @@ def generate_231(brand_no: str):
 
 
 def generate_232(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'232.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '232'.ljust(3),  # TableNo
                 ''.ljust(2),  # SortNo
@@ -495,7 +499,7 @@ def generate_232(brand_no: str):
 
 
 def generate_233(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'233.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -517,11 +521,11 @@ def generate_233(brand_no: str):
 
 
 def generate_400(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'400.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '400'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -534,11 +538,11 @@ def generate_400(brand_no: str):
 
 
 def generate_401(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'401.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '401'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -557,11 +561,11 @@ def generate_401(brand_no: str):
 
 
 def generate_403(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'403.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '403'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -576,11 +580,11 @@ def generate_403(brand_no: str):
 
 
 def generate_404(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'404.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '404'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -593,11 +597,11 @@ def generate_404(brand_no: str):
 
 
 def generate_410(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'410.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '410'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -616,11 +620,11 @@ def generate_410(brand_no: str):
 
 
 def generate_432(brand_no: str):
-    objects = []
+    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'432.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                ''.ljust(22),  # ArtNo
+                obj.ArtNo.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '432'.ljust(3),  # TableNo
                 ''.ljust(5),  # GenArtNo
@@ -637,10 +641,8 @@ def generate_432(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-
-
 # def test_get(brand_no: str):
-#     objects = Article_200.objects.filter(BrandNoId__BrandNo=brand_no).prefetch_related('Country')
+#     objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no).prefetch_related('Country')
 #     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
 #         for obj in objects:
 #             data = [
@@ -665,35 +667,35 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
-            # test_get(comp.BrandNo)
-            # generate_001(comp.BrandNo)
-            # generate_030(comp.BrandNo)
-            # generate_035(comp.BrandNo)
-            # generate_040(comp.BrandNo)
-            # generate_042(comp.BrandNo)
-            # generate_043(comp.BrandNo)
-            # generate_200(comp.BrandNo)
-            # generate_201(comp.BrandNo)
-            generate_202(comp.BrandNo)
-            # generate_203(comp.BrandNo)
-            # generate_204(comp.BrandNo)
-            # generate_205(comp.BrandNo)
-            # generate_206(comp.BrandNo)
-            # generate_207(comp.BrandNo)
-            # generate_208(comp.BrandNo)
-            # generate_209(comp.BrandNo)
-            # generate_210(comp.BrandNo)
-            # generate_211(comp.BrandNo)
-            # generate_212(comp.BrandNo)
-            # generate_217(comp.BrandNo)
-            # generate_222(comp.BrandNo)
-            # generate_228(comp.BrandNo)
-            # generate_231(comp.BrandNo)
-            # generate_232(comp.BrandNo)
-            # generate_233(comp.BrandNo)
-            # generate_400(comp.BrandNo)
-            # generate_401(comp.BrandNo)
-            # generate_403(comp.BrandNo)
-            # generate_404(comp.BrandNo)
-            # generate_410(comp.BrandNo)
-            # generate_432(comp.BrandNo)
+            # test_get(comp.brand_no)
+            # generate_001(comp.brand_no)
+            # generate_030(comp.brand_no)
+            # generate_035(comp.brand_no)
+            # generate_040(comp.brand_no)
+            # generate_042(comp.brand_no)
+            # generate_043(comp.brand_no)
+            # generate_200(comp.brand_no)
+            # generate_201(comp.brand_no)
+            generate_202(comp.brand_no)
+            # generate_203(comp.brand_no)
+            # generate_204(comp.brand_no)
+            # generate_205(comp.brand_no)
+            # generate_206(comp.brand_no)
+            # generate_207(comp.brand_no)
+            # generate_208(comp.brand_no)
+            # generate_209(comp.brand_no)
+            # generate_210(comp.brand_no)
+            # generate_211(comp.brand_no)
+            # generate_212(comp.brand_no)
+            # generate_217(comp.brand_no)
+            # generate_222(comp.brand_no)
+            # generate_228(comp.brand_no)
+            # generate_231(comp.brand_no)
+            # generate_232(comp.brand_no)
+            # generate_233(comp.brand_no)
+            # generate_400(comp.brand_no)
+            # generate_401(comp.brand_no)
+            # generate_403(comp.brand_no)
+            # generate_404(comp.brand_no)
+            # generate_410(comp.brand_no)
+            # generate_432(comp.brand_no)

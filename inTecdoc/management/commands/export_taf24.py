@@ -5,11 +5,11 @@ from django.db.models import *
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from inTecdoc.models import (Supliers_200, Article_200, Country_202, Manufacture_203, Ref_203,
-                             Supers_204, CritName_210, Crit_210,
-                             Trade_207, Doc_231_232, Lnk, Table_404, Table_410)
+from inTecdoc.models import (Suppliers200, Article200, Country202, Manufacture203, Ref203,
+                             Supers204, CritName210, Crit210,
+                             Trade207, Doc231and232, Lnk400, Table404, Table410)
 
-COMPANIES = Supliers_200.objects.all()
+COMPANIES = Suppliers200.objects.all()
 BASE_DIR = settings.BASE_DIR
 
 
@@ -75,7 +75,7 @@ def generate_040(brand_no: str):
         data = [
             str(brand_no).ljust(4),  # BrandNo
             '40'.ljust(3),  # TableNo
-            COMPANIES.get(BrandNo=brand_no).Name.ljust(40),  # Term1
+            COMPANIES.get(brand_no=brand_no).Name.ljust(40),  # Term1
             ''.ljust(40),  # Term2
             'Mamonovskiy pereulok'.ljust(40),  # Street1
             '4 str.1'.ljust(40),  # Street2
@@ -102,7 +102,7 @@ def generate_042(brand_no: str):
             str(brand_no).ljust(4),  # BrandNo
             '42'.rjust(3, '0'),  # TableNo
             ''.ljust(3),  # CountryCode
-            Doc_231_232.objects.get().rjust(9, '0'),  # DocNo
+            Doc231and232.objects.get().rjust(9, '0'),  # DocNo
             ''.ljust(2),  # DocType
             '0'.ljust(1),  # DeleteFlag
         ]
@@ -137,11 +137,11 @@ def generate_043(brand_no: str):
 
 
 def generate_200(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'200.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                obj.ArtNo.ljust(22),  # ArtNo
+                obj.art_no.ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '200'.ljust(3),  # TableNo
                 ''.ljust(9),  # TermNo
@@ -182,7 +182,7 @@ def generate_201(brand_no: str):
 
 
 def generate_202(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)\
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)\
         .values('art_no', 'country__country_code').filter(pk__gt=0)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
@@ -198,7 +198,7 @@ def generate_202(brand_no: str):
 
 
 def generate_203(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no) \
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no) \
         .values('art_no', 'ref_no_id__ManNoId__ManNo', 'ref_no_id__RefNo').filter(pk__gt=0)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'203.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
@@ -219,7 +219,7 @@ def generate_203(brand_no: str):
 
 
 def generate_204(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no) \
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no) \
         .values('art_no', 'supers_id__SortNo').filter(pk__gt=0)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'204.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
@@ -238,7 +238,7 @@ def generate_204(brand_no: str):
 
 
 def generate_205(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'205.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -255,7 +255,7 @@ def generate_205(brand_no: str):
 
 
 def generate_206(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'206.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -275,7 +275,7 @@ def generate_206(brand_no: str):
 
 
 def generate_207(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'207.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -293,7 +293,7 @@ def generate_207(brand_no: str):
 
 
 def generate_208(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'208.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -313,7 +313,7 @@ def generate_208(brand_no: str):
 
 
 def generate_209(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'209.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -329,7 +329,7 @@ def generate_209(brand_no: str):
 
 
 def generate_210(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'210.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -349,7 +349,7 @@ def generate_210(brand_no: str):
 
 
 def generate_211(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'211.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -363,7 +363,7 @@ def generate_211(brand_no: str):
 
 
 def generate_212(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'212.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -381,7 +381,7 @@ def generate_212(brand_no: str):
 
 
 def generate_215(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'215.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -397,7 +397,7 @@ def generate_215(brand_no: str):
 
 
 def generate_217(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'217.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -415,7 +415,7 @@ def generate_217(brand_no: str):
 
 
 def generate_222(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'222.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -437,7 +437,7 @@ def generate_222(brand_no: str):
 
 
 def generate_228(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'228.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -457,7 +457,7 @@ def generate_228(brand_no: str):
 
 
 def generate_231(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'231.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -481,7 +481,7 @@ def generate_231(brand_no: str):
 
 
 def generate_232(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'232.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -499,7 +499,7 @@ def generate_232(brand_no: str):
 
 
 def generate_233(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'233.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -521,7 +521,7 @@ def generate_233(brand_no: str):
 
 
 def generate_400(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'400.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -538,7 +538,7 @@ def generate_400(brand_no: str):
 
 
 def generate_401(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'401.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -561,7 +561,7 @@ def generate_401(brand_no: str):
 
 
 def generate_403(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'403.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -580,7 +580,7 @@ def generate_403(brand_no: str):
 
 
 def generate_404(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'404.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -597,7 +597,7 @@ def generate_404(brand_no: str):
 
 
 def generate_410(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'410.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -620,7 +620,7 @@ def generate_410(brand_no: str):
 
 
 def generate_432(brand_no: str):
-    objects = Article_200.objects.filter(brand_no_id__brand_no=brand_no)
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'432.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [

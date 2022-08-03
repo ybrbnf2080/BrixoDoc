@@ -4,6 +4,17 @@ from django.db import models
 class Suppliers200(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name", blank=True, null=True)
     brand_no = models.IntegerField(verbose_name="BrandNo", blank=True, null=True)
+    street = models.CharField(max_length=255, verbose_name="Street", blank=True, null=True)
+    street_two = models.CharField(max_length=255, verbose_name="Street2", blank=True, null=True)
+    country_code = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True)
+    post_code = models.CharField(max_length=255, verbose_name="PostCode", blank=True, null=True)
+    city = models.CharField(max_length=255, verbose_name="City", blank=True, null=True)
+    phone = models.CharField(max_length=255, verbose_name="Phone", blank=True, null=True)
+    email = models.CharField(max_length=255, verbose_name="Email", blank=True, null=True)
+    web_site = models.CharField(max_length=255, verbose_name="Web", blank=True, null=True)
+    adr_type = models.IntegerField(verbose_name="AdrType", blank=True, null=True)
+    doc_no = models.IntegerField(verbose_name="DocNo", blank=True, null=True)
+    doc_type = models.IntegerField(verbose_name="DocType", blank=True, null=True)
 
     def __str__(self):
         return self.name

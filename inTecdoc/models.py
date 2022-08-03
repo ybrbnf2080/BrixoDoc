@@ -23,7 +23,7 @@ class Manufacture_203(models.Model):
     TermPlain = models.CharField(max_length=255, verbose_name="TermPlain", blank=True, null=True)
 
     def __str__(self):
-        return self.ManNo
+        return self.ShortName
 
 
 class Ref_203(models.Model):
@@ -33,6 +33,14 @@ class Ref_203(models.Model):
 
     def __str__(self):
         return self.RefNo
+
+
+class Supers_204(models.Model):
+    SupersNo = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True)
+    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
+
+    def __str__(self):
+        return self.SupersNo
 
 
 class Article_200(models.Model):
@@ -46,18 +54,10 @@ class Article_200(models.Model):
     art_stat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True)
     status_dat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True)
     ref_no_id = models.ManyToManyField(Ref_203, blank=True, related_name='ref_no_article')
+    supers_id = models.ManyToManyField(Supers_204, blank=True, null=True, related_name='supers_article')
 
     def __str__(self):
         return self.art_no
-
-
-class Supers_204(models.Model):
-    SupersNo = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True)
-    ArtNoId = models.ForeignKey(Article_200, on_delete=models.CASCADE, related_name='ArtNoSupers_204', blank=True, null=True)
-    SortNo = models.IntegerField(verbose_name="SortNo", blank=True, null=True)
-
-    def __str__(self):
-        return self.SupersNo
 
 
 class CritName_210(models.Model):

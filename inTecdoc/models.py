@@ -57,9 +57,9 @@ class Doc231and232(models.Model):
     doc_no = models.IntegerField(verbose_name="DocNo", blank=True, null=True) #DocNo 231
     doc_name = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True) #DocName 231
     lang_no = models.IntegerField(verbose_name="LangNo", blank=True, null=True) #LangNo 231
-    doc_content_type = models.IntegerField(verbose_name="DocContentType", blank=True, null=True) #DocContentType231
-    doc_term_no = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocTermNorm
-    doc_type = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocType
+    doc_content_type = models.IntegerField(verbose_name="DocContentType", blank=True, null=True) #DocContentType 231
+    doc_term_no = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocTermNorm 231
+    doc_type = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocType 231
 
     def __str__(self):
         return self.doc_name
@@ -71,13 +71,13 @@ class Article200(models.Model):
     brand_no_id = models.ForeignKey(Suppliers200, on_delete=models.CASCADE, related_name='brand_no_article', blank=True,
                                     null=True) #BrandNo
     gtin = models.IntegerField(verbose_name="GTIN", blank=True, null=True) #GTIN 209
-    art_no = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True) #ArtNo
+    art_no = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True) #ArtNo 200
     quant_unit = models.IntegerField(verbose_name="QuantUnit", blank=True, null=True) #QuantUnit 212
     quant_per_unit = models.IntegerField(verbose_name="QuantPerUnit", blank=True, null=True) #QuantPerUnit 212
     art_stat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True) #ArtStat 212
     status_dat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True) #StatusDat 212
     ref_no_id = models.ManyToManyField(Ref203, blank=True, related_name='ref_no_article') #RefNo 203
-    supers_id = models.ManyToManyField(Supers204, blank=True, related_name='supers_article') #SupersNo
+    supers_id = models.ManyToManyField(Supers204, blank=True, related_name='supers_article') #SupersNo 204
     doc_no = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article') #DocNo 232
 
     def __str__(self):
@@ -137,7 +137,7 @@ class Table410(models.Model):
     art_no = models.ForeignKey(Article200, related_name='ArtNoTable410', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 410
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 410
     lnk_target_type = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True) #LnkTargetType 410
-    lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo
+    lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 410
     seq_no = models.IntegerField(verbose_name="SeqNo", blank=True, null=True) #SeqNo 410
     crit_no = models.CharField(max_length=255, verbose_name="CritNo", blank=True, null=True) #CritNo 410
     crit_val = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True) #CritVal 410

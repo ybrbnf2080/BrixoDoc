@@ -63,7 +63,6 @@ class Ref203(models.Model):
 
 class Supers204(models.Model):
     supers_no = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True) #SupersNo204
-    sort_no = models.IntegerField(verbose_name="SortNo", blank=True, null=True) #ArtNo 204
 
     def __str__(self):
         return self.supers_no

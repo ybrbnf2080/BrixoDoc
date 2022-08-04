@@ -47,13 +47,11 @@
 
 `ref_no` = #RefNo `№ - 20`3
 
-`man_no_id` = #ManNo `№ - 20`3
+`man_no_id` = #ManNo `№ - 20` _Связка с Manufacture203 `man_no`_
 
 ---------------------MODEL **Supers204**---------------------
 
 `supers_no` = #SupersNo `№ - 204`
-
-`sort_no` = #ArtNo `№ - 204`
 
 ---------------------MODEL **Doc231and232**---------------------
 
@@ -71,11 +69,11 @@
 
 ---------------------MODEL **Article200**---------------------
 
-`country` = #CountryCode `№ - 202`
+`country_id` = #CountryCode `№ - 202` _Связка с Country202 `country_code`_
 
 `gen_art_no` = #GenArtNo `№ - 211`
 
-`brand_no_id` = #BrandNo
+`brand_no_id` = #BrandNo _Связка с Suppliers200 `brand_no`_
 
 `gtin` = #GTIN `№ - 209`
 
@@ -89,11 +87,11 @@
 
 `status_dat` = #StatusDat `№ - 212`
 
-`ref_no_id` = #RefNo `№ - 203`
+`ref_no_id` = #RefNo `№ - 203` _Связка с Ref203 `ref_no`_
 
-`supers_id` = #SupersNo `№ - 204`
+`supers_id` = #SupersNo `№ - 204` _Связка с Supers204 `supers_no`_
 
-`doc_no` = #DocNo `№ - 232`
+`doc_no_id` = #DocNo `№ - 232` _Связка с Doc231and232 `doc_no`_
 
 ---------------------MODEL **CritVal210**---------------------
 
@@ -105,9 +103,9 @@
 
 ---------------------MODEL **Crit210**---------------------
 
-`art_no_id` = #ArtNo `№ - 210`
+`art_no_id` = #ArtNo `№ - 210` _Связка с Article200 `art_no`_
 
-`crit_no_id` = #CritNo `№ - 210`
+`crit_no_id` = #CritNo `№ - 210` _Связка с CritVal210 `crit_no`_
 
 `crit_val` = #CritVal `№ - 210`
 
@@ -115,13 +113,13 @@
 
 `trade_no` = #TradeNo
 
-`art_no_id` = #ArtNo `№ - 210`
+`art_no_id` = #ArtNo `№ - 210` _Связка с Article200 `art_no`_
 
 `first_page` = #FirstPage
 
 ---------------------MODEL **Lnk400**---------------------
 
-`art_no` = #ArtNo `№ - 400`
+`art_no_id` = #ArtNo `№ - 400` _Связка с Article200 `art_no`_
 
 `gen_art_no` = #GenArtNo `№ - 400`
 
@@ -133,7 +131,7 @@
 
 ---------------------MODEL **Table404**---------------------
 
-`art_no` = #ArtNo `№ - 404`
+`art_no_id` = #ArtNo `№ - 404` _Связка с Article200 `art_no`_
 
 `gen_art_no` = #GenArtNo `№ - 404`
 
@@ -143,7 +141,7 @@
 
 ---------------------MODEL **Table410**---------------------
 
-`art_no` = #ArtNo `№ - 410`
+`art_no_id` = #ArtNo `№ - 410` _Связка с Article200 `art_no`_
 
 `gen_art_no` = #GenArtNo `№ - 410`
 

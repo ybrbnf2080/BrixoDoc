@@ -16,6 +16,10 @@ class Suppliers200(models.Model):
     doc_no = models.IntegerField(verbose_name="DocNo", blank=True, null=True) #DocNo 42
     doc_type = models.IntegerField(verbose_name="DocType", blank=True, null=True) #DocType 42
 
+    class Meta:
+        verbose_name = """Производитель комплектующей"""
+        verbose_name_plural = """Производители комплектующих"""
+
     def __str__(self):
         return self.name
 
@@ -23,6 +27,10 @@ class Suppliers200(models.Model):
 class Country202(models.Model):
     country_code = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True) #Код страны
     country_name = models.CharField(max_length=255, verbose_name="CountryName", blank=True, null=True) #Имя страны
+
+    class Meta:
+        verbose_name = """Страна"""
+        verbose_name_plural = """Страны"""
 
     def __str__(self):
         return self.country_code
@@ -33,6 +41,10 @@ class Manufacture203(models.Model):
     short_name = models.CharField(max_length=255, verbose_name="ShortName", blank=True, null=True) #ShortName
     term_plain = models.CharField(max_length=255, verbose_name="TermPlain", blank=True, null=True) #TermPlain
 
+    class Meta:
+        verbose_name = """Производитель авто"""
+        verbose_name_plural = """Производители авто"""
+
     def __str__(self):
         return self.short_name
 
@@ -40,6 +52,10 @@ class Manufacture203(models.Model):
 class Ref203(models.Model):
     ref_no = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True) #RefNo 203
     man_no_id = models.ForeignKey(Manufacture203, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True) #ManNo 203
+
+    class Meta:
+        verbose_name = """Комплектующая от производителя авто"""
+        verbose_name_plural = """Комплектующие от производителя авто"""
 
     def __str__(self):
         return self.ref_no
@@ -61,12 +77,16 @@ class Doc231and232(models.Model):
     doc_term_no = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocTermNorm 231
     doc_type = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocType 231
 
+    class Meta:
+        verbose_name = """Документ"""
+        verbose_name_plural = """Документы"""
+
     def __str__(self):
         return self.doc_name
 
 
 class Article200(models.Model):
-    country = models.ManyToManyField(Country202, blank=True, related_name='CountryArticle_200') #CountryCode 202
+    country_id = models.ManyToManyField(Country202, blank=True, related_name='CountryArticle_200') #CountryCode 202
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 211
     brand_no_id = models.ForeignKey(Suppliers200, on_delete=models.CASCADE, related_name='brand_no_article', blank=True,
                                     null=True) #BrandNo
@@ -78,7 +98,11 @@ class Article200(models.Model):
     status_dat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True) #StatusDat 212
     ref_no_id = models.ManyToManyField(Ref203, blank=True, related_name='ref_no_article') #RefNo 203
     supers_id = models.ManyToManyField(Supers204, blank=True, related_name='supers_article') #SupersNo 204
-    doc_no = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article') #DocNo 232
+    doc_no_id = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article') #DocNo 232
+
+    class Meta:
+        verbose_name = """Артикул"""
+        verbose_name_plural = """Артикулы"""
 
     def __str__(self):
         return self.art_no
@@ -89,6 +113,10 @@ class CritVal210(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name", blank=True, null=True) #Name
     description = models.TextField(verbose_name="Description", blank=True, null=True) #Comment
 
+    class Meta:
+        verbose_name = """Список критерий"""
+        verbose_name_plural = """Список критерий"""
+
     def __str__(self):
         return self.name
 
@@ -97,6 +125,10 @@ class Crit210(models.Model):
     art_no_id = models.ForeignKey(Article200, on_delete=models.CASCADE, verbose_name="ArtNo", blank=True, null=True) #ArtNo 210
     crit_no_id = models.ForeignKey(CritVal210, on_delete=models.CASCADE, verbose_name="CritNo", blank=True, null=True) #CritNo 210
     crit_val = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True) #CritVal 210
+
+    class Meta:
+        verbose_name = """Критерии комплектующего"""
+        verbose_name_plural = """Критерии комплектующих"""
 
     def __str__(self):
         return self.crit_val
@@ -113,7 +145,7 @@ class Trade207(models.Model):
 
 
 class Lnk400(models.Model):
-    art_no = models.ForeignKey(Article200, related_name='ArtNoLnk400', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 400
+    art_no_id = models.ForeignKey(Article200, related_name='ArtNoLnk400', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 400
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 400
     lnk_target_type = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True) #LnkTargetType 400
     lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 400
@@ -124,7 +156,7 @@ class Lnk400(models.Model):
 
 
 class Table404(models.Model):
-    art_no = models.ForeignKey(Article200, related_name='ArtNoTable404', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 404
+    art_no_id = models.ForeignKey(Article200, related_name='ArtNoTable404', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 404
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 404
     lnk_target_type = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True) #LnkTargetType 404
     lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 404
@@ -134,7 +166,7 @@ class Table404(models.Model):
 
 
 class Table410(models.Model):
-    art_no = models.ForeignKey(Article200, related_name='ArtNoTable410', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 410
+    art_no_id = models.ForeignKey(Article200, related_name='ArtNoTable410', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 410
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 410
     lnk_target_type = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True) #LnkTargetType 410
     lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 410

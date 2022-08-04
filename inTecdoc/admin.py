@@ -19,17 +19,53 @@ class CritValAdmin(ModelAdmin):
                     ]
 
 
+class SuppliersAdmin(ModelAdmin):
+    list_display = ['id',
+                    'brand_no',
+                    'name'
+                    ]
+
+
+class DocAdmin(ModelAdmin):
+    list_display = ['id',
+                    'doc_no',
+                    'doc_name'
+                    ]
+
+
+class ArticleAdmin(ModelAdmin):
+    list_display = ['id',
+                    'art_no',
+                    'gen_art_no',
+                    'brand_no_id'
+                    ]
+
+
+class ManufactureAdmin(ModelAdmin):
+    list_display = ['id',
+                    'man_no',
+                    'short_name',
+                    'term_plain'
+                    ]
+
+
+class RefAdmin(ModelAdmin):
+    list_display = ['id',
+                    'ref_no',
+                    'man_no_id'
+                    ]
+
 admin.site.site_header = "BrixoDoc"
-admin.site.register(Suppliers200)
-admin.site.register(Article200)
+admin.site.register(Suppliers200, SuppliersAdmin)
+admin.site.register(Article200, ArticleAdmin)
 admin.site.register(Country202)
-admin.site.register(Manufacture203)
-admin.site.register(Ref203)
+admin.site.register(Manufacture203, ManufactureAdmin)
+admin.site.register(Ref203, RefAdmin)
 admin.site.register(Supers204)
 admin.site.register(CritVal210, CritValAdmin)
 admin.site.register(Crit210, CritAdmin)
 admin.site.register(Trade207)
-admin.site.register(Doc231and232)
+admin.site.register(Doc231and232, DocAdmin)
 admin.site.register(Lnk400)
 admin.site.register(Table404)
 admin.site.register(Table410)

@@ -18,6 +18,7 @@ class CritValAdmin(ModelAdmin):
                     'name'
                     ]
 
+
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Suppliers200)
 admin.site.register(Article200)

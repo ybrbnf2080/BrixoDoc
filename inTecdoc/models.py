@@ -33,7 +33,7 @@ class Country202(models.Model):
         verbose_name_plural = """Страны"""
 
     def __str__(self):
-        return self.country_code
+        return self.country_code #"{}".format(self.country_code)
 
 
 class Manufacture203(models.Model):

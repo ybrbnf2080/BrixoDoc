@@ -31,9 +31,10 @@ class Country202(models.Model):
     class Meta:
         verbose_name = """Страна"""
         verbose_name_plural = """Страны"""
+        default_related_name = 'country'
 
     def __str__(self):
-        return self.country_code #"{}".format(self.country_code)
+        return self.country_code
 
 
 class Manufacture203(models.Model):
@@ -85,12 +86,12 @@ class Doc231and232(models.Model):
 
 
 class Article200(models.Model):
+    art_no = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True)  # ArtNo 200
     country_id = models.ManyToManyField(Country202, blank=True, related_name='CountryArticle_200') #CountryCode 202
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 211
     brand_no_id = models.ForeignKey(Suppliers200, on_delete=models.CASCADE, related_name='brand_no_article', blank=True,
                                     null=True) #BrandNo
     gtin = models.IntegerField(verbose_name="GTIN", blank=True, null=True) #GTIN 209
-    art_no = models.CharField(max_length=255, verbose_name="ArtNo", blank=True, null=True) #ArtNo 200
     quant_unit = models.IntegerField(verbose_name="QuantUnit", blank=True, null=True) #QuantUnit 212
     quant_per_unit = models.IntegerField(verbose_name="QuantPerUnit", blank=True, null=True) #QuantPerUnit 212
     art_stat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True) #ArtStat 212

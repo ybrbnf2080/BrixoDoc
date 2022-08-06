@@ -73,9 +73,9 @@ class Doc231and232(models.Model):
     doc_no = models.IntegerField(verbose_name="DocNo", blank=True, null=True) #DocNo 231
     doc_name = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True) #DocName 231
     lang_no = models.IntegerField(verbose_name="LangNo", blank=True, null=True) #LangNo 231
-    doc_content_type = models.IntegerField(verbose_name="DocContentType", blank=True, null=True) #DocContentType 231
+    doc_type = models.IntegerField(verbose_name="DocContentType", blank=True, null=True) #DocContentType 231
     doc_term_no = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocTermNorm 231
-    doc_type = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocType 231
+    doc_type_one = models.IntegerField(verbose_name="DocTermNorm", blank=True, null=True) #DocType 231
 
     class Meta:
         verbose_name = """Документ"""

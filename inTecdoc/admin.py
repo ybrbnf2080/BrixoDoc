@@ -54,6 +54,7 @@ class RefAdmin(ModelAdmin):
                     'ref_no',
                     'man_no_id'
                     ]
+    search_fields = ['ref_no']
 
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Suppliers200, SuppliersAdmin)

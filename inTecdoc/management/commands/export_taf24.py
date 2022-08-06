@@ -5,7 +5,7 @@ from django.db.models import *
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from inTecdoc.models import (Suppliers200, Article200)
+from inTecdoc.models import (Suppliers200, Article200, Lnk400)
 
 COMPANIES = Suppliers200.objects.all()
 BASE_DIR = settings.BASE_DIR
@@ -525,10 +525,10 @@ def generate_233(brand_no: str):
 
 
 def generate_400(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no).values('art_no', 'gen_art_no',
-                                                                               'ArtNoLnk__lnk_target_no',
-                                                                               'ArtNoLnk__lnk_target_type',
-                                                                               'ArtNoLnk__seq_no')
+    objects = Lnk400.objects.filter(brand_no_id__brand_no=brand_no).values('gen_art_no', 'lnk_target_type',
+                                                                           'lnk_target_no',
+                                                                           'seq_no',
+                                                                           'art_no_id__art_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'400.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [

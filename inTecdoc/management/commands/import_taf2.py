@@ -127,9 +127,10 @@ def get_country():
         for line in f:
             try:
                 _, created = Country202.objects.get_or_create(
-                    country_code=line[0:4],
-                    country_name=line[4:]
+                    country_code=line[0:4].strip(),
+                    country_name=line[4:].strip()
                 )
+                # print(len(line[0:4]), len(line[0:4].strip()), line[0:4].strip())
             except:
                 print('Error')
         print('---------------END COUNTRY--------------------')
@@ -209,6 +210,7 @@ def get_supers():
 
 
 def get_pre_article():
+    Article200.objects.all().delete()
     test_df = get_data()[get_data()['genartno'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
 
@@ -225,10 +227,11 @@ def get_pre_article():
     pre_article_df['gtin'] = pre_article_df['gtin'].fillna(0)
     pre_article_res_list = []
     for i, row in pre_article_df.iterrows():
+        article = str(row['artno']).strip()
         brand_no_id = Suppliers200.objects.filter(brand_no=int(row['brandno'])).first()
         if row['gtin']:
             pre_article_res_list.append(Article200(
-                art_no=row['artno'],
+                art_no=article,
                 brand_no_id=brand_no_id,
                 gen_art_no=row['genartno'],
                 gtin=row['gtin'],
@@ -238,7 +241,7 @@ def get_pre_article():
             ))
         else:
             pre_article_res_list.append(Article200(
-                art_no=row['artno'],
+                art_no=article,
                 brand_no_id=brand_no_id,
                 gen_art_no=row['genartno'],
                 quant_unit=row['quantunit'],
@@ -384,21 +387,49 @@ def clear_data():
     Table410.objects.all().delete()
 
 
+def get_article_in_country():
+    data_df_202 = get_data_in_txt('202')
+    data_df_202 = data_df_202[['artno', 'countrycode']]
+    countries_list = []
+    data = {}
+    for i, row in data_df_202.iterrows():
+        art = str(row["artno"]).strip()
+        code = str(row["countrycode"]).strip()
+        if art in data:
+            data[art].append(code)
+        else:
+            data[art] = []
+            data[art].append(code)
+
+        countries = Country202.objects.filter(country_code__in=data[art])
+
+        for article in data.keys():
+            obj = Article200.objects.get(art_no=article)
+            obj.country_id.set(countries)
+
+    # print(data)
+
+
+    print('---------------END article_in_country--------------------')
+
+
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        get_manufacturer()
-        get_country()
-        get_suppliers()
-        get_reference()
-        get_document()
-        get_supers()
+        # get_manufacturer()
+        # get_country()
+        # get_suppliers()
+        # get_reference()
+        # get_document()
+        # get_supers()
         get_pre_article()
         # get_article()
-        get_criteria()
-        criteria_in_article()
-        get_trade()
-        get_lnk()
-        get_table404()
-        get_table410()
+        # get_criteria()
+        # criteria_in_article()
+        # get_trade()
+        # get_lnk()
+        # get_table404()
+        # get_table410()
+        # get_data()
+        # get_article_in_country()
         print("--- %s seconds ---" % (time.time() - start_time))

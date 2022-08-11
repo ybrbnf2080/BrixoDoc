@@ -210,7 +210,7 @@ def get_supers():
 
 
 def get_pre_article():
-    Article200.objects.all().delete()
+    # Article200.objects.all().delete()
     test_df = get_data()[get_data()['genartno'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
 
@@ -390,7 +390,6 @@ def clear_data():
 def get_article_in_country():
     data_df_202 = get_data_in_txt('202')
     data_df_202 = data_df_202[['artno', 'countrycode']]
-    countries_list = []
     data = {}
     for i, row in data_df_202.iterrows():
         art = str(row["artno"]).strip()
@@ -400,15 +399,11 @@ def get_article_in_country():
         else:
             data[art] = []
             data[art].append(code)
-
-        countries = Country202.objects.filter(country_code__in=data[art])
-
-        for article in data.keys():
-            obj = Article200.objects.get(art_no=article)
-            obj.country_id.set(countries)
-
-    # print(data)
-
+    for key in data:
+        countries = Country202.objects.filter(country_code__in=data[key])
+        obj = Article200.objects.get(art_no=key)
+        # print(obj, '->', countries)
+        obj.country_id.set(countries)
 
     print('---------------END article_in_country--------------------')
 
@@ -422,7 +417,7 @@ class Command(BaseCommand):
         # get_reference()
         # get_document()
         # get_supers()
-        get_pre_article()
+        # get_pre_article()
         # get_article()
         # get_criteria()
         # criteria_in_article()
@@ -431,5 +426,5 @@ class Command(BaseCommand):
         # get_table404()
         # get_table410()
         # get_data()
-        # get_article_in_country()
+        get_article_in_country()
         print("--- %s seconds ---" % (time.time() - start_time))

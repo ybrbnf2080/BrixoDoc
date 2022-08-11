@@ -39,6 +39,7 @@ class ArticleAdmin(ModelAdmin):
                     'gen_art_no',
                     'brand_no_id'
                     ]
+    search_fields = ['art_no']
 
 
 class ManufactureAdmin(ModelAdmin):

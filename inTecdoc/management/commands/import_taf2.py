@@ -163,16 +163,18 @@ def get_suppliers():
 
 
 def get_reference():
+    Ref203.objects.all().delete()
     data_df_203 = get_data_in_txt('203')
     data_df_203 = data_df_203[['artno', 'manno', 'refno']]
     data_df_203['manno'] = data_df_203['manno'].astype("Int64")
     data_df_203 = data_df_203.dropna()
     ref_res_list = []
     for i, row in data_df_203.iterrows():
+        ref = str(row["refno"]).strip()
         man_no_id = Manufacture203.objects.filter(man_no=int(row['manno'])).first()
         if man_no_id:
             ref_res_list.append(Ref203(
-                    ref_no=row['refno'],
+                    ref_no=ref,
                     man_no_id=man_no_id
                 ))
     Ref203.objects.bulk_create(ref_res_list, batch_size=1000, ignore_conflicts=True)
@@ -185,9 +187,11 @@ def get_document():
                                'langno', 'docname', 'doctype1']]
     doc_res_lst = []
     for i, row in data_df_231.iterrows():
+        doc_no = str(row['docno']).strip()
+        doc_name = str(row['docname']).strip()
         doc_res_lst.append(Doc231and232(
-            doc_no=row['docno'],
-            doc_name=row['docname'],
+            doc_no=doc_no,
+            doc_name=doc_name,
             lang_no=row['langno'],
             doc_type=row['doctype'],
             doc_type_one=row['doctype1'],
@@ -202,8 +206,9 @@ def get_supers():
     data_df_204 = get_data_in_txt('204')
     data_df_204 = data_df_204[['artno', 'supersno']]
     for i, row in data_df_204.iterrows():
+        supers = str(row['supersno']).strip()
         super_res_list.append(Supers204(
-            supers_no=row['supersno']
+            supers_no=supers
         ))
     Supers204.objects.bulk_create(super_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Supers--------------------')
@@ -252,26 +257,92 @@ def get_pre_article():
     print('---------------END PRE Article--------------------')
 
 
-def get_article():
-    get_data()['countrycode'] = get_data()['countrycode'].fillna('')
-    get_data()['supersno'] = get_data()['supersno'].fillna('')
-    get_data()['refno'] = get_data()['refno'].fillna('')
-    get_data()['docno'] = get_data()['docno'].fillna(0)
+def get_article_in_country():
+    data_df_202 = get_data_in_txt('202')
+    data_df_202 = data_df_202[['artno', 'countrycode']]
+    data = {}
+    for i, row in data_df_202.iterrows():
+        art = str(row["artno"]).strip()
+        code = str(row["countrycode"]).strip()
+        if art in data:
+            data[art].append(code)
+        else:
+            data[art] = []
+            data[art].append(code)
+    for key in data:
+        # print(key, '->', data[key])
+        countries = Country202.objects.filter(country_code__in=data[key])
+        obj = Article200.objects.get(art_no=key)
+        # print(obj, '->', countries)
+        obj.country_id.set(countries)
 
-    article_res_list = []
-    for i, row in get_data().iterrows():
-        supers_id = Supers204.objects.filter(supers_no=row['supersno']).first()  # Todo
-        ref_no_id = Ref203.objects.filter(ref_no=row['refno']).first()  # Todo
-        country = Country202.objects.filter(country_code=row['countrycode']).first()  # Todo
-        doc_no_id = Doc231and232.objects.filter(doc_no=row['docno']).first()  # Todo
-        article_res_list.append(Article200(
-            country_id=country,
-            supers_id=supers_id,
-            ref_no_id=ref_no_id,
-            doc_no_id=doc_no_id
-        ))
-    Article200.objects.bulk_create(article_res_list, batch_size=1000, ignore_conflicts=True)
-    print('---------------END Article--------------------')
+    print('---------------END article_in_country--------------------')
+
+
+def get_article_in_supers():
+    data_df_204 = get_data_in_txt('204')
+    data_df_204 = data_df_204[['artno', 'supersno']]
+    data = {}
+    for i, row in data_df_204.iterrows():
+        art = str(row["artno"]).strip()
+        supers = str(row["supersno"]).strip()
+        if art in data:
+            data[art].append(supers)
+        else:
+            data[art] = []
+            data[art].append(supers)
+    for key in data:
+        # print(key, '->', data[key])
+        supers_no = Supers204.objects.filter(supers_no__in=data[key])
+        obj = Article200.objects.get(art_no=key)
+        # print(obj, '->', supers_no)
+        obj.supers_id.set(supers_no)
+
+    print('---------------END article_in_supers--------------------')
+
+
+def get_article_in_ref():
+    data_df_203 = get_data_in_txt('203')
+    data_df_203 = data_df_203[['artno', 'refno']]
+    data = {}
+    for i, row in data_df_203.iterrows():
+        art = str(row["artno"]).strip()
+        reference = str(row["refno"]).strip()
+        if art in data:
+            data[art].append(reference)
+        else:
+            data[art] = []
+            data[art].append(reference)
+    for key in data:
+        # print(key, '->', data[key])
+        ref_no = Ref203.objects.filter(ref_no__in=data[key])
+        obj = Article200.objects.get(art_no=key)
+        # print(obj, '->', ref_no)
+        obj.ref_no_id.set(ref_no)
+
+    print('---------------END article_in_ref--------------------')
+
+
+def get_article_in_doc():
+    data_df_232 = get_data_in_txt('232')
+    data_df_232 = data_df_232[['artno', 'docno']]
+    data = {}
+    for i, row in data_df_232.iterrows():
+        art = str(row["artno"]).strip()
+        doc_no = str(row["docno"]).strip()
+        if art in data:
+            data[art].append(doc_no)
+        else:
+            data[art] = []
+            data[art].append(doc_no)
+    for key in data:
+        # print(key, '->', data[key])
+        doc = Doc231and232.objects.filter(doc_no__in=data[key])
+        obj = Article200.objects.get(art_no=key)
+        # print(obj, '->', doc)
+        obj.doc_no_id.set(doc)
+
+    print('---------------END article_in_doc--------------------')
 
 
 def get_criteria():
@@ -387,44 +458,24 @@ def clear_data():
     Table410.objects.all().delete()
 
 
-def get_article_in_country():
-    data_df_202 = get_data_in_txt('202')
-    data_df_202 = data_df_202[['artno', 'countrycode']]
-    data = {}
-    for i, row in data_df_202.iterrows():
-        art = str(row["artno"]).strip()
-        code = str(row["countrycode"]).strip()
-        if art in data:
-            data[art].append(code)
-        else:
-            data[art] = []
-            data[art].append(code)
-    for key in data:
-        countries = Country202.objects.filter(country_code__in=data[key])
-        obj = Article200.objects.get(art_no=key)
-        # print(obj, '->', countries)
-        obj.country_id.set(countries)
-
-    print('---------------END article_in_country--------------------')
-
-
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        # get_manufacturer()
-        # get_country()
-        # get_suppliers()
-        # get_reference()
-        # get_document()
-        # get_supers()
-        # get_pre_article()
-        # get_article()
-        # get_criteria()
-        # criteria_in_article()
-        # get_trade()
-        # get_lnk()
-        # get_table404()
-        # get_table410()
-        # get_data()
+        get_manufacturer()
+        get_country()
+        get_suppliers()
+        get_reference()
+        get_document()
+        get_supers()
+        get_pre_article()
         get_article_in_country()
+        get_article_in_supers()
+        get_article_in_ref()
+        get_article_in_doc()
+        get_criteria()
+        criteria_in_article()
+        get_trade()
+        get_lnk()
+        get_table404()
+        get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

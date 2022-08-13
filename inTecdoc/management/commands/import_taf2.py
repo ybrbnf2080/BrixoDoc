@@ -108,6 +108,7 @@ def get_data():
 
 
 def get_manufacturer():
+    Manufacture203.objects.all().delete()
     manufacturer = pd.read_csv(os.path.join(BASE_DIR, 'ImportTAF/sources_static/manufacturer.csv'), header=None, sep=";")
     manufacturer.rename(columns={0: 'man_no', 1: 'short_name', 2: 'term_plain'}, inplace=True)
     manufacturer_res_list = []
@@ -122,6 +123,7 @@ def get_manufacturer():
 
 
 def get_country():
+    Country202.objects.all().delete()
     path = os.path.join(BASE_DIR, 'ImportTAF/sources_static/country.txt')
     with open(path, "r", encoding='utf-8') as f:
         for line in f:
@@ -137,6 +139,7 @@ def get_country():
 
 
 def get_suppliers():
+    Suppliers200.objects.all()
     data_df_40 = get_data_in_txt('040')
     data_df_40 = data_df_40[['brandno', 'street1', 'street2', 'term1',
                              'web', 'countrycode', 'postcode', 'city1',
@@ -182,6 +185,7 @@ def get_reference():
 
 
 def get_document():
+    Doc231and232.objects.all().delete()
     data_df_231 = get_data_in_txt('231')
     data_df_231 = data_df_231[['docno', 'doctype', 'doctermnorm',
                                'langno', 'docname', 'doctype1']]
@@ -202,6 +206,7 @@ def get_document():
 
 
 def get_supers():
+    Supers204.objects.all().delete()
     super_res_list = []
     data_df_204 = get_data_in_txt('204')
     data_df_204 = data_df_204[['artno', 'supersno']]
@@ -215,7 +220,7 @@ def get_supers():
 
 
 def get_pre_article():
-    # Article200.objects.all().delete()
+    Article200.objects.all().delete()
     test_df = get_data()[get_data()['genartno'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
 
@@ -243,6 +248,7 @@ def get_pre_article():
                 quant_unit=row['quantunit'],
                 quant_per_unit=row['quantperunit'],
                 status_dat=row['statusdat'],
+                art_stat=row['artstat'],
             ))
         else:
             pre_article_res_list.append(Article200(
@@ -346,6 +352,7 @@ def get_article_in_doc():
 
 
 def get_criteria():
+    CritVal210.objects.all().delete()
     criteria = pd.read_csv(os.path.join(BASE_DIR, 'ImportTAF/sources_static/criteria.csv'), header=None, sep=";")
     criteria.rename(columns={0: 'crit_no', 1: 'name', 2: 'description'}, inplace=True)
     criteria_res_list = []
@@ -360,11 +367,13 @@ def get_criteria():
 
 
 def criteria_in_article():
+    Crit210.objects.all().delete()
     crit_res_list = []
     data_df_210 = get_data_in_txt('210')
     data_df_210 = data_df_210[['artno', 'critno', 'critval']]
     for i, row in data_df_210.iterrows():
-        art_no_id = Article200.objects.filter(art_no=row['artno']).first()
+        art = str(row["artno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
         crit_no_id = CritVal210.objects.filter(crit_no=row['critno']).first()
         crit_res_list.append(Crit210(
             art_no_id=art_no_id,
@@ -376,11 +385,13 @@ def criteria_in_article():
 
 
 def get_trade():
+    Trade207.objects.all().delete()
     trade_res_list = []
     data_df_207 = get_data_in_txt('207')
     data_df_207 = data_df_207[['artno', 'tradeno', 'firstpage']]
     for i, row in data_df_207.iterrows():
-        art_no_id = Article200.objects.filter(art_no=row['artno']).first()
+        art = str(row["artno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
         trade_res_list.append(Trade207(
             art_no_id=art_no_id,
             trade_no=row['tradeno'],
@@ -391,11 +402,13 @@ def get_trade():
 
 
 def get_lnk():
+    Lnk400.objects.all().delete()
     lnk_res_list = []
     data_df_400 = get_data_in_txt('400')
     data_df_400 = data_df_400[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno']]
     for i, row in data_df_400.iterrows():
-        art_no_id = Article200.objects.filter(art_no=row['artno']).first()
+        art = str(row["artno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
         lnk_res_list.append(Lnk400(
             art_no_id=art_no_id,
             gen_art_no=row['genartno'],
@@ -408,11 +421,13 @@ def get_lnk():
 
 
 def get_table404():
+    Table404.objects.all().delete()
     table404_res_list = []
     data_df_404 = get_data_in_txt('404')
     data_df_404 = data_df_404[['artno', 'genartno', 'lnktargettype', 'lnktargetno']]
     for i, row in data_df_404.iterrows():
-        art_no_id = Article200.objects.filter(art_no=row['artno']).first()
+        art = str(row["artno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
         table404_res_list.append(Table404(
             art_no_id=art_no_id,
             gen_art_no=row['genartno'],
@@ -424,11 +439,13 @@ def get_table404():
 
 
 def get_table410():
+    Table404.objects.all().delete()
     table410_res_list = []
     data_df_410 = get_data_in_txt('410')
     data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage']]
     for i, row in data_df_410.iterrows():
-        art_no_id = Article200.objects.filter(art_no=row['artno']).first()
+        art = str(row["artno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
         table410_res_list.append(Table410(
             art_no_id=art_no_id,
             gen_art_no=row['genartno'],
@@ -461,21 +478,21 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        get_manufacturer()
-        get_country()
-        get_suppliers()
-        get_reference()
-        get_document()
-        get_supers()
-        get_pre_article()
-        get_article_in_country()
-        get_article_in_supers()
-        get_article_in_ref()
-        get_article_in_doc()
-        get_criteria()
-        criteria_in_article()
-        get_trade()
-        get_lnk()
+        # get_manufacturer()
+        # get_country()
+        # get_suppliers()
+        # get_reference()
+        # get_document()
+        # get_supers()
+        # get_pre_article()
+        # get_article_in_country()
+        # get_article_in_supers()
+        # get_article_in_ref()
+        # get_article_in_doc()
+        # get_criteria()
+        # criteria_in_article()
+        # get_trade()
+        # get_lnk()
         get_table404()
-        get_table410()
+        # get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

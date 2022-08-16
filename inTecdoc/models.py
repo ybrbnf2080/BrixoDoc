@@ -3,18 +3,26 @@ from django.db import models
 
 class Suppliers200(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name", blank=True, null=True) #Имя BranNo
-    brand_no = models.IntegerField(verbose_name="BrandNo", blank=True, null=True) #BranNo
+    brand_no = models.IntegerField(verbose_name="Brand No", blank=True, null=True) #BranNo
     street = models.CharField(max_length=255, verbose_name="Street", blank=True, null=True) #Street1 40
     street_two = models.CharField(max_length=255, verbose_name="Street2", blank=True, null=True) #Street2 40
-    country_code = models.CharField(max_length=255, verbose_name="CountryCode", blank=True, null=True) #CountryCode 40 PostCode
-    post_code = models.CharField(max_length=255, verbose_name="PostCode", blank=True, null=True) #PostCode 40
+    country_code = models.CharField(max_length=255, verbose_name="Country Code", blank=True, null=True) #CountryCode 40 PostCode
+    post_code = models.CharField(max_length=255, verbose_name="Post Code", blank=True, null=True) #PostCode 40
     city = models.CharField(max_length=255, verbose_name="City", blank=True, null=True) #City1 40
     phone = models.CharField(max_length=255, verbose_name="Phone", blank=True, null=True) #Phone 40
     email = models.CharField(max_length=255, verbose_name="Email", blank=True, null=True) #Email 40
     web_site = models.CharField(max_length=255, verbose_name="Web", blank=True, null=True) #WEB 40
-    adr_type = models.IntegerField(verbose_name="AdrType", blank=True, null=True) #AdrType 40
-    doc_no = models.IntegerField(verbose_name="DocNo", blank=True, null=True) #DocNo 42
+    adr_type = models.IntegerField(verbose_name="Adr Type", blank=True, null=True) #AdrType 40
+    doc_no = models.IntegerField(verbose_name="Doc No", blank=True, null=True) #DocNo 42
     doc_type = models.IntegerField(verbose_name="DocType", blank=True, null=True) #DocType 42
+    data_release = models.IntegerField(verbose_name="Data Release", blank=True, null=True)
+    version_date = models.IntegerField(verbose_name="Version Date", blank=True, null=True)
+    man_no = models.IntegerField(verbose_name="Man No", blank=True, null=True)
+    full = models.IntegerField(verbose_name="Full", blank=True, null=True)
+    term1 = models.CharField(max_length=255, verbose_name="Term1", blank=True, null=True)
+    ref_data_version = models.IntegerField(verbose_name="ref_data_version", blank=True, null=True)
+    post_code_pobox = models.CharField(max_length=255, verbose_name="post_code_pobox", blank=True, null=True)
+    post_code_cus = models.CharField(max_length=255, verbose_name="post_code_cus", blank=True, null=True)
 
     class Meta:
         verbose_name = """Производитель комплектующей"""

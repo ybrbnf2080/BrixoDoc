@@ -141,25 +141,44 @@ def get_country():
 def get_suppliers():
     Suppliers200.objects.all()
     data_df_40 = get_data_in_txt('040')
-    data_df_40 = data_df_40[['brandno', 'street1', 'street2', 'term1',
-                             'web', 'countrycode', 'postcode', 'city1',
-                             'phone', 'email'
-                             ]]
-    data_df_40.rename(columns={'countrycode': 'countrycode_sup'}, inplace=True)
+    data_df_01 = get_data_in_txt('001')
+    data_df_42 = get_data_in_txt('042')
+    data_df_42 = data_df_42[['brandno', "docno", 'doctype']]
+    result_df = data_df_01.merge(data_df_40, how='left',
+                                  left_on=['brandno'],
+                                  right_on=['brandno'])
+    result_df = result_df.merge(data_df_42, how='left',
+                                 left_on=['brandno'],
+                                 right_on=['brandno'])
+    # # data_df_40.rename(columns={'countrycode': 'countrycode_sup'}, inplace=True)
+    # print(result_df.columns)
 
     supplier_res_list = []
-    for i, row in data_df_40.iterrows():
+    for i, row in result_df.iterrows():
+        postcodepobox = str(row['postcodepobox']).strip()
+        postcodecus = str(row['postcodecus']).strip()
         supplier_res_list.append(Suppliers200(
-            name=row['term1'],
+            name=row['brandname'],
             brand_no=row['brandno'],
             street=row['street1'],
-            country_code=row['countrycode_sup'],
+            country_code=row['countrycode'],
             street_two=row['street2'],
             post_code=row['postcode'],
             city=row['city1'],
             phone=row['phone'],
             email=row['email'],
             web_site=row['web'],
+            data_release=row['data release'],
+            version_date=row['versiondate'],
+            man_no=row['manno'],
+            full=row['full'],
+            term1=row['term1'],
+            adr_type=row['adrtype'],
+            doc_no=row['docno'],
+            doc_type=row['doctype'],
+            ref_data_version=row['refdataversion'],
+            post_code_pobox=postcodepobox,
+            post_code_cus=postcodecus,
         ))
     Suppliers200.objects.bulk_create(supplier_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Suppliers--------------------')
@@ -478,21 +497,22 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        # get_manufacturer()
-        # get_country()
-        # get_suppliers()
-        # get_reference()
-        # get_document()
-        # get_supers()
-        # get_pre_article()
-        # get_article_in_country()
-        # get_article_in_supers()
-        # get_article_in_ref()
-        # get_article_in_doc()
-        # get_criteria()
-        # criteria_in_article()
-        # get_trade()
-        # get_lnk()
+        clear_data()
+        get_manufacturer()
+        get_country()
+        get_suppliers()
+        get_reference()
+        get_document()
+        get_supers()
+        get_pre_article()
+        get_article_in_country()
+        get_article_in_supers()
+        get_article_in_ref()
+        get_article_in_doc()
+        get_criteria()
+        criteria_in_article()
+        get_trade()
+        get_lnk()
         get_table404()
-        # get_table410()
+        get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

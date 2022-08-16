@@ -24,12 +24,12 @@ def generate_001(brand_no: str):
         data = [
             str(brand_no).rjust(4, '0'),  # BrandNo
             '1'.rjust(3, '0'),  # TableNo
-            '0'.rjust(4, '0'),  # Data Release
-            '20220209'.rjust(8, '0'),  # VersionDate ########################### ТРЕБУЕТ РЕШЕНИЕ #####################
-            '1'.rjust(1, '0'),  # Full
-            '3870'.rjust(6, '0'),  # ManNo ########################### ТРЕБУЕТ РЕШЕНИЕ ###############################
+            str(COMPANIES.get(brand_no=brand_no).data_release).rjust(4, '0'),  # Data Release
+            str(COMPANIES.get(brand_no=brand_no).version_date).rjust(8, '0'),  # VersionDate
+            str(COMPANIES.get(brand_no=brand_no).full).rjust(1, '0'),  # Full
+            str(COMPANIES.get(brand_no=brand_no).man_no).rjust(6, '0'),  # ManNo
             COMPANIES.get(brand_no=brand_no).name.ljust(20),  # BrandName
-            '722'.rjust(4, '0'),  # RefDataVersion ########################### ТРЕБУЕТ РЕШЕНИЕ ####################
+            str(COMPANIES.get(brand_no=brand_no).ref_data_version).rjust(4, '0'),  # RefDataVersion
             ''.rjust(4),  # Reserved
             '2.4'.ljust(3),  # Format
             '0'.ljust(1),  # DeleteFlag
@@ -72,15 +72,15 @@ def generate_040(brand_no: str):
         data = [
             str(brand_no).ljust(4),  # BrandNo
             '40'.rjust(3, '0'),  # TableNo
-            str(COMPANIES.get(brand_no=brand_no).name).ljust(40),  # Term1
+            str(COMPANIES.get(brand_no=brand_no).term1).ljust(40),  # Term1
             ''.ljust(40),  # Term2
             str(COMPANIES.get(brand_no=brand_no).street).ljust(40),  # Street1
             str(COMPANIES.get(brand_no=brand_no).street_two).ljust(40),  # Street2
             ''.ljust(10),  # POBox
             str(COMPANIES.get(brand_no=brand_no).country_code).ljust(3),  # CountryCode
             str(COMPANIES.get(brand_no=brand_no).post_code).ljust(8),  # PostCode
-            ''.ljust(8),  # PostCodePOBox
-            ''.ljust(8),  # PostCodeCus
+            str(COMPANIES.get(brand_no=brand_no).post_code_pobox).ljust(8),  # PostCodePOBox
+            str(COMPANIES.get(brand_no=brand_no).post_code_cus).ljust(8),  # PostCodeCus
             str(COMPANIES.get(brand_no=brand_no).city).ljust(40),  # City1
             ''.ljust(40),  # City2
             str(COMPANIES.get(brand_no=brand_no).phone).ljust(20),  # Phone
@@ -99,8 +99,8 @@ def generate_042(brand_no: str):
             str(brand_no).ljust(4),  # BrandNo
             '42'.rjust(3, '0'),  # TableNo
             ''.ljust(3),  # CountryCode
-            ''.rjust(9, '0'),  # DocNo
-            ''.ljust(2),  # DocType
+            str(COMPANIES.get(brand_no=brand_no).doc_no).rjust(9, '0'),  # DocNo
+            str(COMPANIES.get(brand_no=brand_no).doc_type).rjust(2, '0'),  # DocType
             '0'.ljust(1),  # DeleteFlag
         ]
         file.write(''.join(data))
@@ -180,7 +180,7 @@ def generate_201(brand_no: str):
 
 def generate_202(brand_no: str):
     objects = Article200.objects.filter(brand_no_id__brand_no=brand_no) \
-        .values('art_no', 'country__country_code')
+        .values('art_no', 'country_id__country_code')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -198,16 +198,26 @@ def generate_203(brand_no: str):
     objects = Article200.objects.filter(brand_no_id__brand_no=brand_no) \
         .values('art_no', 'ref_no_id__man_no_id__man_no', 'ref_no_id__ref_no').filter(pk__gt=0)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'203.{brand_no}', 'w', encoding='utf-8') as file:
+        art_sort_no = []
+        sort_no = 0
         for obj in objects:
+            art_no = obj.get('art_no').strip()
+            if art_no in art_sort_no:
+                art_sort_no.append(art_no)
+                sort_no += 1
+            else:
+                art_sort_no.clear()
+                art_sort_no.append(art_no)
+                sort_no = 1
             data = [
                 obj.get('art_no').ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '203'.ljust(3),  # TableNo
                 str(obj.get('ref_no_id__man_no_id__man_no')).rjust(6, '0'),  # ManNo
                 'GUS'.ljust(3),  # CountryCode ########################### ТРЕБУЕТ РЕШЕНИЕ #########################
-                obj.get('ref_no_id__ref_no').ljust(22),  # RefNo
+                str(obj.get('ref_no_id__ref_no')).ljust(22),  # RefNo
                 '0'.ljust(1),  # Exclude
-                '1'.rjust(5, '0'),  # SortNo ########################### ТРЕБУЕТ РЕШЕНИЕ ###############################
+                str(sort_no).rjust(5, '0'),  # SortNo ########################### ТРЕБУЕТ РЕШЕНИЕ ###############################
                 '0'.ljust(1),  # Additive
                 ''.ljust(3),  # ReferenceInfo
                 '0'.ljust(1),  # DeleteFlag
@@ -660,34 +670,34 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
-            generate_001(comp.brand_no)
-            generate_030(comp.brand_no)
-            generate_035(comp.brand_no)
-            generate_040(comp.brand_no)
-            generate_042(comp.brand_no)
-            generate_043(comp.brand_no)
-            generate_200(comp.brand_no)
-            generate_201(comp.brand_no)
-            generate_202(comp.brand_no)
+            # generate_001(comp.brand_no)
+            # generate_030(comp.brand_no)
+            # generate_035(comp.brand_no)
+            # generate_040(comp.brand_no)
+            # generate_042(comp.brand_no)
+            # generate_043(comp.brand_no)
+            # generate_200(comp.brand_no)
+            # generate_201(comp.brand_no)
+            # generate_202(comp.brand_no)
             generate_203(comp.brand_no)
-            generate_204(comp.brand_no)
-            generate_205(comp.brand_no)
-            generate_206(comp.brand_no)
-            generate_207(comp.brand_no)
-            generate_208(comp.brand_no)
-            generate_209(comp.brand_no)
-            generate_210(comp.brand_no)
-            generate_211(comp.brand_no)
-            generate_212(comp.brand_no)
-            generate_217(comp.brand_no)
-            generate_222(comp.brand_no)
-            generate_228(comp.brand_no)
-            generate_231(comp.brand_no)
-            generate_232(comp.brand_no)
-            generate_233(comp.brand_no)
-            generate_400(comp.brand_no)
-            generate_401(comp.brand_no)
-            generate_403(comp.brand_no)
-            generate_404(comp.brand_no)
-            generate_410(comp.brand_no)
-            generate_432(comp.brand_no)
+            # generate_204(comp.brand_no)
+            # generate_205(comp.brand_no)
+            # generate_206(comp.brand_no)
+            # generate_207(comp.brand_no)
+            # generate_208(comp.brand_no)
+            # generate_209(comp.brand_no)
+            # generate_210(comp.brand_no)
+            # generate_211(comp.brand_no)
+            # generate_212(comp.brand_no)
+            # generate_217(comp.brand_no)
+            # generate_222(comp.brand_no)
+            # generate_228(comp.brand_no)
+            # generate_231(comp.brand_no)
+            # generate_232(comp.brand_no)
+            # generate_233(comp.brand_no)
+            # generate_400(comp.brand_no)
+            # generate_401(comp.brand_no)
+            # generate_403(comp.brand_no)
+            # generate_404(comp.brand_no)
+            # generate_410(comp.brand_no)
+            # generate_432(comp.brand_no)

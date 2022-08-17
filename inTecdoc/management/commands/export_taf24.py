@@ -217,7 +217,7 @@ def generate_203(brand_no: str):
                 'GUS'.ljust(3),  # CountryCode ########################### ТРЕБУЕТ РЕШЕНИЕ #########################
                 str(obj.get('ref_no_id__ref_no')).ljust(22),  # RefNo
                 '0'.ljust(1),  # Exclude
-                str(sort_no).rjust(5, '0'),  # SortNo ########################### ТРЕБУЕТ РЕШЕНИЕ ###############################
+                str(sort_no).rjust(5, '0'),  # SortNo
                 '0'.ljust(1),  # Additive
                 ''.ljust(3),  # ReferenceInfo
                 '0'.ljust(1),  # DeleteFlag
@@ -226,19 +226,29 @@ def generate_203(brand_no: str):
 
 
 def generate_204(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no) \
-        .values('art_no', 'supers_id__supers_no')
+    objects = Supers204.objects.filter(supers_article__brand_no_id__brand_no=brand_no) \
+        .values('supers_article__art_no', 'supers_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'204.{brand_no}', 'w', encoding='utf-8') as file:
+        art_sort_no = []
+        sort_no = 0
         for obj in objects:
+            art_no = obj.get('supers_article__art_no').strip()
+            if art_no in art_sort_no:
+                art_sort_no.append(art_no)
+                sort_no += 1
+            else:
+                art_sort_no.clear()
+                art_sort_no.append(art_no)
+                sort_no = 1
             data = [
-                obj.get('art_no').ljust(22),  # ArtNo
+                str(obj.get('supers_article__art_no')).ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '204'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
-                obj.get('supers_id__supers_no').ljust(22),  # SupersNo
-                ''.ljust(1),  # Exclude
-                ''.ljust(5),  # SortNo
-                ''.ljust(1),  # DeleteFlag
+                str(obj.get('supers_no')).ljust(22),  # SupersNo
+                '0'.ljust(1),  # Exclude
+                str(sort_no).rjust(5, '0'),  # SortNo
+                '0'.ljust(1),  # DeleteFlag
             ]
             file.write(''.join(data) + '\n')
 
@@ -281,18 +291,28 @@ def generate_206(brand_no: str):
 
 
 def generate_207(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no).values('art_no', 'ArtNoTrade_207__trade_no')
+    objects = Trade207.objects.filter(art_no_id__brand_no_id__brand_no=brand_no).values('art_no_id__art_no', 'trade_no', 'first_page')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'207.{brand_no}', 'w', encoding='utf-8') as file:
+        art_sort_no = []
+        sort_no = 0
         for obj in objects:
+            art_no = obj.get('art_no_id__art_no').strip()
+            if art_no in art_sort_no:
+                art_sort_no.append(art_no)
+                sort_no += 1
+            else:
+                art_sort_no.clear()
+                art_sort_no.append(art_no)
+                sort_no = 1
             data = [
-                obj.get('art_no').ljust(22),  # ArtNo
+                str(obj.get('art_no_id__art_no')).ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '207'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
-                obj.get('ArtNoTrade_207__trade_no').ljust(35),  # TradeNo
+                str(obj.get('trade_no')).ljust(35),  # TradeNo
                 '0'.ljust(1),  # Exclude
-                '1'.ljust(1),  # FirstPage
-                '1'.ljust(5),  # SortNo ########################### ТРЕБУЕТ РЕШЕНИЕ ###############################
+                str(obj.get('first_page')).ljust(1),  # FirstPage
+                str(sort_no).rjust(5, '0'),  # SortNo
                 '0'.ljust(1),  # DeleteFlag
             ]
             file.write(''.join(data) + '\n')
@@ -319,11 +339,11 @@ def generate_208(brand_no: str):
 
 
 def generate_209(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no).values('art_no', 'gtin')
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no, gtin__isnull=False).values('art_no', 'gtin')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'209.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                obj.get('art_no').ljust(22),  # ArtNo
+                str(obj.get('art_no')).ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '209'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode
@@ -679,13 +699,13 @@ class Command(BaseCommand):
             # generate_200(comp.brand_no)
             # generate_201(comp.brand_no)
             # generate_202(comp.brand_no)
-            generate_203(comp.brand_no)
+            # generate_203(comp.brand_no)
             # generate_204(comp.brand_no)
             # generate_205(comp.brand_no)
             # generate_206(comp.brand_no)
             # generate_207(comp.brand_no)
             # generate_208(comp.brand_no)
-            # generate_209(comp.brand_no)
+            generate_209(comp.brand_no)
             # generate_210(comp.brand_no)
             # generate_211(comp.brand_no)
             # generate_212(comp.brand_no)

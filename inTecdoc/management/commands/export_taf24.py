@@ -37,36 +37,6 @@ def generate_001(brand_no: str):
         file.write(''.join(data))
 
 
-def generate_030(brand_no: str):
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'030.{brand_no}', 'w', encoding='utf-8') as file:
-        data = [
-            ''.ljust(22),  # Reserved
-            ''.ljust(4),  # BrandNo
-            ''.ljust(3),  # TableNo
-            ''.ljust(9),  # TermNo
-            ''.ljust(3),  # LangNo
-            ''.ljust(60),  # Term
-            ''.ljust(1),  # DeleteFlag
-        ]
-        file.write(''.join(data))
-
-
-def generate_035(brand_no: str):
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'035.{brand_no}', 'w', encoding='utf-8') as file:
-        data = [
-            ''.ljust(22),  # Reserved
-            ''.ljust(4),  # BrandNo
-            ''.ljust(3),  # TableNo
-            ''.ljust(6),  # TxtModNo
-            ''.ljust(3),  # LangNo
-            ''.ljust(1),  # Fixed
-            ''.ljust(3),  # SeqNo
-            ''.ljust(60),  # Text
-            ''.ljust(1),  # DeleteFlag
-        ]
-        file.write(''.join(data))
-
-
 def generate_040(brand_no: str):
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'040.{brand_no}', 'w', encoding='utf-8') as file:
         data = [
@@ -106,33 +76,6 @@ def generate_042(brand_no: str):
         file.write(''.join(data))
 
 
-def generate_043(brand_no: str):
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'043.{brand_no}', 'w', encoding='utf-8') as file:
-        data = [
-            ''.ljust(4),  # BrandNo
-            ''.ljust(3),  # TableNo
-            ''.ljust(3),  # AdrType
-            ''.ljust(3),  # CountryCode
-            ''.ljust(40),  # Term1
-            ''.ljust(40),  # Term2
-            ''.ljust(40),  # Street1
-            ''.ljust(40),  # Street2
-            ''.ljust(10),  # POBox
-            ''.ljust(3),  # CountryCode1
-            ''.ljust(8),  # PostCode
-            ''.ljust(8),  # PostCodePOBox
-            ''.ljust(8),  # PostCodeCus
-            ''.ljust(40),  # City1
-            ''.ljust(40),  # City2
-            ''.ljust(20),  # Phone
-            ''.ljust(20),  # Fax
-            ''.ljust(60),  # Email
-            ''.ljust(60),  # Web
-            ''.ljust(1),  # AdrType1
-        ]
-        file.write(''.join(data))
-
-
 def generate_200(brand_no: str):
     objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'200.{brand_no}', 'w', encoding='utf-8') as file:
@@ -154,31 +97,7 @@ def generate_200(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_201(brand_no: str):
-    objects = []
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'201.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(10),  # Price
-                ''.ljust(3),  # PrUnit
-                ''.ljust(3),  # PrQuantUnit
-                ''.ljust(8),  # ValidFrom
-                ''.ljust(8),  # ValidTo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(3),  # PrType
-                ''.ljust(10),  # Reserved
-                ''.ljust(3),  # CurCode
-                ''.ljust(5),  # DiscGroup
-                ''.ljust(1),  # Dicount
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_202(brand_no: str):#Вопрос в последовательности
+def generate_202(brand_no: str):  # Вопрос в последовательности
     objects = Article200.objects.filter(brand_no_id__brand_no=brand_no, country_id__country_code__isnull=False) \
         .values('art_no', 'country_id__country_code')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'202.{brand_no}', 'w', encoding='utf-8') as file:
@@ -225,7 +144,7 @@ def generate_203(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_204(brand_no: str): #Вопрос в последовательности
+def generate_204(brand_no: str):  # Вопрос в последовательности
     objects = Supers204.objects.filter(supers_article__brand_no_id__brand_no=brand_no) \
         .values('supers_article__art_no', 'supers_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'204.{brand_no}', 'w', encoding='utf-8') as file:
@@ -239,43 +158,6 @@ def generate_204(brand_no: str): #Вопрос в последовательно
                 '0'.ljust(1),  # Exclude
                 '1'.rjust(5, '0'),  # SortNo
                 '0'.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_205(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'205.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(5),  # PartGenArtNo
-                ''.ljust(3),  # SeqNo
-                ''.ljust(22),  # PartNo
-                ''.ljust(3),  # Quantity
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_206(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'206.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(5),  # Reserved
-                ''.ljust(3),  # CountryCode
-                ''.ljust(2),  # SortNo
-                ''.ljust(3),  # InfType
-                ''.ljust(1),  # FirstPage
-                ''.ljust(6),  # TXTModNo
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
             ]
             file.write(''.join(data) + '\n')
 
@@ -309,27 +191,7 @@ def generate_207(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_208(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'208.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(3),  # Reserved
-                ''.ljust(5),  # SeqNo
-                ''.ljust(3),  # SortNo
-                ''.ljust(4),  # CritNo
-                ''.ljust(20),  # CritVal
-                ''.ljust(1),  # Reserved1
-                ''.ljust(3),  # SeqNo1
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_209(brand_no: str):# Уникален ли GTIN? в исходнике 2 шт RN1025 с разными gtin
+def generate_209(brand_no: str):  # Уникален ли GTIN? в исходнике 2 шт RN1025 с разными gtin
     objects = Article200.objects.filter(brand_no_id__brand_no=brand_no, gtin__isnull=False).values('art_no', 'gtin')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'209.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
@@ -410,89 +272,36 @@ def generate_212(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_215(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'215.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(3),  # SeqNo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
+def generate_zero_file(brand_no: str):
+    # brand_no = Suppliers200.objects.filter(brand_no=brand_no)
+    file_030 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'030.{brand_no}', 'w', encoding='utf-8')
+    file_035 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'035.{brand_no}', 'w', encoding='utf-8')
+    file_043 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'043.{brand_no}', 'w', encoding='utf-8')
+    file_201 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'201.{brand_no}', 'w', encoding='utf-8')
+    file_205 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'205.{brand_no}', 'w', encoding='utf-8')
+    file_206 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'206.{brand_no}', 'w', encoding='utf-8')
+    file_208 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'208.{brand_no}', 'w', encoding='utf-8')
+    file_213 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'213.{brand_no}', 'w', encoding='utf-8')
+    file_214 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'214.{brand_no}', 'w', encoding='utf-8')
+    file_215 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'215.{brand_no}', 'w', encoding='utf-8')
+    file_216 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'216.{brand_no}', 'w', encoding='utf-8')
+    file_217 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'217.{brand_no}', 'w', encoding='utf-8')
+    file_222 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'222.{brand_no}', 'w', encoding='utf-8')
+    file_228 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'228.{brand_no}', 'w', encoding='utf-8')
+    file_233 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'233.{brand_no}', 'w', encoding='utf-8')
+    file_401 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'401.{brand_no}', 'w', encoding='utf-8')
+    file_402 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'402.{brand_no}', 'w', encoding='utf-8')
+    file_403 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'403.{brand_no}', 'w', encoding='utf-8')
+    file_432 = open(BASE_DIR / 'converted_db' / str(brand_no) / f'432.{brand_no}', 'w', encoding='utf-8')
 
 
-def generate_217(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'217.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(3),  # SeqNo
-                ''.ljust(9),  # DocNo
-                ''.ljust(2),  # DocType
-                ''.ljust(3),  # LangNo
-                ''.ljust(4),  # CoordNo
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_222(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'222.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(1),  # LnkType
-                ''.ljust(6),  # LnkVal
-                ''.ljust(3),  # SeqNo
-                ''.ljust(3),  # SortNo
-                ''.ljust(22),  # AccArtNo
-                ''.ljust(3),  # Quantity
-                ''.ljust(5),  # AccGenArtNo
-                ''.ljust(1),  # Reserved
-                ''.ljust(9),  # TermNo
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_228(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'228.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(3),  # SeqNo1
-                ''.ljust(3),  # SortNo1
-                ''.ljust(3),  # SeqNo
-                ''.ljust(4),  # CritNo
-                ''.ljust(20),  # CritVal
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_231(brand_no: str):
+def generate_231(brand_no: str):  # Не подхватывает Логотип
     objects = Doc231and232.objects.filter(doc_no_article__brand_no_id__brand_no=brand_no).values('doc_no',
-                                                                                 'lang_no',
-                                                                                 'doc_name',
-                                                                                 'doc_type',
-                                                                                 'doc_term_no',
-                                                                                 'doc_type_one')
+                                                                                                 'lang_no',
+                                                                                                 'doc_name',
+                                                                                                 'doc_type',
+                                                                                                 'doc_term_no',
+                                                                                                 'doc_type_one')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'231.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -501,7 +310,7 @@ def generate_231(brand_no: str):
                 '231'.ljust(3),  # TableNo
                 str(obj.get('doc_no')).rjust(9, '0'),  # DocNo
                 str(obj.get('lang_no')).rjust(3, '0'),  # LangNo
-                str(obj.get('doc_type')).ljust(30),  # DocName
+                str(obj.get('doc_name')).ljust(30),  # DocName
                 str(obj.get('doc_type')).rjust(3, '0'),  # DocType
                 str(obj.get('doc_term_no')).rjust(3, '0'),  # DocTermNorm
                 ''.ljust(4),  # Width
@@ -515,16 +324,27 @@ def generate_231(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_232(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no).values('art_no', 'doc_no_id__doc_no',
-                                                                               'doc_no_id__doc_type')
+def generate_232(brand_no: str):  # Порядок сортировки
+    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no, doc_no_id__doc_no__isnull=False).values(
+        'art_no', 'doc_no_id__doc_no',
+        'doc_no_id__doc_type')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'232.{brand_no}', 'w', encoding='utf-8') as file:
+        art_sort_no = []
+        sort_no = 0
         for obj in objects:
+            art_no = obj.get('art_no').strip()
+            if art_no in art_sort_no:
+                art_sort_no.append(art_no)
+                sort_no += 1
+            else:
+                art_sort_no.clear()
+                art_sort_no.append(art_no)
+                sort_no = 1
             data = [
                 obj.get('art_no').ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '232'.ljust(3),  # TableNo
-                '1'.rjust(2, '0'),  # SortNo ################### ТРЕБУЕТ РЕШЕНИЕ ################################
+                str(sort_no).rjust(2, '0'),  # SortNo
                 ''.ljust(3),  # CountryCode
                 '0'.ljust(1),  # Exclude
                 str(obj.get('doc_no_id__doc_no')).rjust(9, '0'),  # DocNo
@@ -534,33 +354,11 @@ def generate_232(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_233(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'233.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(9),  # DocNo
-                ''.ljust(2),  # DocType
-                ''.ljust(4),  # CoordNo
-                ''.ljust(3),  # SeqNo
-                ''.ljust(3),  # LangNo
-                ''.ljust(1),  # Type
-                ''.ljust(4),  # X1
-                ''.ljust(4),  # Y1
-                ''.ljust(4),  # X2
-                ''.ljust(4),  # Y2
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
 def generate_400(brand_no: str):
-    objects = Lnk400.objects.filter(art_no_id__brand_no_id=brand_no).values('gen_art_no', 'lnk_target_type',
-                                                                            'lnk_target_no',
-                                                                            'seq_no',
-                                                                            'art_no_id__art_no')
+    objects = Lnk400.objects.filter(art_no_id__brand_no_id__brand_no=brand_no).values('gen_art_no', 'lnk_target_type',
+                                                                                      'lnk_target_no',
+                                                                                      'seq_no',
+                                                                                      'art_no_id__art_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'400.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -576,52 +374,11 @@ def generate_400(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_401(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'401.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(5),  # GenArtNo
-                ''.ljust(3),  # LnkTargetType
-                ''.ljust(9),  # LnkTargetNo
-                ''.ljust(9),  # SeqNo
-                ''.ljust(2),  # SortNo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(3),  # InfType
-                ''.ljust(1),  # FirstPage
-                ''.ljust(6),  # TxtModNo
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
-def generate_403(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'403.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(5),  # GenArtNo
-                ''.ljust(3),  # LnkTargetType
-                ''.ljust(9),  # LnkTargetNo
-                ''.ljust(9),  # SeqNo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
 def generate_404(brand_no: str):
-    objects = Table404.objects.filter(art_no_id__brand_no_id=brand_no).values('art_no_id__art_no', 'gen_art_no',
-                                                                              'lnk_target_no',
-                                                                              'lnk_target_type')
+    objects = Table404.objects.filter(art_no_id__brand_no_id__brand_no=brand_no).values('art_no_id__art_no',
+                                                                                        'gen_art_no',
+                                                                                        'lnk_target_no',
+                                                                                        'lnk_target_type', 'sort_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'404.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -631,20 +388,22 @@ def generate_404(brand_no: str):
                 str(obj.get('gen_art_no')).rjust(5, '0'),  # GenArtNo
                 str(obj.get('lnk_target_type')).rjust(3, '0'),  # LnkTargetType
                 str(obj.get('lnk_target_no')).rjust(9, '0'),  # LnkTargetNo
-                '1'.rjust(9, '0'),  # SortNo ################### ТРЕБУЕТ РЕШЕНИЕ ################################
+                str(obj.get('sort_no')).rjust(9, '0'),  # SortNo
                 '0'.ljust(1),  # DeleteFlag
             ]
             file.write(''.join(data) + '\n')
 
 
 def generate_410(brand_no: str):
-    objects = Table410.objects.filter(art_no_id__brand_no_id=brand_no).values('art_no_id__art_no', 'gen_art_no',
-                                                                              'lnk_target_type',
-                                                                              'lnk_target_no',
-                                                                              'seq_no',
-                                                                              'crit_no',
-                                                                              'crit_val',
-                                                                              'first_page')
+    objects = Table410.objects.filter(art_no_id__brand_no_id__brand_no=brand_no).values('art_no_id__art_no',
+                                                                                        'gen_art_no',
+                                                                                        'lnk_target_type',
+                                                                                        'lnk_target_no',
+                                                                                        'seq_no',
+                                                                                        'crit_no',
+                                                                                        'crit_val',
+                                                                                        'first_page',
+                                                                                        'sort_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'410.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
@@ -655,7 +414,7 @@ def generate_410(brand_no: str):
                 str(obj.get('lnk_target_type')).rjust(3, '0'),  # LnkTargetType
                 str(obj.get('lnk_target_no')).rjust(9, '0'),  # LnkTargetNo
                 str(obj.get('seq_no')).rjust(9, '0'),  # SeqNo
-                '1'.rjust(3, '0'),  # SortNo ################### ТРЕБУЕТ РЕШЕНИЕ ################################
+                str(obj.get('sort_no')).rjust(3, '0'),  # SortNo ################### ТРЕБУЕТ РЕШЕНИЕ ################################
                 str(obj.get('crit_no')).rjust(4, '0'),  # CritNo
                 str(obj.get('crit_val')).ljust(20),  # CritVal
                 str(obj.get('first_page')).ljust(1),  # FirstPage
@@ -666,60 +425,25 @@ def generate_410(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
-def generate_432(brand_no: str):
-    objects = Article200.objects.filter(brand_no_id__brand_no=brand_no)
-    with open(BASE_DIR / 'converted_db' / str(brand_no) / f'432.{brand_no}', 'w', encoding='utf-8') as file:
-        for obj in objects:
-            data = [
-                ''.ljust(22),  # ArtNo
-                ''.ljust(4),  # BrandNo
-                ''.ljust(3),  # TableNo
-                ''.ljust(5),  # GenArtNo
-                ''.ljust(3),  # LnkTargetType
-                ''.ljust(9),  # LnkTargetNo
-                ''.ljust(9),  # SeqNo
-                ''.ljust(3),  # CountryCode
-                ''.ljust(2),  # SortNo
-                ''.ljust(9),  # DocNo
-                ''.ljust(2),  # DocType
-                ''.ljust(1),  # Exclude
-                ''.ljust(1),  # DeleteFlag
-            ]
-            file.write(''.join(data) + '\n')
-
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
+            # generate_zero_file(comp.brand_no)
             # generate_001(comp.brand_no)
-            # generate_030(comp.brand_no)
-            # generate_035(comp.brand_no)
             # generate_040(comp.brand_no)
             # generate_042(comp.brand_no)
-            # generate_043(comp.brand_no)
             # generate_200(comp.brand_no)
-            # generate_201(comp.brand_no)
             # generate_202(comp.brand_no)
             # generate_203(comp.brand_no)
             # generate_204(comp.brand_no)
-            # generate_205(comp.brand_no)
-            # generate_206(comp.brand_no)
             # generate_207(comp.brand_no)
-            # generate_208(comp.brand_no)
             # generate_209(comp.brand_no)
             # generate_210(comp.brand_no)
-            generate_211(comp.brand_no)
-            generate_212(comp.brand_no)
-            generate_217(comp.brand_no)
-            generate_222(comp.brand_no)
-            generate_228(comp.brand_no)
-            generate_231(comp.brand_no)
-            generate_232(comp.brand_no)
-            generate_233(comp.brand_no)
-            generate_400(comp.brand_no)
-            generate_401(comp.brand_no)
-            generate_403(comp.brand_no)
+            # generate_211(comp.brand_no)
+            # generate_212(comp.brand_no)
+            # generate_231(comp.brand_no)
+            # generate_232(comp.brand_no)
+            # generate_400(comp.brand_no)
             generate_404(comp.brand_no)
             generate_410(comp.brand_no)
-            generate_432(comp.brand_no)

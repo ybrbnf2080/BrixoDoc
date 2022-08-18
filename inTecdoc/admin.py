@@ -31,6 +31,7 @@ class DocAdmin(ModelAdmin):
                     'doc_no',
                     'doc_name'
                     ]
+    search_fields = ['doc_name']
 
 
 class ArticleAdmin(ModelAdmin):

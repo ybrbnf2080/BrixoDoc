@@ -445,7 +445,7 @@ def get_table404():
     Table404.objects.all().delete()
     table404_res_list = []
     data_df_404 = get_data_in_txt('404')
-    data_df_404 = data_df_404[['artno', 'genartno', 'lnktargettype', 'lnktargetno']]
+    data_df_404 = data_df_404[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'sortno']]
     for i, row in data_df_404.iterrows():
         art = str(row["artno"]).strip()
         art_no_id = Article200.objects.filter(art_no=art).first()
@@ -454,6 +454,7 @@ def get_table404():
             gen_art_no=row['genartno'],
             lnk_target_type=row['lnktargettype'],
             lnk_target_no=row['lnktargetno'],
+            sort_no=row['sortno'],
         ))
     Table404.objects.bulk_create(table404_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Table404--------------------')
@@ -463,7 +464,7 @@ def get_table410():
     Table404.objects.all().delete()
     table410_res_list = []
     data_df_410 = get_data_in_txt('410')
-    data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage']]
+    data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage', 'sort_no']]
     for i, row in data_df_410.iterrows():
         art = str(row["artno"]).strip()
         art_no_id = Article200.objects.filter(art_no=art).first()
@@ -476,6 +477,7 @@ def get_table410():
             crit_no=row['critno'],
             crit_val=row['critval'],
             first_page=row['firstpage'],
+            sort_no=row['sort_no'],
         ))
     Table410.objects.bulk_create(table410_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Table410--------------------')
@@ -499,22 +501,22 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        clear_data()
-        get_manufacturer()
-        get_country()
-        get_suppliers()
-        get_reference()
-        get_document()
-        get_supers()
-        get_pre_article()
-        get_article_in_country()
-        get_article_in_supers()
-        get_article_in_ref()
-        get_article_in_doc()
-        get_criteria()
-        criteria_in_article()
-        get_trade()
-        get_lnk()
+        # clear_data()
+        # get_manufacturer()
+        # get_country()
+        # get_suppliers()
+        # get_reference()
+        # get_document()
+        # get_supers()
+        # get_pre_article()
+        # get_article_in_country()
+        # get_article_in_supers()
+        # get_article_in_ref()
+        # get_article_in_doc()
+        # get_criteria()
+        # criteria_in_article()
+        # get_trade()
+        # get_lnk()
         get_table404()
-        get_table410()
+        # get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

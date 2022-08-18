@@ -160,8 +160,8 @@ class Lnk400(models.Model):
     lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 400
     seq_no = models.IntegerField(verbose_name="SeqNo", blank=True, null=True) #SeqNo 400
 
-    # def __str__(self):
-    #     return self.lnk_target_no
+    def __str__(self):
+        return self.art_no_id.art_no
 
 
 class Table404(models.Model):
@@ -169,9 +169,10 @@ class Table404(models.Model):
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 404
     lnk_target_type = models.IntegerField(verbose_name="LnkTargetType", blank=True, null=True) #LnkTargetType 404
     lnk_target_no = models.IntegerField(verbose_name="LnkTargetNo", blank=True, null=True) #LnkTargetNo 404
+    sort_no = models.IntegerField(verbose_name="sort_no", blank=True, null=True) #sort_no 404
 
-    # def __str__(self):
-    #     return self.lnk_target_no
+    def __str__(self):
+        return self.art_no_id.art_no
 
 
 class Table410(models.Model):
@@ -183,6 +184,7 @@ class Table410(models.Model):
     crit_no = models.CharField(max_length=255, verbose_name="CritNo", blank=True, null=True) #CritNo 410
     crit_val = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True) #CritVal 410
     first_page = models.IntegerField(verbose_name="FirstPage", blank=True, null=True) #FirstPage 410
+    sort_no = models.IntegerField(verbose_name="sort_no", blank=True, null=True) #sort_no 410
 
     def __str__(self):
-        return self.crit_val
+        return self.art_no_id.art_no

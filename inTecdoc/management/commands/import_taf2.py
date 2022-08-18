@@ -464,7 +464,7 @@ def get_table410():
     Table404.objects.all().delete()
     table410_res_list = []
     data_df_410 = get_data_in_txt('410')
-    data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage', 'sort_no']]
+    data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage', 'sortno']]
     for i, row in data_df_410.iterrows():
         art = str(row["artno"]).strip()
         art_no_id = Article200.objects.filter(art_no=art).first()
@@ -518,5 +518,5 @@ class Command(BaseCommand):
         # get_trade()
         # get_lnk()
         get_table404()
-        # get_table410()
+        get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

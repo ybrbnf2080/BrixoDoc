@@ -52,6 +52,7 @@ class ManufactureAdmin(ModelAdmin):
 
 class RefAdmin(ModelAdmin):
     list_display = ['id',
+                    'art_no_id',
                     'ref_no',
                     'man_no_id'
                     ]

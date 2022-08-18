@@ -276,6 +276,7 @@ def get_pre_article():
                 gen_art_no=row['genartno'],
                 quant_unit=row['quantunit'],
                 quant_per_unit=row['quantperunit'],
+                art_stat=row['artstat'],
                 status_dat=row['statusdat']
             ))
     Article200.objects.bulk_create(pre_article_res_list, batch_size=1000, ignore_conflicts=True)
@@ -326,28 +327,6 @@ def get_article_in_supers():
     print('---------------END article_in_supers--------------------')
 
 
-def get_article_in_ref():
-    data_df_203 = get_data_in_txt('203')
-    data_df_203 = data_df_203[['artno', 'refno']]
-    data = {}
-    for i, row in data_df_203.iterrows():
-        art = str(row["artno"]).strip()
-        reference = str(row["refno"]).strip()
-        if art in data:
-            data[art].append(reference)
-        else:
-            data[art] = []
-            data[art].append(reference)
-    for key in data:
-        # print(key, '->', data[key])
-        ref_no = Ref203.objects.filter(ref_no__in=data[key])
-        obj = Article200.objects.get(art_no=key)
-        # print(obj, '->', ref_no)
-        obj.ref_no_id.set(ref_no)
-
-    print('---------------END article_in_ref--------------------')
-
-
 def get_article_in_doc():
     data_df_232 = get_data_in_txt('232')
     data_df_232 = data_df_232[['artno', 'docno']]
@@ -370,7 +349,29 @@ def get_article_in_doc():
     print('---------------END article_in_doc--------------------')
 
 
-def get_criteria():
+def get_article_in_ref():
+    Ref203.objects.all().delete()
+    data_df_203 = get_data_in_txt('203')
+    data_df_203 = data_df_203[['artno', 'refno', 'manno', 'countrycode']]
+    ref_res_list = []
+    for i, row in data_df_203.iterrows():
+        art_no_id = Article200.objects.filter(art_no=str(row['artno']).strip()).first()
+        man_no_id = Manufacture203.objects.filter(man_no=str(row['manno'])).first()
+        ref_no = str(row['refno']).strip()
+        country_code = str(row['countrycode']).strip()
+        country_code = Country202.objects.filter(country_code=country_code).first()
+        ref_res_list.append(Ref203(
+            art_no_id=art_no_id,
+            man_no_id=man_no_id,
+            ref_no=ref_no,
+            country_code=country_code
+        ))
+    Ref203.objects.bulk_create(ref_res_list, batch_size=1000, ignore_conflicts=True)
+
+    print('---------------END article_in_ref--------------------')
+
+
+def get_criteria():# Требуется актуальный список критерий
     CritVal210.objects.all().delete()
     criteria = pd.read_csv(os.path.join(BASE_DIR, 'ImportTAF/sources_static/criteria.csv'), header=None, sep=";")
     criteria.rename(columns={0: 'crit_no', 1: 'name', 2: 'description'}, inplace=True)
@@ -392,12 +393,13 @@ def criteria_in_article():
     data_df_210 = data_df_210[['artno', 'critno', 'critval']]
     for i, row in data_df_210.iterrows():
         art = str(row["artno"]).strip()
-        art_no_id = Article200.objects.filter(art_no=art).first()
+        crit_val = str(row["critval"]).strip()
+        art_no_id = Article200.objects.get(art_no=art)
         crit_no_id = CritVal210.objects.filter(crit_no=row['critno']).first()
         crit_res_list.append(Crit210(
             art_no_id=art_no_id,
             crit_no_id=crit_no_id,
-            crit_val=row['critval'],
+            crit_val=crit_val,
         ))
     Crit210.objects.bulk_create(crit_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Criteria_In_Article--------------------')

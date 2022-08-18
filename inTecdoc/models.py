@@ -58,18 +58,6 @@ class Manufacture203(models.Model):
         return self.short_name
 
 
-class Ref203(models.Model):
-    ref_no = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True) #RefNo 203
-    man_no_id = models.ForeignKey(Manufacture203, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True) #ManNo 203
-
-    class Meta:
-        verbose_name = """Комплектующая от производителя авто"""
-        verbose_name_plural = """Комплектующие от производителя авто"""
-
-    def __str__(self):
-        return self.ref_no
-
-
 class Supers204(models.Model):
     supers_no = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True) #SupersNo204
 
@@ -104,7 +92,6 @@ class Article200(models.Model):
     quant_per_unit = models.IntegerField(verbose_name="QuantPerUnit", blank=True, null=True) #QuantPerUnit 212
     art_stat = models.IntegerField(verbose_name="ArtStat", blank=True, null=True) #ArtStat 212
     status_dat = models.IntegerField(verbose_name="StatusDat", blank=True, null=True) #StatusDat 212
-    ref_no_id = models.ManyToManyField(Ref203, blank=True, related_name='ref_no_article') #RefNo 203
     supers_id = models.ManyToManyField(Supers204, blank=True, related_name='supers_article') #SupersNo 204
     doc_no_id = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article') #DocNo 232
 
@@ -114,6 +101,20 @@ class Article200(models.Model):
 
     def __str__(self):
         return self.art_no
+
+
+class Ref203(models.Model):
+    art_no_id = models.ForeignKey(Article200, on_delete=models.CASCADE, verbose_name='ArtNo', blank=True, null=True) #ArtNo 203
+    man_no_id = models.ForeignKey(Manufacture203, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True)  # ManNo 203
+    ref_no = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True) #RefNo 203
+    country_code = models.ForeignKey(Country202, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True)  # CountryCode 203
+
+    class Meta:
+        verbose_name = """Комплектующая от производителя авто"""
+        verbose_name_plural = """Комплектующие от производителя авто"""
+
+    def __str__(self):
+        return self.ref_no
 
 
 class CritVal210(models.Model):

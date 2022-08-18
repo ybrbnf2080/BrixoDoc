@@ -414,7 +414,7 @@ def generate_410(brand_no: str):
                 str(obj.get('lnk_target_type')).rjust(3, '0'),  # LnkTargetType
                 str(obj.get('lnk_target_no')).rjust(9, '0'),  # LnkTargetNo
                 str(obj.get('seq_no')).rjust(9, '0'),  # SeqNo
-                str(obj.get('sort_no')).rjust(3, '0'),  # SortNo ################### ТРЕБУЕТ РЕШЕНИЕ ################################
+                str(obj.get('sort_no')).rjust(3, '0'),  # SortNo
                 str(obj.get('crit_no')).rjust(4, '0'),  # CritNo
                 str(obj.get('crit_val')).ljust(20),  # CritVal
                 str(obj.get('first_page')).ljust(1),  # FirstPage
@@ -429,21 +429,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
-            # generate_zero_file(comp.brand_no)
-            # generate_001(comp.brand_no)
-            # generate_040(comp.brand_no)
-            # generate_042(comp.brand_no)
-            # generate_200(comp.brand_no)
-            # generate_202(comp.brand_no)
-            # generate_203(comp.brand_no)
-            # generate_204(comp.brand_no)
-            # generate_207(comp.brand_no)
-            # generate_209(comp.brand_no)
-            # generate_210(comp.brand_no)
-            # generate_211(comp.brand_no)
-            # generate_212(comp.brand_no)
-            # generate_231(comp.brand_no)
-            # generate_232(comp.brand_no)
-            # generate_400(comp.brand_no)
+            generate_zero_file(comp.brand_no)
+            generate_001(comp.brand_no)
+            generate_040(comp.brand_no)
+            generate_042(comp.brand_no)
+            generate_200(comp.brand_no)
+            generate_202(comp.brand_no)
+            generate_203(comp.brand_no)
+            generate_204(comp.brand_no)
+            generate_207(comp.brand_no)
+            generate_209(comp.brand_no)
+            generate_210(comp.brand_no)
+            generate_211(comp.brand_no)
+            generate_212(comp.brand_no)
+            generate_231(comp.brand_no)
+            generate_232(comp.brand_no)
+            generate_400(comp.brand_no)
             generate_404(comp.brand_no)
             generate_410(comp.brand_no)

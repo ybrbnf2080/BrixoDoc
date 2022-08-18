@@ -461,7 +461,7 @@ def get_table404():
 
 
 def get_table410():
-    Table404.objects.all().delete()
+    Table410.objects.all().delete()
     table410_res_list = []
     data_df_410 = get_data_in_txt('410')
     data_df_410 = data_df_410[['artno', 'genartno', 'lnktargettype', 'lnktargetno', 'seqno', 'critno', 'critval', 'firstpage', 'sortno']]
@@ -501,22 +501,22 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        # clear_data()
-        # get_manufacturer()
-        # get_country()
-        # get_suppliers()
-        # get_reference()
-        # get_document()
-        # get_supers()
-        # get_pre_article()
-        # get_article_in_country()
-        # get_article_in_supers()
-        # get_article_in_ref()
-        # get_article_in_doc()
-        # get_criteria()
-        # criteria_in_article()
-        # get_trade()
-        # get_lnk()
+        clear_data()
+        get_manufacturer()
+        get_country()
+        get_suppliers()
+        get_reference()
+        get_document()
+        get_supers()
+        get_pre_article()
+        get_article_in_country()
+        get_article_in_supers()
+        get_article_in_ref()
+        get_article_in_doc()
+        get_criteria()
+        criteria_in_article()
+        get_trade()
+        get_lnk()
         get_table404()
         get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

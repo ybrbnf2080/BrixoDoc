@@ -477,7 +477,7 @@ def get_table410():
             crit_no=row['critno'],
             crit_val=row['critval'],
             first_page=row['firstpage'],
-            sort_no=row['sort_no'],
+            sort_no=row['sortno'],
         ))
     Table410.objects.bulk_create(table410_res_list, batch_size=1000, ignore_conflicts=True)
     print('---------------END Table410--------------------')

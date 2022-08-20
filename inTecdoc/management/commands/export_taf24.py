@@ -4,7 +4,7 @@ from shutil import rmtree
 from django.db.models import *
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
+import time
 from inTecdoc.models import *
 
 COMPANIES = Suppliers200.objects.all()
@@ -429,6 +429,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
         for comp in COMPANIES:
+            start_time = time.time()
             generate_zero_file(comp.brand_no)
             generate_001(comp.brand_no)
             generate_040(comp.brand_no)
@@ -447,3 +448,5 @@ class Command(BaseCommand):
             generate_400(comp.brand_no)
             generate_404(comp.brand_no)
             generate_410(comp.brand_no)
+            print("--- %s seconds ---" % (time.time() - start_time))
+

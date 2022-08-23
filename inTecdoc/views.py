@@ -8,11 +8,11 @@ from .models import *
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article200.objects.prefetch_related()[:3]
+    queryset = Article200.objects.all()[:3]
     serializer_class = ArticleSerializer
     permission_classes = (IsAuthenticated,)
 
-    @action(methods=['get'], detail=True)
-    def brand(self, request, pk=None):
-        brand = Suppliers200.objects.get(pk=pk)
-        return Response({'brand': brand.name})
+    # @action(methods=['get'], detail=True)
+    # def brand(self, request, pk=None):
+    #     brand = Suppliers200.objects.get(pk=pk)
+    #     return Response({'brand': brand.name})

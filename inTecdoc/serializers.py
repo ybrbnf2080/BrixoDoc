@@ -55,49 +55,38 @@ class ArticleSerializer(serializers.ModelSerializer):
             'doc_no_id'
         ]
 
-    # def update(self, instance, validated_data):
-        # if 'country_id' in validated_data:
-        #     country_id_data = validated_data.pop('country_id')
-        #     country_id = instance.country_id.all()
-        #     country_id = list(country_id)
-        #     for country_data in country_id_data:
-        #         country = country_id.pop(0)
-        #         country.country_code = country_data.get('country_code', country.country_code)
-        #         country.country_name = country_data.get('country_name', country.country_name)
-        #
-        #         country.save()
-        #         return instance
+    def update(self, instance, validated_data):
+        if 'country_id' in validated_data:
+            country_id_data = validated_data.pop('country_id')
+            country_id = instance.country_id.all()
+            country_id = list(country_id)
+            for country_data in country_id_data:
+                country = country_id.pop(0)
+                country.country_code = country_data.get('country_code', country.country_code)
+                country.country_name = country_data.get('country_name', country.country_name)
 
-        # if 'supers_id' in validated_data:
-        #     supers_id_data = validated_data.pop('supers_id')
-        #     supers_id = instance.supers_id.all()
-        #     supers_id = list(supers_id)
-        #     for supers_data in supers_id_data:
-        #         supers = supers_id.pop(0)
-        #         supers.supers_no = supers_data.get('supers_no', supers.supers_no)
-        #
-        #         supers.save()
-        #         return instance
+                country.save()
+                return instance
 
-        # if 'doc_no_id' in validated_data:
-        #     doc_no_id_data = validated_data.pop('doc_no_id')
-        #     doc_no_id = instance.doc_no_id.all()
-        #     doc_no_id = list(doc_no_id)
-        #     for doc_data in doc_no_id_data:
-        #         doc = doc_no_id.pop(0)
-        #         doc.doc_no_id = doc_data.get('doc_name', doc.doc_name)
-        #
-        #         doc.save()
-        #         return instance
+        if 'supers_id' in validated_data:
+            supers_id_data = validated_data.pop('supers_id')
+            supers_id = instance.supers_id.all()
+            supers_id = list(supers_id)
+            for supers_data in supers_id_data:
+                supers = supers_id.pop(0)
+                supers.supers_no = supers_data.get('supers_no', supers.supers_no)
 
-#
-# class ArticleSerializer(serializers.ModelSerializer):
-#     country_id = Country202Serializer(many=True)
-#
-#     class Meta:
-#         model = Article200
-#         fields = [
-#             'art_no',
-#             'gen_art_no',
-#             'country_id'
-#         ]
+                supers.save()
+                return instance
+
+        if 'doc_no_id' in validated_data:
+            doc_no_id_data = validated_data.pop('doc_no_id')
+            doc_no_id = instance.doc_no_id.all()
+            doc_no_id = list(doc_no_id)
+            for doc_data in doc_no_id_data:
+                doc = doc_no_id.pop(0)
+                doc.doc_no_id = doc_data.get('doc_name', doc.doc_name)
+
+                doc.save()
+                return instance
+

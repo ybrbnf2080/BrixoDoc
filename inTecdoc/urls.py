@@ -4,7 +4,7 @@ from .views import *
 
 
 router = SimpleRouter(trailing_slash=False)
-router.register(r'article', Table203ViewSet)
+router.register(r'article', ArticleViewSet)
 
 
 urlpatterns = [

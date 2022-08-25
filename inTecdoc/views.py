@@ -12,27 +12,66 @@ class ArticleAPIView(APIView):
 
     def get(self, request):
         queryset = Article200.objects.all()[:3]
-        serialezer = ArticleSerializer(queryset, many=True)
+        serializer = ArticleSerializer(queryset, many=True)
 
-        return Response(serialezer.data)
+        return Response(serializer.data)
 
     def post(self, request):
-        art_no = request.data['art_no']
-        country_id = request.data['country_id']
+        brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()
         Article200.objects.create(
-            art_no=art_no
+            art_no=request.data['art_no'],
+            brand_no_id=brand_name,
+            gen_art_no=request.data['gen_art_no'],
+            quant_unit=request.data['quant_unit'],
+            quant_per_unit=request.data['quant_per_unit'],
+            art_stat=request.data['art_stat'],
+            status_dat=request.data['status_dat'],
+            gtin=request.data['gtin'],
         )
-        return Response({"art_no": art_no})
+
+        def add_country():
+            list_country = request.data['country_id']
+            countries = []
+            for dicts in list_country:
+                country = dicts.get('country_code')
+                countries.append(country)
+            countries = Country202.objects.filter(country_code__in=countries)
+            obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+            obj.country_id.set(countries)
+
+        def add_supers():
+            list_supers = request.data['supers_id']
+            supers = []
+            for dicts in list_supers:
+                super = dicts.get('supers_no')
+                supers.append(super)
+            supers = Supers204.objects.filter(supers_no__in=supers)
+            obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+            obj.supers_id.set(supers)
+
+        def add_documents():
+            list_documents = request.data['doc_no_id']
+            documents = []
+            for dicts in list_documents:
+                document = dicts.get('doc_no')
+                documents.append(document)
+            documents = Doc231and232.objects.filter(doc_no__in=documents)
+            obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+            obj.doc_no_id.set(documents)
+
+        add_country()
+        add_supers()
+        add_documents()
+        return Response(request.data)
 
 
 class ArticleAPIViewItem(APIView):
 
     def get(self, request, pk):
-        print(pk)
         queryset = Article200.objects.filter(id=pk)
-        serialezer = ArticleSerializer(queryset, many=True)
+        serializer = ArticleSerializer(queryset, many=True)
 
-        return Response(serialezer.data)
+        return Response(serializer.data)
 
 
 

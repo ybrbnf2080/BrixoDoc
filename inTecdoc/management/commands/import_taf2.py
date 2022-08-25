@@ -157,8 +157,9 @@ def get_suppliers():
     for i, row in result_df.iterrows():
         postcodepobox = str(row['postcodepobox']).strip()
         postcodecus = str(row['postcodecus']).strip()
+        brandname = str(row['brandname']).strip()
         supplier_res_list.append(Suppliers200(
-            name=row['brandname'],
+            name=brandname,
             brand_no=row['brandno'],
             street=row['street1'],
             country_code=row['countrycode'],

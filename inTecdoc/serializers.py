@@ -2,6 +2,15 @@ from rest_framework import serializers
 from .models import *
 
 
+class SuppliersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Suppliers200
+        fields = [
+            'id',
+            'name'
+        ]
+
+
 class Country202Serializer(serializers.ModelSerializer):
     class Meta:
         model = Country202
@@ -34,9 +43,10 @@ class DocsSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    country_id = Country202Serializer(many=True)
-    supers_id = SupersSerializer(many=True)
-    doc_no_id = DocsSerializer(many=True)
+    country_id = Country202Serializer(many=True, required=False)
+    supers_id = SupersSerializer(many=True, required=False)
+    doc_no_id = DocsSerializer(many=True, required=False)
+    brand_no_id = SuppliersSerializer(required=False)
 
     class Meta:
         model = Article200
@@ -55,38 +65,46 @@ class ArticleSerializer(serializers.ModelSerializer):
             'doc_no_id'
         ]
 
-    def update(self, instance, validated_data):
-        if 'country_id' in validated_data:
-            country_id_data = validated_data.pop('country_id')
-            country_id = instance.country_id.all()
-            country_id = list(country_id)
-            for country_data in country_id_data:
-                country = country_id.pop(0)
-                country.country_code = country_data.get('country_code', country.country_code)
-                country.country_name = country_data.get('country_name', country.country_name)
+    # def create(self, validated_data):
+    #     brand_no_data = validated_data.pop('brand_no_id')
+    #     art = Article200.objects.create(**validated_data)
+    #     print(brand_no_data)
+    #     # brand_no_id = Suppliers200.objects.get(brand_no=brand_no_data["id"])
+    #     # Article200.objects.create(art_no=art, brand_no_id=brand_no_id)
+    #     return art
 
-                country.save()
-                return instance
-
-        if 'supers_id' in validated_data:
-            supers_id_data = validated_data.pop('supers_id')
-            supers_id = instance.supers_id.all()
-            supers_id = list(supers_id)
-            for supers_data in supers_id_data:
-                supers = supers_id.pop(0)
-                supers.supers_no = supers_data.get('supers_no', supers.supers_no)
-
-                supers.save()
-                return instance
-
-        if 'doc_no_id' in validated_data:
-            doc_no_id_data = validated_data.pop('doc_no_id')
-            doc_no_id = instance.doc_no_id.all()
-            doc_no_id = list(doc_no_id)
-            for doc_data in doc_no_id_data:
-                doc = doc_no_id.pop(0)
-                doc.doc_no_id = doc_data.get('doc_name', doc.doc_name)
-
-                doc.save()
-                return instance
+    # def update(self, instance, validated_data):
+    #     if 'country_id' in validated_data:
+    #         country_id_data = validated_data.pop('country_id')
+    #         country_id = instance.country_id.all()
+    #         country_id = list(country_id)
+    #         for country_data in country_id_data:
+    #             country = country_id.pop(0)
+    #             country.country_code = country_data.get('country_code', country.country_code)
+    #             country.country_name = country_data.get('country_name', country.country_name)
+    #
+    #             country.save()
+    #             return instance
+    #
+    #     if 'supers_id' in validated_data:
+    #         supers_id_data = validated_data.pop('supers_id')
+    #         supers_id = instance.supers_id.all()
+    #         supers_id = list(supers_id)
+    #         for supers_data in supers_id_data:
+    #             supers = supers_id.pop(0)
+    #             supers.supers_no = supers_data.get('supers_no', supers.supers_no)
+    #
+    #             supers.save()
+    #             return instance
+    #
+    #     if 'doc_no_id' in validated_data:
+    #         doc_no_id_data = validated_data.pop('doc_no_id')
+    #         doc_no_id = instance.doc_no_id.all()
+    #         doc_no_id = list(doc_no_id)
+    #         for doc_data in doc_no_id_data:
+    #             doc = doc_no_id.pop(0)
+    #             doc.doc_no_id = doc_data.get('doc_name', doc.doc_name)
+    #
+    #             doc.save()
+    #             return instance
 

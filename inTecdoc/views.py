@@ -43,8 +43,8 @@ class ArticleAPIView(APIView):
             list_supers = request.data['supers_id']
             supers = []
             for dicts in list_supers:
-                super = dicts.get('supers_no')
-                supers.append(super)
+                super_one = dicts.get('supers_no')
+                supers.append(super_one)
             supers = Supers204.objects.filter(supers_no__in=supers)
             obj = Article200.objects.filter(art_no=request.data['art_no']).first()
             obj.supers_id.set(supers)

@@ -34,6 +34,18 @@ class DocAdmin(ModelAdmin):
     search_fields = ['doc_name']
 
 
+class CountryInline(admin.TabularInline):
+    model = Article200.country_id.through
+
+
+class DocInline(admin.TabularInline):
+    model = Article200.doc_no_id.through
+
+
+class SupersInline(admin.TabularInline):
+    model = Article200.supers_id.through
+
+
 class ArticleAdmin(ModelAdmin):
     list_display = ['id',
                     'art_no',
@@ -41,6 +53,13 @@ class ArticleAdmin(ModelAdmin):
                     'brand_no_id'
                     ]
     search_fields = ['art_no']
+    # filter_horizontal = ('doc_no_id', 'supers_id', 'country_id')
+    inlines = [
+        CountryInline,
+        DocInline,
+        SupersInline,
+    ]
+    exclude = ('doc_no_id', 'supers_id', 'country_id')
 
 
 class ManufactureAdmin(ModelAdmin):
@@ -77,6 +96,7 @@ class Lnk400Admin(ModelAdmin):
                     'seq_no',
                     ]
     search_fields = ['lnk_target_no']
+
 
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Suppliers200, SuppliersAdmin)

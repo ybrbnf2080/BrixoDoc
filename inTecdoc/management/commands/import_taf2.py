@@ -413,10 +413,11 @@ def get_trade():
     data_df_207 = data_df_207[['artno', 'tradeno', 'firstpage']]
     for i, row in data_df_207.iterrows():
         art = str(row["artno"]).strip()
+        trade = str(row["tradeno"]).strip()
         art_no_id = Article200.objects.filter(art_no=art).first()
         trade_res_list.append(Trade207(
             art_no_id=art_no_id,
-            trade_no=row['tradeno'],
+            trade_no=trade,
             first_page=row['firstpage'],
         ))
     Trade207.objects.bulk_create(trade_res_list, batch_size=1000, ignore_conflicts=True)

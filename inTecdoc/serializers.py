@@ -42,6 +42,63 @@ class DocsSerializer(serializers.ModelSerializer):
         ]
 
 
+class CritValSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CritVal210
+        fields = [
+            'crit_no',
+            'name',
+            'description'
+        ]
+
+
+class CritSerializer(serializers.ModelSerializer):
+    crit_no_id = CritValSerializer(required=False)
+
+    class Meta:
+        model = Crit210
+        fields = [
+            'id',
+            'art_no_id',
+            'crit_no_id',
+            'crit_val'
+        ]
+
+
+class ManufactureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manufacture203
+        fields = [
+            'man_no',
+            'short_name',
+            'term_plain'
+        ]
+
+
+class TradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trade207
+        fields = [
+            'id',
+            'trade_no',
+            'art_no_id'
+        ]
+
+
+
+class ReferenceSerializer(serializers.ModelSerializer):
+    man_no_id = ManufactureSerializer(required=False)
+
+    class Meta:
+        model = Ref203
+        fields = [
+            'art_no_id',
+            'man_no_id',
+            'ref_no',
+            'country_code'
+        ]
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     country_id = Country202Serializer(many=True, required=False)
     supers_id = SupersSerializer(many=True, required=False)

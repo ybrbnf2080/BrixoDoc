@@ -68,10 +68,18 @@ class ArticleAPIView(APIView):
 class ArticleAPIViewItem(APIView):
 
     def get(self, request, pk):
-        queryset = Article200.objects.filter(id=pk)
-        serializer = ArticleSerializer(queryset, many=True)
+        queryset1 = Article200.objects.filter(id=pk)
+        queryset2 = Crit210.objects.filter(art_no_id__in=queryset1)
+        queryset3 = Ref203.objects.filter(art_no_id__in=queryset1)
+        queryset4 = Trade207.objects.filter(art_no_id__in=queryset1)
+        article = ArticleSerializer(queryset1, many=True)
+        crit = CritSerializer(queryset2, many=True)
+        reference = ReferenceSerializer(queryset3, many=True)
+        trade = TradeSerializer(queryset4, many=True)
 
-        return Response(serializer.data)
+        serializer = {"Article": article.data, "Crit": crit.data, "Reference": reference.data, "Trade": trade.data}
+
+        return Response(serializer)
 
 
 

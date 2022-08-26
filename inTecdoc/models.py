@@ -107,7 +107,7 @@ class Ref203(models.Model):
     art_no_id = models.ForeignKey(Article200, on_delete=models.CASCADE, verbose_name='ArtNo', blank=True, null=True) #ArtNo 203
     man_no_id = models.ForeignKey(Manufacture203, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True)  # ManNo 203
     ref_no = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True) #RefNo 203
-    country_code = models.ForeignKey(Country202, on_delete=models.CASCADE, verbose_name='ManNoName', blank=True, null=True)  # CountryCode 203
+    country_code = models.ForeignKey(Country202, on_delete=models.CASCADE, verbose_name='country_code', blank=True, null=True)  # CountryCode 203
 
     class Meta:
         verbose_name = """Комплектующая от производителя авто"""

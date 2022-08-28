@@ -13,3 +13,4 @@ django-environ
 pandas
 pyxlsb
 djoser
+django-cors-headers

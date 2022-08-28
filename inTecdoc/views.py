@@ -12,9 +12,12 @@ class ArticleAPIView(APIView):
 
     def get(self, request):
         queryset = Article200.objects.all()[:30]
-        serializer = ArticleSerializer(queryset, many=True)
+        queryset1 = Ref203.objects.filter(art_no_id__in=queryset)
+        reference = ReferenceSerializer(queryset1, many=True)
+        article = ArticleSerializer(queryset, many=True)
+        serializer = {"article": article.data, "reference": reference.data}
 
-        return Response(serializer.data)
+        return Response(serializer)
 
     def post(self, request):
         brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()

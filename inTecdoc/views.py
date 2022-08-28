@@ -11,7 +11,7 @@ from .models import *
 class ArticleAPIView(APIView):
 
     def get(self, request):
-        queryset = Article200.objects.all()[:3]
+        queryset = Article200.objects.all()[:30]
         serializer = ArticleSerializer(queryset, many=True)
 
         return Response(serializer.data)
@@ -72,12 +72,14 @@ class ArticleAPIViewItem(APIView):
         queryset2 = Crit210.objects.filter(art_no_id__in=queryset1)
         queryset3 = Ref203.objects.filter(art_no_id__in=queryset1)
         queryset4 = Trade207.objects.filter(art_no_id__in=queryset1)
+        queryset5 = Suppliers200.objects.all().values("name")
         article = ArticleSerializer(queryset1, many=True)
         crit = CritSerializer(queryset2, many=True)
         reference = ReferenceSerializer(queryset3, many=True)
         trade = TradeSerializer(queryset4, many=True)
+        brands = SuppliersSerializer(queryset5, many=True)
 
-        serializer = {"Article": article.data, "Crit": crit.data, "Reference": reference.data, "Trade": trade.data}
+        serializer = {"article": article.data[0], "crit": crit.data, "reference": reference.data, "trade": trade.data, "brands": brands.data}
 
         return Response(serializer)
 

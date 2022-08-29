@@ -76,13 +76,26 @@ class ArticleAPIViewItem(APIView):
         queryset3 = Ref203.objects.filter(art_no_id__in=queryset1)
         queryset4 = Trade207.objects.filter(art_no_id__in=queryset1)
         queryset5 = Suppliers200.objects.all().values("name")
+        queryset6 = Country202.objects.all()
+        queryset7 = CritVal210.objects.all()
         article = ArticleSerializer(queryset1, many=True)
         crit = CritSerializer(queryset2, many=True)
         reference = ReferenceSerializer(queryset3, many=True)
         trade = TradeSerializer(queryset4, many=True)
         brands = SuppliersSerializer(queryset5, many=True)
+        country = Country202Serializer(queryset6, many=True)
+        characteristics = CritValSerializer(queryset7, many=True)
 
-        serializer = {"article": article.data[0], "crit": crit.data, "reference": reference.data, "trade": trade.data, "brands": brands.data}
+        serializer = {
+            "article": article.data[0],
+            "crit": crit.data,
+            "reference": reference.data,
+            "trade": trade.data,
+            "brands": brands.data,
+            "country": country.data,
+            "characteristics": characteristics.data
+
+        }
 
         return Response(serializer)
 

@@ -94,7 +94,6 @@ class ArticleAPIViewItem(APIView):
             "brands": brands.data,
             "country": country.data,
             "characteristics": characteristics.data
-
         }
 
         return Response(serializer)

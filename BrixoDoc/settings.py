@@ -142,13 +142,13 @@ STATIC_URL = 'static/'
 # MEDIA_URL = '/media/'
 #
 #
-# if DEBUG == True:
-#     STATICFILES_DIRS = [
-#         os.path.join(BASE_DIR, 'static')
-#     ]
-# else:
-#     STATIC_ROOT = os.path.join(BASE_DIR, "static")
-# STATIC_URL = "/static/"
+if DEBUG == True:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
 
 
 # Default primary key field type

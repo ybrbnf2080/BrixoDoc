@@ -14,6 +14,7 @@ RUN apk update \
 
 # install dependencies
 RUN apk update && apk add g++ gcc libxml2 libxslt-dev
+RUN sudo apt install python3-cffi
 COPY ./req.txt .
 
 #COPY ./entrypoint.sh .

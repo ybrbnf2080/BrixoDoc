@@ -8,13 +8,13 @@ ENV PYTHONUNBUFFERED 1
 
 
 RUN python -m pip install pip==22.2.2
+RUN apk install python3-cffi
 # install psycopg2 dependencies
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev
 
 # install dependencies
 RUN apk update && apk add g++ gcc libxml2 libxslt-dev
-RUN sudo apt install python3-cffi
 COPY ./req.txt .
 
 #COPY ./entrypoint.sh .

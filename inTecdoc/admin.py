@@ -98,6 +98,17 @@ class Lnk400Admin(ModelAdmin):
     search_fields = ['lnk_target_no']
 
 
+class VehicleAdmin(ModelAdmin):
+    list_display = ['id',
+                    'veh_type_no',
+                    'veh_model_no',
+                    'veh_brand',
+                    'veh_type_name',
+                    'engine_code',
+                    'ccm_tech',
+                    ]
+    search_fields = ['veh_type_no']
+
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Suppliers200, SuppliersAdmin)
 admin.site.register(Article200, ArticleAdmin)
@@ -112,3 +123,4 @@ admin.site.register(Doc231and232, DocAdmin)
 admin.site.register(Lnk400, Lnk400Admin)
 admin.site.register(Table404)
 admin.site.register(Table410)
+admin.site.register(Vehicles, VehicleAdmin)

@@ -122,6 +122,13 @@ class ArticleSerializer(serializers.ModelSerializer):
             'doc_no_id'
         ]
 
+class ApplicabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Table410
+        fields = [
+
+        ]
+
     # def create(self, validated_data):
     #     brand_no_data = validated_data.pop('brand_no_id')
     #     art = Article200.objects.create(**validated_data)

@@ -153,6 +153,30 @@ class Trade207(models.Model):
         return self.trade_no
 
 
+class Vehicles(models.Model):
+    veh_type_no = models.IntegerField(verbose_name="VEH_TYPE_NO", blank=True, null=True)
+    veh_model_no = models.IntegerField(verbose_name="VEH_MODEL_NO", blank=True, null=True)
+    veh_brand = models.CharField(max_length=255, verbose_name="VEH_BRAND", blank=True, null=True)
+    veh_model_intl = models.CharField(max_length=255, verbose_name="VEH_MODEL_INTL", blank=True, null=True)
+    veh_type_name = models.CharField(max_length=255, verbose_name="VEH_TYPE_NAME", blank=True, null=True)
+    engine_code = models.CharField(max_length=255, verbose_name="ENGINE_CODE", blank=True, null=True)
+    year = models.CharField(max_length=255, verbose_name="YEAR", blank=True, null=True)
+    body_type = models.CharField(max_length=255, verbose_name="BODY_TYPE", blank=True, null=True)
+    drive_type = models.CharField(max_length=255, verbose_name="DRIVE_TYPE", blank=True, null=True)
+    engine_type = models.CharField(max_length=255, verbose_name="ENGINE_TYPE", blank=True, null=True)
+    values_per_chamber = models.CharField(max_length=255, verbose_name="VALVES_PER_CHAMBER", blank=True, null=True)
+    cylinders = models.CharField(max_length=255, verbose_name="CYLINDERS", blank=True, null=True)
+    litres = models.CharField(max_length=255, verbose_name="LITRES", blank=True, null=True)
+    ccm_tech = models.CharField(max_length=255, verbose_name="CCM_TECH", blank=True, null=True)
+    fuel_type = models.CharField(max_length=255, verbose_name="FUEL_TYPE", blank=True, null=True)
+    fuel_mixture_formation = models.CharField(max_length=255, verbose_name="FUEL_MIXTURE_FORMATION", blank=True, null=True)
+    hp = models.CharField(max_length=255, verbose_name="HP", blank=True, null=True)
+    kw = models.CharField(max_length=255, verbose_name="KW", blank=True, null=True)
+
+    def __str__(self):
+        return self.veh_type_no
+
+
 class Lnk400(models.Model):
     art_no_id = models.ForeignKey(Article200, related_name='ArtNoLnk400', on_delete=models.CASCADE, blank=True, null=True) #ArtNo 400
     gen_art_no = models.IntegerField(verbose_name="GenArtNo", blank=True, null=True) #GenArtNo 400

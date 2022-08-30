@@ -485,6 +485,56 @@ def get_table410():
     print('---------------END Table410--------------------')
 
 
+def get_vehicles():
+    Vehicles.objects.all().delete()
+    vehicles = pd.read_csv(os.path.join(BASE_DIR, 'ImportTAF/sources_static/vehicles.csv'), header=None, sep=";")
+    vehicles.rename(columns={
+        0: 'VEH_TYPE_NO',
+        1: 'VEH_MODEL_NO',
+        2: 'VEH_BRAND',
+        3: 'VEH_MODEL_INTL',
+        4: 'VEH_TYPE_NAME',
+        5: 'ENGINE_CODE',
+        6: 'YEAR',
+        7: 'BODY_TYPE',
+        8: 'DRIVE_TYPE',
+        9: 'ENGINE_TYPE',
+        10: 'VALVES_PER_CHAMBER',
+        11: 'CYLINDERS',
+        12: 'LITRES',
+        13: 'CCM_TECH',
+        14: 'FUEL_TYPE',
+        15: 'FUEL_MIXTURE_FORMATION',
+        16: 'HP',
+        17: 'KW'
+    },
+        inplace=True)
+    vehicles_res_list = []
+    for i, row in vehicles.iterrows():
+        vehicles_res_list.append(Vehicles(
+            veh_type_no=row['VEH_TYPE_NO'],
+            veh_model_no=row['VEH_MODEL_NO'],
+            veh_brand=row['VEH_BRAND'],
+            veh_model_intl=row['VEH_MODEL_INTL'],
+            veh_type_name=row['VEH_TYPE_NAME'],
+            engine_code=row['ENGINE_CODE'],
+            year=row['YEAR'],
+            body_type=row['BODY_TYPE'],
+            drive_type=row['DRIVE_TYPE'],
+            engine_type=row['ENGINE_TYPE'],
+            values_per_chamber=row['VALVES_PER_CHAMBER'],
+            cylinders=row['CYLINDERS'],
+            litres=row['LITRES'],
+            ccm_tech=row['CCM_TECH'],
+            fuel_type=row['FUEL_TYPE'],
+            fuel_mixture_formation=row['FUEL_MIXTURE_FORMATION'],
+            hp=row['HP'],
+            kw=row['KW'],
+        ))
+    Vehicles.objects.bulk_create(vehicles_res_list, batch_size=1000, ignore_conflicts=True)
+    print('---------------END Vehicles--------------------')
+
+
 def clear_data():
     Suppliers200.objects.all().delete()
     Country202.objects.all().delete()
@@ -503,22 +553,23 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        clear_data()
-        get_manufacturer()
-        get_country()
-        get_suppliers()
-        get_reference()
-        get_document()
-        get_supers()
-        get_pre_article()
-        get_article_in_country()
-        get_article_in_supers()
-        get_article_in_ref()
-        get_article_in_doc()
-        get_criteria()
-        criteria_in_article()
-        get_trade()
-        get_lnk()
-        get_table404()
-        get_table410()
+        # clear_data()
+        # get_manufacturer()
+        # get_country()
+        # get_suppliers()
+        # get_reference()
+        # get_document()
+        # get_supers()
+        # get_pre_article()
+        # get_article_in_country()
+        # get_article_in_supers()
+        # get_article_in_ref()
+        # get_article_in_doc()
+        # get_criteria()
+        # criteria_in_article()
+        # get_trade()
+        get_vehicles()
+        # get_lnk()
+        # get_table404()
+        # get_table410()
         print("--- %s seconds ---" % (time.time() - start_time))

@@ -78,6 +78,7 @@ class ArticleAPIViewItem(APIView):
         queryset5 = Suppliers200.objects.all().values("name")
         queryset6 = Country202.objects.all()
         queryset7 = CritVal210.objects.all()
+        queryset8 = Table404.objects.filter(art_no_id__in=queryset1)
         article = ArticleSerializer(queryset1, many=True)
         crit = CritSerializer(queryset2, many=True)
         reference = ReferenceSerializer(queryset3, many=True)
@@ -85,6 +86,7 @@ class ArticleAPIViewItem(APIView):
         brands = SuppliersSerializer(queryset5, many=True)
         country = Country202Serializer(queryset6, many=True)
         characteristics = CritValSerializer(queryset7, many=True)
+        # applicability =
 
         serializer = {
             "article": article.data[0],

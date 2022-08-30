@@ -118,7 +118,7 @@ def get_manufacturer():
             short_name=row['short_name'],
             term_plain=row['term_plain']
         ))
-    Manufacture203.objects.bulk_create(manufacturer_res_list, batch_size=1000, ignore_conflicts=True)
+    Manufacture203.objects.bulk_create(manufacturer_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Manufacturer--------------------')
 
 
@@ -181,7 +181,7 @@ def get_suppliers():
             post_code_pobox=postcodepobox,
             post_code_cus=postcodecus,
         ))
-    Suppliers200.objects.bulk_create(supplier_res_list, batch_size=1000, ignore_conflicts=True)
+    Suppliers200.objects.bulk_create(supplier_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Suppliers--------------------')
 
 
@@ -200,7 +200,7 @@ def get_reference():
                     ref_no=ref,
                     man_no_id=man_no_id
                 ))
-    Ref203.objects.bulk_create(ref_res_list, batch_size=1000, ignore_conflicts=True)
+    Ref203.objects.bulk_create(ref_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Reference--------------------')
 
 
@@ -221,7 +221,7 @@ def get_document():
             doc_type_one=row['doctype1'],
             doc_term_no=row['doctermnorm'],
         ))
-    Doc231and232.objects.bulk_create(doc_res_lst, batch_size=1000, ignore_conflicts=True)
+    Doc231and232.objects.bulk_create(doc_res_lst, batch_size=500, ignore_conflicts=True)
     print('---------------END Document--------------------')
 
 
@@ -235,7 +235,7 @@ def get_supers():
         super_res_list.append(Supers204(
             supers_no=supers
         ))
-    Supers204.objects.bulk_create(super_res_list, batch_size=1000, ignore_conflicts=True)
+    Supers204.objects.bulk_create(super_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Supers--------------------')
 
 
@@ -280,7 +280,7 @@ def get_pre_article():
                 art_stat=row['artstat'],
                 status_dat=row['statusdat']
             ))
-    Article200.objects.bulk_create(pre_article_res_list, batch_size=1000, ignore_conflicts=True)
+    Article200.objects.bulk_create(pre_article_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END PRE Article--------------------')
 
 
@@ -367,7 +367,7 @@ def get_article_in_ref():
             ref_no=ref_no,
             country_code=country_code
         ))
-    Ref203.objects.bulk_create(ref_res_list, batch_size=1000, ignore_conflicts=True)
+    Ref203.objects.bulk_create(ref_res_list, batch_size=500, ignore_conflicts=True)
 
     print('---------------END article_in_ref--------------------')
 
@@ -383,7 +383,7 @@ def get_criteria():# Требуется актуальный список кри
             name=row['name'],
             description=row['description']
         ))
-    CritVal210.objects.bulk_create(criteria_res_list, batch_size=1000, ignore_conflicts=True)
+    CritVal210.objects.bulk_create(criteria_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Criteria--------------------')
 
 
@@ -402,7 +402,7 @@ def criteria_in_article():
             crit_no_id=crit_no_id,
             crit_val=crit_val,
         ))
-    Crit210.objects.bulk_create(crit_res_list, batch_size=1000, ignore_conflicts=True)
+    Crit210.objects.bulk_create(crit_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Criteria_In_Article--------------------')
 
 
@@ -420,7 +420,7 @@ def get_trade():
             trade_no=trade,
             first_page=row['firstpage'],
         ))
-    Trade207.objects.bulk_create(trade_res_list, batch_size=1000, ignore_conflicts=True)
+    Trade207.objects.bulk_create(trade_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Trade--------------------')
 
 
@@ -439,7 +439,7 @@ def get_lnk():
             lnk_target_no=row['lnktargetno'],
             seq_no=row['seqno']
         ))
-    Lnk400.objects.bulk_create(lnk_res_list, batch_size=1000, ignore_conflicts=True)
+    Lnk400.objects.bulk_create(lnk_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Lnk--------------------')
 
 
@@ -458,7 +458,7 @@ def get_table404():
             lnk_target_no=row['lnktargetno'],
             sort_no=row['sortno'],
         ))
-    Table404.objects.bulk_create(table404_res_list, batch_size=1000, ignore_conflicts=True)
+    Table404.objects.bulk_create(table404_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Table404--------------------')
 
 
@@ -481,7 +481,7 @@ def get_table410():
             first_page=row['firstpage'],
             sort_no=row['sortno'],
         ))
-    Table410.objects.bulk_create(table410_res_list, batch_size=1000, ignore_conflicts=True)
+    Table410.objects.bulk_create(table410_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Table410--------------------')
 
 
@@ -531,7 +531,7 @@ def get_vehicles():
             hp=row['HP'],
             kw=row['KW'],
         ))
-    Vehicles.objects.bulk_create(vehicles_res_list, batch_size=1000, ignore_conflicts=True)
+    Vehicles.objects.bulk_create(vehicles_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Vehicles--------------------')
 
 

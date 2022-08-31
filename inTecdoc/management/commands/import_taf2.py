@@ -256,9 +256,14 @@ def get_pre_article():
     pre_article_df = get_data().drop_duplicates(subset=['artno'])
     pre_article_df['gtin'] = pre_article_df['gtin'].fillna(0)
     pre_article_res_list = []
+    print("pre_article_df", "-----", pre_article_df)
     for i, row in pre_article_df.iterrows():
+        print("i", "-------", i)
+        print("row", "-----", row)
         article = str(row['artno']).strip()
+        print("article", "-----", article)
         brand_no_id = Suppliers200.objects.filter(brand_no=int(row['brandno'])).first()
+        print("brand_no_id", "-----", brand_no_id)
         if row['gtin']:
             pre_article_res_list.append(Article200(
                 art_no=article,
@@ -270,6 +275,7 @@ def get_pre_article():
                 status_dat=row['statusdat'],
                 art_stat=row['artstat'],
             ))
+            print("IF pre_article_res_list", "--------", pre_article_res_list)
         else:
             pre_article_res_list.append(Article200(
                 art_no=article,
@@ -280,6 +286,7 @@ def get_pre_article():
                 art_stat=row['artstat'],
                 status_dat=row['statusdat']
             ))
+            print("ELSE pre_article_res_list", "--------", pre_article_res_list)
     Article200.objects.bulk_create(pre_article_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END PRE Article--------------------')
 

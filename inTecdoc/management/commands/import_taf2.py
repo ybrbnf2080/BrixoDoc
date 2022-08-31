@@ -103,7 +103,7 @@ def get_data():
     result_df = result_df.merge(data_df_203, how='left',
                                 left_on=['artno'],
                                 right_on=['artno'])
-    # print(result_df)
+    print(result_df)
     return result_df
 
 
@@ -243,15 +243,19 @@ def get_pre_article():
     Article200.objects.all().delete()
     test_df = get_data()[get_data()['genartno'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
+    print("test_df", "-----", test_df, "ttt", ttt)
 
     test_df = get_data()[get_data()['quantunit'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
+    print("test_df", "-----", test_df, "ttt", ttt)
 
     test_df = get_data()[get_data()['quantperunit'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
+    print("test_df", "-----", test_df, "ttt", ttt)
 
     test_df = get_data()[get_data()['statusdat'].notna()]
     ttt = pd.concat([test_df, get_data()]).drop_duplicates(keep=False)
+    print("test_df", "-----", test_df, "ttt", ttt)
 
     pre_article_df = get_data().drop_duplicates(subset=['artno'])
     pre_article_df['gtin'] = pre_article_df['gtin'].fillna(0)

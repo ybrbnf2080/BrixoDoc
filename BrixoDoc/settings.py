@@ -59,7 +59,7 @@ MIDDLEWARE = [
 
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    os.environ.get("CORS", "http://localhost:3000"),
 ]
 
 ROOT_URLCONF = 'BrixoDoc.urls'

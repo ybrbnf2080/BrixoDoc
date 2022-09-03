@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import *
 from rest_framework.views import APIView
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .serializers import *
 from .models import *
@@ -11,13 +12,38 @@ from .models import *
 class ArticleAPIView(APIView):
 
     def get(self, request):
-        queryset = Article200.objects.all()[:30]
-        queryset1 = Ref203.objects.filter(art_no_id__in=queryset)
-        reference = ReferenceSerializer(queryset1, many=True)
-        article = ArticleSerializer(queryset, many=True)
-        serializer = {"article": article.data, "reference": reference.data}
+        nextPage = 1
+        previousPage = 1
+        _from = 2100
+        _to = 2190
+        customers = Article200.objects.all()[_from:_to]
+        page = request.GET.get('page', 1)
+        paginator = Paginator(customers,30)
 
-        return Response(serializer)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
+
+        serializer = ArticleSerializer(data, context={'request': request}, many=True)
+
+        if data.has_next():
+            nextPage = data.next_page_number()
+        if data.has_previous():
+            previousPage = data.previous_page_number()
+
+        # queryset = Article200.objects.all()[:30]
+        queryset1 = Ref203.objects.filter(art_no_id__in=customers)
+        reference = ReferenceSerializer(queryset1, many=True)
+        # article = ArticleSerializer(queryset, many=True)
+        # serializer = {"article": serializer.data, "reference": reference.data}
+
+        return Response({'article': serializer.data, "reference": reference.data, 'count': paginator.count, 'numpages': paginator.num_pages,
+                         'nextlink': '/api/articles/?page=' + str(nextPage),
+                         'prevlink': '/api/articles/?page=' + str(previousPage)})
+
 
     def post(self, request):
         brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()

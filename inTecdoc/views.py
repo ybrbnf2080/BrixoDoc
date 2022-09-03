@@ -34,6 +34,7 @@ class ArticleAPIView(APIView):
         if data.has_previous():
             previousPage = data.previous_page_number()
 
+
         # queryset = Article200.objects.all()[:30]
         queryset1 = Ref203.objects.filter(art_no_id__in=customers)
         reference = ReferenceSerializer(queryset1, many=True)

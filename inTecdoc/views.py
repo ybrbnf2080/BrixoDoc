@@ -28,7 +28,8 @@ class ArticleAPIView(APIView):
             _from = _from + 100
             _to = _to + 100
         print("chank ", chank, " from ", _from, " to ", _to)
-        customers = Article200.objects.all()[_from:_to]
+        brand_no_get = request.GET.get('brand_no')
+        customers = Article200.objects.filter(brand_no_id__brand_no=brand_no_get)[_from:_to]
         page = request.GET.get('page', 1)
         paginator = Paginator(customers, 10)
 
@@ -47,12 +48,14 @@ class ArticleAPIView(APIView):
             previousPage = data.previous_page_number()
 
         queryset1 = Ref203.objects.filter(art_no_id__in=customers)
+        queryset2 = Suppliers200.objects.all().values('brand_no', 'name')
         reference = ReferenceSerializer(queryset1, many=True)
 
         return Response({'article': serializer.data,
                          "reference": reference.data,
                          'count': paginator.count,
                          'numpages': paginator.num_pages,
+                         'brand_no': queryset2,
                          'nextlink': '/api/v1/article/?page=' + str(nextPage),
                          'prevlink': '/api/v1/article/?page=' + str(previousPage),
                          'chank': {"from": _from, "to": _to}

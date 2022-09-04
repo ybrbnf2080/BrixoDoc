@@ -14,11 +14,23 @@ class ArticleAPIView(APIView):
     def get(self, request):
         nextPage = 1
         previousPage = 1
-        _from = 2100
-        _to = 2190
+        chank = request.GET.get('page')
+
+        _from = 0
+        _to = 100
+        if chank == None:
+            _from = 0
+            _to = 100
+        elif int(chank) <= 9:
+            _from = 0
+            _to = 100
+        else:
+            _from = _from + 100
+            _to = _to + 100
+        print("chank ", chank, " from ", _from, " to ", _to)
         customers = Article200.objects.all()[_from:_to]
         page = request.GET.get('page', 1)
-        paginator = Paginator(customers,30)
+        paginator = Paginator(customers, 10)
 
         try:
             data = paginator.page(page)
@@ -34,17 +46,17 @@ class ArticleAPIView(APIView):
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-
-        # queryset = Article200.objects.all()[:30]
         queryset1 = Ref203.objects.filter(art_no_id__in=customers)
         reference = ReferenceSerializer(queryset1, many=True)
-        # article = ArticleSerializer(queryset, many=True)
-        # serializer = {"article": serializer.data, "reference": reference.data}
 
-        return Response({'article': serializer.data, "reference": reference.data, 'count': paginator.count, 'numpages': paginator.num_pages,
-                         'nextlink': '/api/articles/?page=' + str(nextPage),
-                         'prevlink': '/api/articles/?page=' + str(previousPage)})
-
+        return Response({'article': serializer.data,
+                         "reference": reference.data,
+                         'count': paginator.count,
+                         'numpages': paginator.num_pages,
+                         'nextlink': '/api/v1/article/?page=' + str(nextPage),
+                         'prevlink': '/api/v1/article/?page=' + str(previousPage),
+                         'chank': {"from": _from, "to": _to}
+                         })
 
     def post(self, request):
         brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()
@@ -126,8 +138,6 @@ class ArticleAPIViewItem(APIView):
         }
 
         return Response(serializer)
-
-
 
     # queryset = Article200.objects.all()[:3]
     # serializer_class = ArticleSerializer

@@ -28,8 +28,7 @@ class ArticleAPIView(APIView):
             _from = _from + 100
             _to = _to + 100
         print("chank ", chank, " from ", _from, " to ", _to)
-        brand_no_get = request.GET.get('brand_no')
-        customers = Article200.objects.filter(brand_no_id__brand_no=brand_no_get)[_from:_to]
+        customers = Article200.objects.all()[_from:_to]
         page = request.GET.get('page', 1)
         paginator = Paginator(customers, 10)
 
@@ -140,6 +139,15 @@ class ArticleAPIViewItem(APIView):
             "characteristics": characteristics.data
         }
 
+        return Response(serializer)
+
+
+class ArticleFilterBrandAPIViewItem(APIView):
+
+    def get(self, request, brand_no):
+        queryset1 = Article200.objects.filter(brand_no_id__brand_no=brand_no)[:10]
+        article = ArticleSerializer(queryset1, many=True)
+        serializer = {"article": article.data}
         return Response(serializer)
 
     # queryset = Article200.objects.all()[:3]

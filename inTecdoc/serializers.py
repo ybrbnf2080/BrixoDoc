@@ -24,6 +24,7 @@ class SupersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supers204
         fields = [
+            'art_no_id',
             'supers_no'
         ]
 
@@ -85,7 +86,6 @@ class TradeSerializer(serializers.ModelSerializer):
         ]
 
 
-
 class ReferenceSerializer(serializers.ModelSerializer):
     man_no_id = ManufactureSerializer(required=False)
 
@@ -101,7 +101,6 @@ class ReferenceSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     country_id = Country202Serializer(many=True, required=False)
-    supers_id = SupersSerializer(many=True, required=False)
     doc_no_id = DocsSerializer(many=True, required=False)
     brand_no_id = SuppliersSerializer(required=False)
 
@@ -118,9 +117,9 @@ class ArticleSerializer(serializers.ModelSerializer):
             'quant_per_unit',
             'art_stat',
             'status_dat',
-            'supers_id',
             'doc_no_id'
         ]
+
 
 class ApplicabilitySerializer(serializers.ModelSerializer):
     class Meta:

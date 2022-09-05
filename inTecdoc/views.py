@@ -94,7 +94,7 @@ class ArticleAPIView(APIView):
 
     def post(self, request):
         brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()
-        Article200.objects.create(
+        Article200.objects.update(
             art_no=request.data['art_no'],
             brand_no_id=brand_name,
             gen_art_no=request.data['gen_art_no'],
@@ -148,6 +148,7 @@ class ArticleAPIViewItem(APIView):
         queryset2 = Crit210.objects.filter(art_no_id__in=queryset1)
         queryset3 = Ref203.objects.filter(art_no_id__in=queryset1)
         queryset4 = Trade207.objects.filter(art_no_id__in=queryset1)
+        queryset9 = Supers204.objects.filter(art_no_id__in=queryset1)
         queryset5 = Suppliers200.objects.all().values("name")
         queryset6 = Country202.objects.all()
         queryset7 = CritVal210.objects.all()
@@ -156,6 +157,7 @@ class ArticleAPIViewItem(APIView):
         crit = CritSerializer(queryset2, many=True)
         reference = ReferenceSerializer(queryset3, many=True)
         trade = TradeSerializer(queryset4, many=True)
+        supers = SupersSerializer(queryset9, many=True)
         brands = SuppliersSerializer(queryset5, many=True)
         country = Country202Serializer(queryset6, many=True)
         characteristics = CritValSerializer(queryset7, many=True)
@@ -166,12 +168,96 @@ class ArticleAPIViewItem(APIView):
             "crit": crit.data,
             "reference": reference.data,
             "trade": trade.data,
+            "supers": supers.data,
             "brands": brands.data,
             "country": country.data,
             "characteristics": characteristics.data
         }
 
         return Response(serializer)
+
+    def put(self, request, pk):
+        brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()
+        Article200.objects.filter(id=pk).update(
+            art_no=request.data['art_no'],
+            brand_no_id=brand_name,
+            gen_art_no=request.data['gen_art_no'],
+            quant_unit=request.data['quant_unit'],
+            quant_per_unit=request.data['quant_per_unit'],
+            art_stat=request.data['art_stat'],
+            status_dat=request.data['status_dat'],
+            gtin=request.data['gtin'],
+        )
+
+        def update_country():
+            list_country = request.data['country_id']
+            countries = []
+            for dicts in list_country:
+                country = dicts.get('country_code')
+                countries.append(country)
+            countries = Country202.objects.filter(country_code__in=countries)
+            obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+            obj.country_id.set(countries)
+
+        def update_supers():
+            supers = request.data['supers_id']
+            art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+            Supers204.objects.filter(art_no_id=art_no).delete()
+            for sup in supers:
+                art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+                Supers204.objects.create(
+                    supers_no=sup['supers_no'],
+                    art_no_id=art_no
+                )
+
+        def update_trade():
+            trades = request.data['trade_id']
+            art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+            Trade207.objects.filter(art_no_id=art_no).delete()
+            for trade in trades:
+                art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+                Trade207.objects.create(
+                    trade_no=trade['trade_no'],
+                    art_no_id=art_no
+                )
+        #
+        # def update_reference():
+        #     art_no = Article200.objects.filter(art_no=request.data['art_no_id'])
+        #     man_no = Manufacture203.objects.filter(short_name=request.data['short_name'])
+        #     Ref203.objects.create(
+        #         art_no_id=art_no,
+        #         man_no_id=man_no,
+        #         ref_no=request.data['ref_no'],
+        #         country_code=request.data['country_code'],
+        #     )
+        #
+        def update_documents():
+            list_documents = request.data['doc_no_id']
+            documents = []
+            for dicts in list_documents:
+                document = dicts.get('doc_no')
+                documents.append(document)
+            documents = Doc231and232.objects.filter(doc_no__in=documents)
+            obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+            obj.doc_no_id.set(documents)
+        #
+        update_country()
+        update_supers()
+        update_trade()
+        # update_reference()
+        update_documents()
+        # print(request.data)
+        return Response(request.data)
+
+        # def add_country():
+        #     list_country = request.data['country_id']
+        #     countries = []
+        #     for dicts in list_country:
+        #         country = dicts.get('country_code')
+        #         countries.append(country)
+        #     countries = Country202.objects.filter(country_code__in=countries)
+        #     obj = Article200.objects.filter(art_no=request.data['art_no']).first()
+        #     obj.country_id.set(countries)
 
 
 class ArticleFilterBrandAPIViewItem(APIView):

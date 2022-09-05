@@ -42,10 +42,6 @@ class DocInline(admin.TabularInline):
     model = Article200.doc_no_id.through
 
 
-class SupersInline(admin.TabularInline):
-    model = Article200.supers_id.through
-
-
 class ArticleAdmin(ModelAdmin):
     list_display = ['id',
                     'art_no',
@@ -53,13 +49,12 @@ class ArticleAdmin(ModelAdmin):
                     'brand_no_id'
                     ]
     search_fields = ['art_no']
-    # filter_horizontal = ('doc_no_id', 'supers_id', 'country_id')
+    # filter_horizontal = ('doc_no_id', 'country_id')
     inlines = [
         CountryInline,
         DocInline,
-        SupersInline,
     ]
-    exclude = ('doc_no_id', 'supers_id', 'country_id')
+    exclude = ('doc_no_id', 'country_id')
 
 
 class ManufactureAdmin(ModelAdmin):
@@ -85,6 +80,14 @@ class Trade207Admin(ModelAdmin):
                     'trade_no'
                     ]
     search_fields = ['trade_no']
+
+
+class SupersAdmin(ModelAdmin):
+    list_display = ['id',
+                    'art_no_id',
+                    'supers_no'
+                    ]
+    search_fields = ['supers_no']
 
 
 class Lnk400Admin(ModelAdmin):
@@ -115,7 +118,7 @@ admin.site.register(Article200, ArticleAdmin)
 admin.site.register(Country202)
 admin.site.register(Manufacture203, ManufactureAdmin)
 admin.site.register(Ref203, RefAdmin)
-admin.site.register(Supers204)
+admin.site.register(Supers204, SupersAdmin)
 admin.site.register(CritVal210, CritValAdmin)
 admin.site.register(Crit210, CritAdmin)
 admin.site.register(Trade207, Trade207Admin)

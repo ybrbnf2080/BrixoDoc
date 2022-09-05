@@ -59,13 +59,6 @@ class Manufacture203(models.Model):
         return self.short_name
 
 
-class Supers204(models.Model):
-    supers_no = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True)  # SupersNo204
-
-    def __str__(self):
-        return self.supers_no
-
-
 class Doc231and232(models.Model):
     doc_no = models.BigIntegerField(verbose_name="DocNo", blank=True, null=True)  # DocNo 231
     doc_name = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True)  # DocName 231
@@ -93,7 +86,6 @@ class Article200(models.Model):
     quant_per_unit = models.BigIntegerField(verbose_name="QuantPerUnit", blank=True, null=True)  # QuantPerUnit 212
     art_stat = models.BigIntegerField(verbose_name="ArtStat", blank=True, null=True)  # ArtStat 212
     status_dat = models.BigIntegerField(verbose_name="StatusDat", blank=True, null=True)  # StatusDat 212
-    supers_id = models.ManyToManyField(Supers204, blank=True, related_name='supers_article')  # SupersNo 204
     doc_no_id = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article')  # DocNo 232
 
     class Meta:
@@ -102,6 +94,15 @@ class Article200(models.Model):
 
     def __str__(self):
         return self.art_no
+
+
+class Supers204(models.Model):
+    supers_no = models.CharField(max_length=255, verbose_name="SupersNo", blank=True, null=True)  # SupersNo204
+    art_no_id = models.ForeignKey(Article200, on_delete=models.CASCADE, verbose_name='ArtNo', blank=True,
+                                  null=True)  # ArtNo 203
+
+    def __str__(self):
+        return self.supers_no
 
 
 class Ref203(models.Model):

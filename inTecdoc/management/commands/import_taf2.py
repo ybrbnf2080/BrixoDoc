@@ -225,20 +225,6 @@ def get_document():
     print('---------------END Document--------------------')
 
 
-def get_supers():
-    Supers204.objects.all().delete()
-    super_res_list = []
-    data_df_204 = get_data_in_txt('204')
-    data_df_204 = data_df_204[['artno', 'supersno']]
-    for i, row in data_df_204.iterrows():
-        supers = str(row['supersno']).strip()
-        super_res_list.append(Supers204(
-            supers_no=supers
-        ))
-    Supers204.objects.bulk_create(super_res_list, batch_size=500, ignore_conflicts=True)
-    print('---------------END Supers--------------------')
-
-
 def get_pre_article():
     Article200.objects.all().delete()
     test_df = get_data()[get_data()['genartno'].notna()]
@@ -260,14 +246,9 @@ def get_pre_article():
     pre_article_df = get_data().drop_duplicates(subset=['artno'])
     pre_article_df['gtin'] = pre_article_df['gtin'].fillna(0)
     pre_article_res_list = []
-    print("pre_article_df", "-----", pre_article_df)
     for i, row in pre_article_df.iterrows():
-        print("i", "-------", i)
-        print("row", "-----", row)
         article = str(row['artno']).strip()
-        print("article", "-----", article)
         brand_no_id = Suppliers200.objects.filter(brand_no=int(row['brandno'])).first()
-        print("brand_no_id", "-----", brand_no_id)
         if row['gtin']:
             pre_article_res_list.append(Article200(
                 art_no=article,
@@ -279,7 +260,6 @@ def get_pre_article():
                 status_dat=row['statusdat'],
                 art_stat=row['artstat'],
             ))
-            print("IF pre_article_res_list", "--------", pre_article_res_list)
         else:
             pre_article_res_list.append(Article200(
                 art_no=article,
@@ -290,7 +270,6 @@ def get_pre_article():
                 art_stat=row['artstat'],
                 status_dat=row['statusdat']
             ))
-            print("ELSE pre_article_res_list", "--------", pre_article_res_list)
     Article200.objects.bulk_create(pre_article_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END PRE Article--------------------')
 
@@ -317,26 +296,26 @@ def get_article_in_country():
     print('---------------END article_in_country--------------------')
 
 
-def get_article_in_supers():
-    data_df_204 = get_data_in_txt('204')
-    data_df_204 = data_df_204[['artno', 'supersno']]
-    data = {}
-    for i, row in data_df_204.iterrows():
-        art = str(row["artno"]).strip()
-        supers = str(row["supersno"]).strip()
-        if art in data:
-            data[art].append(supers)
-        else:
-            data[art] = []
-            data[art].append(supers)
-    for key in data:
-        # print(key, '->', data[key])
-        supers_no = Supers204.objects.filter(supers_no__in=data[key])
-        obj = Article200.objects.get(art_no=key)
-        # print(obj, '->', supers_no)
-        obj.supers_id.set(supers_no)
-
-    print('---------------END article_in_supers--------------------')
+# def get_article_in_supers():
+#     data_df_204 = get_data_in_txt('204')
+#     data_df_204 = data_df_204[['artno', 'supersno']]
+#     data = {}
+#     for i, row in data_df_204.iterrows():
+#         art = str(row["artno"]).strip()
+#         supers = str(row["supersno"]).strip()
+#         if art in data:
+#             data[art].append(supers)
+#         else:
+#             data[art] = []
+#             data[art].append(supers)
+#     for key in data:
+#         # print(key, '->', data[key])
+#         supers_no = Supers204.objects.filter(supers_no__in=data[key])
+#         obj = Article200.objects.get(art_no=key)
+#         # print(obj, '->', supers_no)
+#         obj.supers_id.set(supers_no)
+#
+#     print('---------------END article_in_supers--------------------')
 
 
 def get_article_in_doc():
@@ -433,6 +412,23 @@ def get_trade():
         ))
     Trade207.objects.bulk_create(trade_res_list, batch_size=500, ignore_conflicts=True)
     print('---------------END Trade--------------------')
+
+
+def get_supers():
+    Supers204.objects.all().delete()
+    super_res_list = []
+    data_df_204 = get_data_in_txt('204')
+    data_df_204 = data_df_204[['artno', 'supersno']]
+    for i, row in data_df_204.iterrows():
+        art = str(row["artno"]).strip()
+        supers_no = str(row["supersno"]).strip()
+        art_no_id = Article200.objects.filter(art_no=art).first()
+        super_res_list.append(Supers204(
+            art_no_id=art_no_id,
+            supers_no=supers_no,
+        ))
+    Supers204.objects.bulk_create(super_res_list, batch_size=500, ignore_conflicts=True)
+    print('---------------END Supers--------------------')
 
 
 def get_lnk():
@@ -570,15 +566,15 @@ class Command(BaseCommand):
         get_suppliers()
         get_reference()
         get_document()
-        get_supers()
         get_pre_article()
         get_article_in_country()
-        get_article_in_supers()
+        # get_article_in_supers()
         get_article_in_ref()
         get_article_in_doc()
         get_criteria()
         criteria_in_article()
         get_trade()
+        get_supers()
         get_vehicles()
         get_lnk()
         get_table404()

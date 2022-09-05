@@ -15,20 +15,52 @@ class ArticleAPIView(APIView):
         nextPage = 1
         previousPage = 1
         chank = request.GET.get('page')
+        ditrection = request.GET.get('direction')
 
-        _from = 0
-        _to = 100
-        if chank == None:
-            _from = 0
-            _to = 100
-        elif int(chank) <= 9:
-            _from = 0
-            _to = 100
-        else:
-            _from = _from + 100
-            _to = _to + 100
-        print("chank ", chank, " from ", _from, " to ", _to)
-        customers = Article200.objects.all()[_from:_to]
+        page_from = 0
+        page_to = 100
+
+        try:
+            query = Chanks.objects
+            page = query.all()
+            count = page[0].count
+        except:
+            count = 1
+        if chank is None:
+            query0 = Chanks.objects.all()
+            if not query0:
+                Chanks.objects.create(page_from=0, page_to=100, count=count)
+            else:
+                Chanks.objects.update(page_from=0, page_to=100, count=count)
+        elif count == 10 and ditrection == "next":
+            query = Chanks.objects
+            page = query.all()
+            page_from = page[0].page_from
+            page_to = page[0].page_to
+            query.update(page_from=page_from + 100, page_to=page_to + 100, count=chank)
+            query.all()
+            page_from = page[0].page_from
+            page_to = page[0].page_to
+        elif count < 10 and ditrection == "prev":
+            query = Chanks.objects
+            page = query.all()
+            page_from = page[0].page_from
+            page_to = page[0].page_to
+            if page_from - 10 < 0:
+                page_from = 10
+                page_to = 100 + 10
+            query.update(page_from=page_from - 10, page_to=page_to - 10, count=chank)
+            query.all()
+            page_from = page[0].page_from
+            page_to = page[0].page_to
+        elif chank and count < 10:
+            query = Chanks.objects
+            page = query.all()
+            page_from = page[0].page_from
+            page_to = page[0].page_to
+            query.update(count=chank)
+
+        customers = Article200.objects.all()[page_from:page_to]
         page = request.GET.get('page', 1)
         paginator = Paginator(customers, 10)
 
@@ -57,7 +89,7 @@ class ArticleAPIView(APIView):
                          'brand_no': queryset2,
                          'nextlink': '/api/v1/article/?page=' + str(nextPage),
                          'prevlink': '/api/v1/article/?page=' + str(previousPage),
-                         'chank': {"from": _from, "to": _to}
+                         'chank': {"from": page_from, "to": page_to}
                          })
 
     def post(self, request):

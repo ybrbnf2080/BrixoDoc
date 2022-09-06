@@ -88,6 +88,7 @@ class TradeSerializer(serializers.ModelSerializer):
 
 class ReferenceSerializer(serializers.ModelSerializer):
     man_no_id = ManufactureSerializer(required=False)
+    country_code = Country202Serializer(required=False)
 
     class Meta:
         model = Ref203

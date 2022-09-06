@@ -145,12 +145,12 @@ def generate_203(brand_no: str):
 
 
 def generate_204(brand_no: str):  # Вопрос в последовательности
-    objects = Supers204.objects.filter(supers_article__brand_no_id__brand_no=brand_no) \
-        .values('supers_article__art_no', 'supers_no')
+    objects = Supers204.objects.filter(art_no_id__brand_no_id__brand_no=brand_no) \
+        .values('art_no_id__art_no', 'supers_no')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'204.{brand_no}', 'w', encoding='utf-8') as file:
         for obj in objects:
             data = [
-                str(obj.get('supers_article__art_no')).ljust(22),  # ArtNo
+                str(obj.get('art_no_id__art_no')).ljust(22),  # ArtNo
                 str(brand_no).ljust(4),  # BrandNo
                 '204'.ljust(3),  # TableNo
                 ''.ljust(3),  # CountryCode

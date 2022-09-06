@@ -220,17 +220,23 @@ class ArticleAPIViewItem(APIView):
                     trade_no=trade['trade_no'],
                     art_no_id=art_no
                 )
-        #
-        # def update_reference():
-        #     art_no = Article200.objects.filter(art_no=request.data['art_no_id'])
-        #     man_no = Manufacture203.objects.filter(short_name=request.data['short_name'])
-        #     Ref203.objects.create(
-        #         art_no_id=art_no,
-        #         man_no_id=man_no,
-        #         ref_no=request.data['ref_no'],
-        #         country_code=request.data['country_code'],
-        #     )
-        #
+
+        def update_reference():
+            references = request.data['reference']
+            art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+
+            Ref203.objects.filter(art_no_id=art_no).delete()
+            for reference in references:
+                art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
+                man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
+                country_code = Country202.objects.filter(country_code=reference['country_code']).first()
+                Ref203.objects.create(
+                    art_no_id=art_no,
+                    man_no_id=man_no,
+                    ref_no=reference['ref_no'],
+                    country_code_id=country_code,
+                )
+
         def update_documents():
             list_documents = request.data['doc_no_id']
             documents = []
@@ -244,7 +250,7 @@ class ArticleAPIViewItem(APIView):
         update_country()
         update_supers()
         update_trade()
-        # update_reference()
+        update_reference()
         update_documents()
         # print(request.data)
         return Response(request.data)

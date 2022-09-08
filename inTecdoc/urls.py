@@ -13,4 +13,5 @@ urlpatterns = [
     re_path("api/v1/article/$", views.ArticleAPIView.as_view()),
     path("api/v1/article/<int:pk>/", views.ArticleAPIViewItem.as_view()),
     path("api/v1/article/brand_filter/<int:brand_no>/", views.ArticleFilterBrandAPIViewItem.as_view()),
+    path("api/v1/article/search/<str:art_no>/", views.ArticleSearchAPIViewItem.as_view()),
 ]

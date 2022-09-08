@@ -246,13 +246,12 @@ class ArticleAPIViewItem(APIView):
             documents = Doc231and232.objects.filter(doc_no__in=documents)
             obj = Article200.objects.filter(art_no=request.data['art_no']).first()
             obj.doc_no_id.set(documents)
-        #
+
         update_country()
         update_supers()
         update_trade()
         update_reference()
         update_documents()
-        # print(request.data)
         return Response(request.data)
 
         # def add_country():
@@ -270,6 +269,15 @@ class ArticleFilterBrandAPIViewItem(APIView):
 
     def get(self, request, brand_no):
         queryset1 = Article200.objects.filter(brand_no_id__brand_no=brand_no)[:10]
+        article = ArticleSerializer(queryset1, many=True)
+        serializer = {"article": article.data}
+        return Response(serializer)
+
+
+class ArticleSearchAPIViewItem(APIView):
+
+    def get(self, request, art_no):
+        queryset1 = Article200.objects.filter(art_no__contains=art_no)[:10]
         article = ArticleSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)

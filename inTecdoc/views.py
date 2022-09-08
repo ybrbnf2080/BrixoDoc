@@ -278,7 +278,7 @@ class ArticleSearchAPIViewItem(APIView):
 
     def get(self, request, art_no):
         queryset1 = Article200.objects.filter(art_no__contains=art_no)[:10]
-        article = ArticleSerializer(queryset1, many=True)
+        article = ArticleSearchSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)
 

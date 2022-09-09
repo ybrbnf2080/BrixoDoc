@@ -8,6 +8,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .serializers import *
 from .models import *
 
+from django.core.management import call_command
+
 
 class ArticleAPIView(APIView):
 
@@ -281,6 +283,20 @@ class ArticleSearchAPIViewItem(APIView):
         article = ArticleSearchSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)
+
+
+class GetExportTafAPIView(APIView):
+
+    def get(self, request):
+        call_command('export_taf24')
+        return Response("success")
+
+
+class GetImportTafAPIView(APIView):
+
+    def get(self, request):
+        call_command('import_taf2')
+        return Response("success")
 
     # queryset = Article200.objects.all()[:3]
     # serializer_class = ArticleSerializer

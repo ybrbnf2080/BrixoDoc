@@ -1,10 +1,12 @@
 import os
+import shutil
 from shutil import rmtree
 
 from django.db.models import *
 from django.conf import settings
 from django.core.management.base import BaseCommand
 import time
+import zipfile
 from inTecdoc.models import *
 
 COMPANIES = Suppliers200.objects.all()
@@ -115,7 +117,7 @@ def generate_202(brand_no: str):  # Вопрос в последовательн
 
 def generate_203(brand_no: str):
     objects = Ref203.objects.filter(art_no_id__brand_no_id__brand_no=brand_no) \
-        .values('art_no_id__art_no', 'man_no_id__man_no', 'ref_no', 'country_code')
+        .values('art_no_id__art_no', 'man_no_id__man_no', 'ref_no', 'country_code_id')
     with open(BASE_DIR / 'converted_db' / str(brand_no) / f'203.{brand_no}', 'w', encoding='utf-8') as file:
         art_sort_no = []
         sort_no = 0
@@ -133,7 +135,7 @@ def generate_203(brand_no: str):
                 str(brand_no).ljust(4),  # BrandNo
                 '203'.ljust(3),  # TableNo
                 str(obj.get('man_no_id__man_no')).rjust(6, '0'),  # ManNo
-                str(obj.get('country_code')).rjust(3, '0'),  # CountryCode
+                str(obj.get('country_code_id')).rjust(3, '0'),  # CountryCode
                 str(obj.get('ref_no')).ljust(22),  # RefNo
                 '0'.ljust(1),  # Exclude
                 str(sort_no).rjust(5, '0'),  # SortNo
@@ -425,6 +427,14 @@ def generate_410(brand_no: str):
             file.write(''.join(data) + '\n')
 
 
+def arch():
+    now_date = time.time()
+    backup_folders = BASE_DIR / 'converted_db'
+    arch_name = "backup_" + str(now_date)
+
+    shutil.make_archive(arch_name, 'zip', backup_folders)
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
@@ -449,4 +459,5 @@ class Command(BaseCommand):
             generate_404(comp.brand_no)
             generate_410(comp.brand_no)
             print("--- %s seconds ---" % (time.time() - start_time))
+        arch()
 

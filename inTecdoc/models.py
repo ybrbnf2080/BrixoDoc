@@ -182,7 +182,7 @@ class Vehicles(models.Model):
     kw = models.CharField(max_length=255, verbose_name="KW", blank=True, null=True)
 
     def __str__(self):
-        return self.veh_type_no
+        return self.veh_brand
 
 
 class Lnk400(models.Model):

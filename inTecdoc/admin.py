@@ -101,16 +101,54 @@ class Lnk400Admin(ModelAdmin):
     search_fields = ['lnk_target_no']
 
 
+class Lnk404Admin(ModelAdmin):
+    list_display = ['id',
+                    'art_no_id',
+                    'gen_art_no',
+                    'lnk_target_type',
+                    'lnk_target_no',
+                    'sort_no'
+                    ]
+    search_fields = ['lnk_target_no']
+
+
+class Lnk410Admin(ModelAdmin):
+    list_display = ['id',
+                    'art_no_id',
+                    'gen_art_no',
+                    'lnk_target_type',
+                    'lnk_target_no',
+                    'seq_no',
+                    'crit_no',
+                    'crit_val',
+                    'first_page',
+                    'sort_no'
+                    ]
+    search_fields = ['lnk_target_no']
+
+
 class VehicleAdmin(ModelAdmin):
     list_display = ['id',
                     'veh_type_no',
                     'veh_model_no',
                     'veh_brand',
+                    'veh_model_intl',
                     'veh_type_name',
                     'engine_code',
+                    'year',
+                    'body_type',
+                    'drive_type',
+                    'engine_type',
+                    'values_per_chamber',
+                    'cylinders',
+                    'litres',
                     'ccm_tech',
+                    'fuel_type',
+                    'fuel_mixture_formation',
+                    'hp',
+                    'kw'
                     ]
-    search_fields = ['veh_type_no']
+    search_fields = ['veh_brand']
 
 admin.site.site_header = "BrixoDoc"
 admin.site.register(Suppliers200, SuppliersAdmin)
@@ -124,6 +162,6 @@ admin.site.register(Crit210, CritAdmin)
 admin.site.register(Trade207, Trade207Admin)
 admin.site.register(Doc231and232, DocAdmin)
 admin.site.register(Lnk400, Lnk400Admin)
-admin.site.register(Table404)
-admin.site.register(Table410)
+admin.site.register(Table404, Lnk404Admin)
+admin.site.register(Table410, Lnk410Admin)
 admin.site.register(Vehicles, VehicleAdmin)

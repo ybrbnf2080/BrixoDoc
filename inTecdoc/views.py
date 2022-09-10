@@ -252,8 +252,8 @@ class ArticleAPIViewItem(APIView):
         update_country()
         update_supers()
         update_trade()
-        update_reference()
-        update_documents()
+        # update_reference()
+        # update_documents()
         return Response(request.data)
 
         # def add_country():

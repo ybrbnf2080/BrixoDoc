@@ -267,6 +267,26 @@ class ArticleAPIViewItem(APIView):
         #     obj.country_id.set(countries)
 
 
+class ReferencesAPIViewItem(APIView):
+    def put(self, request, pk):
+        references = request.data['reference']
+        art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
+
+        Ref203.objects.filter(art_no_id=art_no).delete()
+        for reference in references:
+            art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
+            man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
+            country_code = Country202.objects.filter(country_code=reference['country_code']).first()
+            Ref203.objects.create(
+                art_no_id=art_no,
+                man_no_id=man_no,
+                ref_no=reference['ref_no'],
+                country_code_id=country_code,
+            )
+
+        return Response(request.data)
+
+
 class ArticleFilterBrandAPIViewItem(APIView):
 
     def get(self, request, brand_no):

@@ -195,7 +195,7 @@ class ArticleAPIViewItem(APIView):
             list_country = request.data['country_id']
             countries = []
             for dicts in list_country:
-                country = dicts.get('country_code')
+                country = dicts.get('label')
                 countries.append(country)
             countries = Country202.objects.filter(country_code__in=countries)
             obj = Article200.objects.filter(art_no=request.data['art_no']).first()
@@ -208,7 +208,7 @@ class ArticleAPIViewItem(APIView):
             for sup in supers:
                 art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
                 Supers204.objects.create(
-                    supers_no=sup['supers_no'],
+                    supers_no=sup['label'],
                     art_no_id=art_no
                 )
 
@@ -219,7 +219,7 @@ class ArticleAPIViewItem(APIView):
             for trade in trades:
                 art_no = Article200.objects.filter(art_no=request.data['art_no']).first()
                 Trade207.objects.create(
-                    trade_no=trade['trade_no'],
+                    trade_no=trade['label'],
                     art_no_id=art_no
                 )
 

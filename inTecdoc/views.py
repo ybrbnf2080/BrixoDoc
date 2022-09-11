@@ -287,6 +287,48 @@ class ReferencesAPIViewItem(APIView):
         return Response(request.data)
 
 
+class CharacteristicsAPIViewItem(APIView):
+    def post(self, request, art_no_id):
+        crits = request.data['crit']
+        for crit in crits:
+            art_no = Article200.objects.filter(id=art_no_id).first()
+            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
+            crit_val = crit['crit_val']
+            if_crit = Crit210.objects.filter(art_no_id=art_no, crit_no_id=crit_no, crit_val=crit_val)
+            if not if_crit:
+                Crit210.objects.create(
+                    art_no_id=art_no,
+                    crit_no_id=crit_no,
+                    crit_val=crit_val
+                )
+        return Response(request.data)
+
+    def delete(self, request, art_no_id):
+        crits = request.data['crit']
+        for crit in crits:
+            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
+            crit_val = crit['crit_val']
+            Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).delete()
+        return Response(request.data)
+
+    def put(self, request, art_no_id):
+        crits = request.data['crit']
+        new_crit = request.data['new_crit'][0]
+        print("new_crit", new_crit)
+        for crit in crits:
+            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
+            crit_val = crit['crit_val']
+            new_art_no_id = new_crit['art_no_id']
+            new_crit_no = CritVal210.objects.filter(crit_no=new_crit['crit_no_id']['crit_no']).first()
+            new_crit_val = new_crit['crit_val']
+            Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).update(
+                art_no_id=new_art_no_id,
+                crit_no_id=new_crit_no,
+                crit_val=new_crit_val,
+            )
+        return Response(request.data)
+
+
 class ArticleFilterBrandAPIViewItem(APIView):
 
     def get(self, request, brand_no):

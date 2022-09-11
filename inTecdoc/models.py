@@ -25,9 +25,9 @@ class Suppliers200(models.Model):
     post_code_pobox = models.CharField(max_length=255, verbose_name="post_code_pobox", blank=True, null=True)
     post_code_cus = models.CharField(max_length=255, verbose_name="post_code_cus", blank=True, null=True)
 
-    class Meta:
-        verbose_name = """Производитель комплектующей"""
-        verbose_name_plural = """Производители комплектующих"""
+    # class Meta:
+    #     verbose_name = """Производитель комплектующей"""
+    #     verbose_name_plural = """Производители комплектующих"""
 
     def __str__(self):
         return self.name
@@ -51,9 +51,9 @@ class Manufacture203(models.Model):
     short_name = models.CharField(max_length=255, verbose_name="ShortName", blank=True, null=True)  # ShortName
     term_plain = models.CharField(max_length=255, verbose_name="TermPlain", blank=True, null=True)  # TermPlain
 
-    class Meta:
-        verbose_name = """Производитель авто"""
-        verbose_name_plural = """Производители авто"""
+    # class Meta:
+    #     verbose_name = """Производитель авто"""
+    #     verbose_name_plural = """Производители авто"""
 
     def __str__(self):
         return self.short_name
@@ -67,9 +67,9 @@ class Doc231and232(models.Model):
     doc_term_no = models.BigIntegerField(verbose_name="DocTermNorm", blank=True, null=True)  # DocTermNorm 231
     doc_type_one = models.BigIntegerField(verbose_name="DocTermNorm", blank=True, null=True)  # DocType 231
 
-    class Meta:
-        verbose_name = """Документ"""
-        verbose_name_plural = """Документы"""
+    # class Meta:
+    #     verbose_name = """Документ"""
+    #     verbose_name_plural = """Документы"""
 
     def __str__(self):
         return self.doc_name
@@ -88,9 +88,9 @@ class Article200(models.Model):
     status_dat = models.BigIntegerField(verbose_name="StatusDat", blank=True, null=True)  # StatusDat 212
     doc_no_id = models.ManyToManyField(Doc231and232, blank=True, related_name='doc_no_article')  # DocNo 232
 
-    class Meta:
-        verbose_name = """Артикул"""
-        verbose_name_plural = """Артикулы"""
+    # class Meta:
+    #     verbose_name = """Артикул"""
+    #     verbose_name_plural = """Артикулы"""
 
     def __str__(self):
         return self.art_no
@@ -114,9 +114,9 @@ class Ref203(models.Model):
     country_code_id = models.ForeignKey(Country202, on_delete=models.CASCADE, verbose_name='country_code', blank=True,
                                      null=True)  # CountryCode 203
 
-    class Meta:
-        verbose_name = """Комплектующая от производителя авто"""
-        verbose_name_plural = """Комплектующие от производителя авто"""
+    # class Meta:
+    #     verbose_name = """Комплектующая от производителя авто"""
+    #     verbose_name_plural = """Комплектующие от производителя авто"""
 
     def __str__(self):
         return self.ref_no
@@ -127,9 +127,9 @@ class CritVal210(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name", blank=True, null=True)  # Name
     description = models.TextField(verbose_name="Description", blank=True, null=True)  # Comment
 
-    class Meta:
-        verbose_name = """Список критерий"""
-        verbose_name_plural = """Список критерий"""
+    # class Meta:
+    #     verbose_name = """Список критерий"""
+    #     verbose_name_plural = """Список критерий"""
 
     def __str__(self):
         return self.name
@@ -142,9 +142,9 @@ class Crit210(models.Model):
                                    null=True)  # CritNo 210
     crit_val = models.CharField(max_length=255, verbose_name="CritVal", blank=True, null=True)  # CritVal 210
 
-    class Meta:
-        verbose_name = """Критерии комплектующего"""
-        verbose_name_plural = """Критерии комплектующих"""
+    # class Meta:
+    #     verbose_name = """Критерии комплектующего"""
+    #     verbose_name_plural = """Критерии комплектующих"""
 
     def __str__(self):
         return self.crit_val

@@ -318,7 +318,7 @@ class CharacteristicsAPIViewItem(APIView):
 
     def delete(self, request, art_no_id):
         crit = request.data
-        print(crit)
+
         crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
         crit_val = crit['crit_val']
         Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).delete()
@@ -328,9 +328,9 @@ class CharacteristicsAPIViewItem(APIView):
     def put(self, request, art_no_id):
         crit = request.data
         crit_id = crit['id']
-        print(crit_id)
+        print(crit)
         crit_no = CritVal210.objects.filter(crit_no=crit['crit_no']).first()
-        print(crit_no)
+
         crit_val = crit['crit_val']
         Crit210.objects.filter(art_no_id=art_no_id, id=crit_id).update(
             crit_no_id=crit_no,

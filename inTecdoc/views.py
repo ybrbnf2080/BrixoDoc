@@ -268,22 +268,35 @@ class ArticleAPIViewItem(APIView):
 
 
 class ReferencesAPIViewItem(APIView):
-    def put(self, request, pk):
+    def post(self, request, art_no_id):
         references = request.data['reference']
-        art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
-
-        Ref203.objects.filter(art_no_id=art_no).delete()
+        result = []
         for reference in references:
-            art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
+            art_no = Article200.objects.filter(id=art_no_id).first()
             man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
             country_code = Country202.objects.filter(country_code=reference['country_code']).first()
-            Ref203.objects.create(
-                art_no_id=art_no,
-                man_no_id=man_no,
-                ref_no=reference['ref_no'],
-                country_code_id=country_code,
-            )
+            if_ref = Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
+                                           country_code_id=country_code)
+            if not if_ref:
+                Ref203.objects.create(
+                    art_no_id=art_no,
+                    man_no_id=man_no,
+                    ref_no=reference['ref_no'],
+                    country_code_id=country_code,
+                )
+                result = "Success: Референс добавлен"
+            else:
+                result = "Error: Референс уже существует"
+        return Response(result)
 
+    def delete(self, request, art_no_id):
+        references = request.data['reference']
+        for reference in references:
+            art_no = Article200.objects.filter(id=art_no_id).first()
+            man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
+            country_code = Country202.objects.filter(country_code=reference['country_code']).first()
+            Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
+                                  country_code_id=country_code).delete()
         return Response(request.data)
 
 
@@ -313,20 +326,16 @@ class CharacteristicsAPIViewItem(APIView):
         return Response(request.data)
 
     def put(self, request, art_no_id):
-        crits = request.data['crit']
-        new_crit = request.data['new_crit'][0]
-        print("new_crit", new_crit)
-        for crit in crits:
-            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
-            crit_val = crit['crit_val']
-            new_art_no_id = new_crit['art_no_id']
-            new_crit_no = CritVal210.objects.filter(crit_no=new_crit['crit_no_id']['crit_no']).first()
-            new_crit_val = new_crit['crit_val']
-            Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).update(
-                art_no_id=new_art_no_id,
-                crit_no_id=new_crit_no,
-                crit_val=new_crit_val,
-            )
+        crit = request.data
+        crit_id = crit['id']
+        print(crit_id)
+        crit_no = CritVal210.objects.filter(crit_no=crit['crit_no']).first()
+        print(crit_no)
+        crit_val = crit['crit_val']
+        Crit210.objects.filter(art_no_id=art_no_id, id=crit_id).update(
+            crit_no_id=crit_no,
+            crit_val=crit_val,
+        )
         return Response(request.data)
 
 

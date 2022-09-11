@@ -268,22 +268,35 @@ class ArticleAPIViewItem(APIView):
 
 
 class ReferencesAPIViewItem(APIView):
-    def put(self, request, pk):
+    def post(self, request, art_no_id):
         references = request.data['reference']
-        art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
-
-        Ref203.objects.filter(art_no_id=art_no).delete()
+        result = []
         for reference in references:
-            art_no = Article200.objects.filter(art_no=references[0]['art_no']).first()
+            art_no = Article200.objects.filter(id=art_no_id).first()
             man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
             country_code = Country202.objects.filter(country_code=reference['country_code']).first()
-            Ref203.objects.create(
-                art_no_id=art_no,
-                man_no_id=man_no,
-                ref_no=reference['ref_no'],
-                country_code_id=country_code,
-            )
+            if_ref = Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
+                                           country_code_id=country_code)
+            if not if_ref:
+                Ref203.objects.create(
+                    art_no_id=art_no,
+                    man_no_id=man_no,
+                    ref_no=reference['ref_no'],
+                    country_code_id=country_code,
+                )
+                result = "Success: Референс добавлен"
+            else:
+                result = "Error: Референс уже существует"
+        return Response(result)
 
+    def delete(self, request, art_no_id):
+        references = request.data['reference']
+        for reference in references:
+            art_no = Article200.objects.filter(id=art_no_id).first()
+            man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
+            country_code = Country202.objects.filter(country_code=reference['country_code']).first()
+            Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
+                                  country_code_id=country_code).delete()
         return Response(request.data)
 
 

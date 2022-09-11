@@ -13,7 +13,7 @@ urlpatterns = [
     re_path("api/v1/article/$", views.ArticleAPIView.as_view()),
     path("api/v1/article/<int:pk>/", views.ArticleAPIViewItem.as_view()),
 
-    path("api/v1/references/<int:pk>/", views.ReferencesAPIViewItem.as_view()),
+    path("api/v1/references/<int:art_no_id>/", views.ReferencesAPIViewItem.as_view()),
     path("api/v1/crit/<int:art_no_id>/", views.CharacteristicsAPIViewItem.as_view()),
 
     path("api/v1/article/brand_filter/<int:brand_no>/", views.ArticleFilterBrandAPIViewItem.as_view()),

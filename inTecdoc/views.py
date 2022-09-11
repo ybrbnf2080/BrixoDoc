@@ -267,36 +267,43 @@ class ArticleAPIViewItem(APIView):
         #     obj.country_id.set(countries)
 
 
+class ManufactureSearchAPIViewItem(APIView):
+
+    def get(self, request, short_name):
+        queryset1 = Manufacture203.objects.filter(short_name__contains=short_name)[:10]
+        short_name = ManufactureSearchSerializer(queryset1, many=True)
+
+        serializer = {"ref_name": short_name.data}
+        return Response(serializer)
+
+
 class ReferencesAPIViewItem(APIView):
+
     def post(self, request, art_no_id):
-        references = request.data['reference']
-        result = []
-        for reference in references:
-            art_no = Article200.objects.filter(id=art_no_id).first()
-            man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
-            country_code = Country202.objects.filter(country_code=reference['country_code']).first()
-            if_ref = Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
-                                           country_code_id=country_code)
-            if not if_ref:
-                Ref203.objects.create(
-                    art_no_id=art_no,
-                    man_no_id=man_no,
-                    ref_no=reference['ref_no'],
-                    country_code_id=country_code,
-                )
-                result = "Success: Референс добавлен"
-            else:
-                result = "Error: Референс уже существует"
+        art_no = Article200.objects.filter(id=art_no_id).first()
+        short_name = Manufacture203.objects.filter(short_name=request.data['short_name']).first()
+        country_code = Country202.objects.filter(country_code=request.data['country_code']).first()
+        if_ref = Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name,
+                                       ref_no=request.data['ref_no'],
+                                       country_code_id=country_code)
+        if not if_ref:
+            Ref203.objects.create(
+                art_no_id=art_no,
+                man_no_id=short_name,
+                ref_no=request.data['ref_no'],
+                country_code_id=country_code,
+            )
+            result = "Success: Референс добавлен"
+        else:
+            result = "Error: Референс уже существует"
         return Response(result)
 
     def delete(self, request, art_no_id):
-        references = request.data['reference']
-        for reference in references:
-            art_no = Article200.objects.filter(id=art_no_id).first()
-            man_no = Manufacture203.objects.filter(man_no=reference['man_no_id']['man_no']).first()
-            country_code = Country202.objects.filter(country_code=reference['country_code']).first()
-            Ref203.objects.filter(art_no_id=art_no, man_no_id=man_no, ref_no=reference['ref_no'],
-                                  country_code_id=country_code).delete()
+        art_no = Article200.objects.filter(id=art_no_id).first()
+        short_name = Manufacture203.objects.filter(short_name=request.data['short_name']).first()
+        country_code = Country202.objects.filter(country_code=request.data['country_code']).first()
+        Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name, ref_no=request.data['ref_no'],
+                              country_code_id=country_code).delete()
         return Response(request.data)
 
 

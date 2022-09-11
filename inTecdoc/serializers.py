@@ -67,6 +67,14 @@ class CritSerializer(serializers.ModelSerializer):
         ]
 
 
+class ManufactureSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manufacture203
+        fields = [
+            'short_name'
+        ]
+
+
 class ManufactureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacture203

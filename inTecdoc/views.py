@@ -304,11 +304,12 @@ class CharacteristicsAPIViewItem(APIView):
         return Response(request.data)
 
     def delete(self, request, art_no_id):
-        crits = request.data['crit']
-        for crit in crits:
-            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
-            crit_val = crit['crit_val']
-            Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).delete()
+        crit = request.data
+        print(crit)
+        crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
+        crit_val = crit['crit_val']
+        Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).delete()
+
         return Response(request.data)
 
     def put(self, request, art_no_id):

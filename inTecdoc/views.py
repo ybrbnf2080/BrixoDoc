@@ -309,19 +309,21 @@ class ReferencesAPIViewItem(APIView):
 
 class CharacteristicsAPIViewItem(APIView):
     def post(self, request, art_no_id):
-        crits = request.data['crit']
-        for crit in crits:
-            art_no = Article200.objects.filter(id=art_no_id).first()
-            crit_no = CritVal210.objects.filter(crit_no=crit['crit_no_id']['crit_no']).first()
-            crit_val = crit['crit_val']
-            if_crit = Crit210.objects.filter(art_no_id=art_no, crit_no_id=crit_no, crit_val=crit_val)
-            if not if_crit:
-                Crit210.objects.create(
-                    art_no_id=art_no,
-                    crit_no_id=crit_no,
-                    crit_val=crit_val
-                )
-        return Response(request.data)
+        art_no = Article200.objects.filter(id=art_no_id).first()
+        crit = request.data['crit']
+        crit_name = CritVal210.objects.filter(name=crit['name']).first()
+        crit_val = crit['crit_val']
+        if_crit = Crit210.objects.filter(art_no_id=art_no, crit_no_id__name=crit_name, crit_val=crit_val)
+        if not if_crit:
+            Crit210.objects.create(
+                art_no_id=art_no,
+                crit_no_id=crit_name,
+                crit_val=crit_val
+            )
+            result = "Success: Референс добавлен"
+        else:
+            result = "Error: Референс уже существует"
+        return Response(result)
 
     def delete(self, request, art_no_id):
         crit = request.data

@@ -328,12 +328,12 @@ class CharacteristicsAPIViewItem(APIView):
     def put(self, request, art_no_id):
         crit = request.data['crit']
         new_crit = request.data['new_crit']
-        crit_no = CritVal210.objects.filter(crit_no=crit['crit_no']).first()
+        crit_name = CritVal210.objects.filter(name=crit['name']).first()
         crit_val = crit['crit_val']
-        new_crit_no = CritVal210.objects.filter(crit_no=new_crit['new_crit_no']).first()
+        new_crit_name = CritVal210.objects.filter(name=new_crit['new_name']).first()
         new_crit_val = new_crit['new_crit_val']
-        Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_no, crit_val=crit_val).update(
-            crit_no_id=new_crit_no,
+        Crit210.objects.filter(art_no_id=art_no_id, crit_no_id=crit_name, crit_val=crit_val).update(
+            crit_no_id=new_crit_name,
             crit_val=new_crit_val,
         )
         return Response(request.data)

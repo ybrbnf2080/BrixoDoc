@@ -47,6 +47,7 @@ class CritValSerializer(serializers.ModelSerializer):
     class Meta:
         model = CritVal210
         fields = [
+            'id',
             'crit_no',
             'name',
             'description'

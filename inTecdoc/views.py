@@ -328,7 +328,6 @@ class CharacteristicsAPIViewItem(APIView):
     def put(self, request, art_no_id):
         crit = request.data
         crit_id = crit['id']
-        print(crit)
         crit_no = CritVal210.objects.filter(crit_no=crit['crit_no']).first()
 
         crit_val = crit['crit_val']

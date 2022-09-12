@@ -301,7 +301,6 @@ class ReferencesAPIViewItem(APIView):
     def delete(self, request, art_no_id):
         art_no = Article200.objects.filter(id=art_no_id).first()
         short_name = Manufacture203.objects.filter(short_name=request.data['short_name']).first()
-        country_code = Country202.objects.filter(country_code=request.data['country_code']).first()
         Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name,
                               ref_no=request.data['ref_no']).delete()
 

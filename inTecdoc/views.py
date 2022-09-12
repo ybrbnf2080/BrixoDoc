@@ -304,6 +304,9 @@ class ReferencesAPIViewItem(APIView):
         country_code = Country202.objects.filter(country_code=request.data['country_code']).first()
         Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name, ref_no=request.data['ref_no'],
                               country_code_id=country_code).delete()
+        if not country_code:
+            Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name,
+                                  ref_no=request.data['ref_no']).delete()
         return Response(request.data)
 
 

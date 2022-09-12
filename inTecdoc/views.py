@@ -302,7 +302,8 @@ class ReferencesAPIViewItem(APIView):
         art_no = Article200.objects.filter(id=art_no_id).first()
         short_name = Manufacture203.objects.filter(short_name=request.data['short_name']).first()
         country_code = Country202.objects.filter(country_code=request.data['country_code']).first()
-        Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name, ref_no=request.data['ref_no']).delete()
+        Ref203.objects.filter(art_no_id=art_no, man_no_id__short_name=short_name,
+                              ref_no=request.data['ref_no']).delete()
 
         return Response(request.data)
 
@@ -313,7 +314,7 @@ class CharacteristicsAPIViewItem(APIView):
         crit = request.data['crit']
         crit_name = CritVal210.objects.filter(name=crit['name']).first()
         crit_val = crit['crit_val']
-        if_crit = Crit210.objects.filter(art_no_id=art_no, crit_no_id__name=crit_name, crit_val=crit_val)
+        if_crit = Crit210.objects.filter(art_no_id=art_no, crit_no_id__name=crit_name)
         if not if_crit:
             Crit210.objects.create(
                 art_no_id=art_no,

@@ -272,7 +272,7 @@ class ArticleAPIViewItem(APIView):
 class ManufactureSearchAPIViewItem(APIView):
 
     def get(self, request, short_name):
-        queryset1 = Manufacture203.objects.filter(short_name__iexact=short_name)[:10]
+        queryset1 = Manufacture203.objects.filter(short_name__icontains=short_name)[:10]
         short_name = ManufactureSearchSerializer(queryset1, many=True)
 
         serializer = {"ref_name": short_name.data}
@@ -281,7 +281,7 @@ class ManufactureSearchAPIViewItem(APIView):
 
 class ReferencesAPIViewItem(APIView):
     def get(self, request, ref_no):
-        queryset1 = Ref203.objects.filter(ref_no__iexact=ref_no)[:10]
+        queryset1 = Ref203.objects.filter(ref_no__icontains=ref_no)[:10]
         ref_no = ReferenceSearchSerializer(queryset1, many=True)
         serializer = {"ref_no": ref_no.data}
         return Response(serializer)
@@ -367,7 +367,7 @@ class ArticleFilterBrandAPIViewItem(APIView):
 class ArticleSearchAPIViewItem(APIView):
 
     def get(self, request, art_no):
-        queryset1 = Article200.objects.filter(art_no__iexact=art_no)[:10]
+        queryset1 = Article200.objects.filter(art_no__icontains=art_no)[:10]
         article = ArticleSearchSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)

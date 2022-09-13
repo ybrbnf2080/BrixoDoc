@@ -278,6 +278,11 @@ class ManufactureSearchAPIViewItem(APIView):
 
 
 class ReferencesAPIViewItem(APIView):
+    def get(self, request, ref_no):
+        queryset1 = Ref203.objects.filter(ref_no__contains=ref_no)[:10]
+        ref_no = ReferenceSearchSerializer(queryset1, many=True)
+        serializer = {"ref_name": ref_no.data}
+        return Response(serializer)
 
     def post(self, request, art_no_id):
         art_no = Article200.objects.filter(id=art_no_id).first()

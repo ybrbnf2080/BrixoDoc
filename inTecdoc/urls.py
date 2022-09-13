@@ -15,6 +15,7 @@ urlpatterns = [
 
     path("api/v1/references/<int:art_no_id>/", views.ReferencesAPIViewItem.as_view()),
     path("api/v1/manufacture_search/<str:short_name>/", views.ManufactureSearchAPIViewItem.as_view()),
+    path("api/v1/reference_search/<str:ref_no>/", views.ReferencesAPIViewItem.as_view()),
     path("api/v1/crit/<int:art_no_id>/", views.CharacteristicsAPIViewItem.as_view()),
 
     path("api/v1/article/brand_filter/<int:brand_no>/", views.ArticleFilterBrandAPIViewItem.as_view()),

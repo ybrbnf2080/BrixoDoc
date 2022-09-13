@@ -108,6 +108,13 @@ class ReferenceSerializer(serializers.ModelSerializer):
             'country_code_id'
         ]
 
+class ReferenceSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ref203
+        fields = [
+            'ref_no'
+        ]
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     country_id = Country202Serializer(many=True, required=False)

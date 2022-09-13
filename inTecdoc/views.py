@@ -10,6 +10,8 @@ from .models import *
 
 from django.core.management import call_command
 
+from inTecdoc.management.commands import export_taf24
+
 
 class ArticleAPIView(APIView):
 
@@ -270,7 +272,7 @@ class ArticleAPIViewItem(APIView):
 class ManufactureSearchAPIViewItem(APIView):
 
     def get(self, request, short_name):
-        queryset1 = Manufacture203.objects.filter(short_name__contains=short_name)[:10]
+        queryset1 = Manufacture203.objects.filter(short_name__iexact=short_name)[:10]
         short_name = ManufactureSearchSerializer(queryset1, many=True)
 
         serializer = {"ref_name": short_name.data}
@@ -279,7 +281,7 @@ class ManufactureSearchAPIViewItem(APIView):
 
 class ReferencesAPIViewItem(APIView):
     def get(self, request, ref_no):
-        queryset1 = Ref203.objects.filter(ref_no__contains=ref_no)[:10]
+        queryset1 = Ref203.objects.filter(ref_no__iexact=ref_no)[:10]
         ref_no = ReferenceSearchSerializer(queryset1, many=True)
         serializer = {"ref_no": ref_no.data}
         return Response(serializer)
@@ -365,7 +367,7 @@ class ArticleFilterBrandAPIViewItem(APIView):
 class ArticleSearchAPIViewItem(APIView):
 
     def get(self, request, art_no):
-        queryset1 = Article200.objects.filter(art_no__contains=art_no)[:10]
+        queryset1 = Article200.objects.filter(art_no__iexact=art_no)[:10]
         article = ArticleSearchSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)
@@ -375,7 +377,9 @@ class GetExportTafAPIView(APIView):
 
     def get(self, request):
         call_command('export_taf24')
-        return Response("success")
+        url = export_taf24.arch()
+        print(url)
+        return Response(f'success: {url}')
 
 
 class GetImportTafAPIView(APIView):

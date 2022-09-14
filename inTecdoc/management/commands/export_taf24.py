@@ -428,18 +428,19 @@ def generate_410(brand_no: str):
 
 
 def arch():
-    now_date = time.time()
+    now_date = str(time.strftime('%x %X')).replace('/', '-').replace(' ', '_').replace(':', '-')
     backup_folders = BASE_DIR / 'converted_db'
-    arch_name = "backup_" + str(now_date)
-
+    arch_name = backup_folders / f'arch_{now_date}.zip'
     shutil.make_archive(arch_name, 'zip', backup_folders)
+    print('Архив готов')
+    return arch_name
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         update_dirs()
+        start_time = time.time()
         for comp in COMPANIES:
-            start_time = time.time()
             generate_zero_file(comp.brand_no)
             generate_001(comp.brand_no)
             generate_040(comp.brand_no)
@@ -458,6 +459,5 @@ class Command(BaseCommand):
             generate_400(comp.brand_no)
             generate_404(comp.brand_no)
             generate_410(comp.brand_no)
-            print("--- %s seconds ---" % (time.time() - start_time))
-        arch()
+        print("--- %s seconds ---" % (time.time() - start_time))
 

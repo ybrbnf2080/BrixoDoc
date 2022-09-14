@@ -13,14 +13,14 @@ from django.core.management import call_command
 
 class ArticleAPIView(APIView):
 
-    def get(self, request):
-        nextPage = 1
-        previousPage = 1
+    def get(self, request):        
         chank = request.GET.get('page')
         ditrection = request.GET.get('direction')
+        nextPage = request.GET.get('next')
+        previousPage = request.GET.get('prev')
 
         page_from = 0
-        page_to = 100
+        page_to = 300
 
         try:
             query = Chanks.objects
@@ -31,15 +31,15 @@ class ArticleAPIView(APIView):
         if chank is None:
             query0 = Chanks.objects.all()
             if not query0:
-                Chanks.objects.create(page_from=0, page_to=100, count=count)
+                Chanks.objects.create(page_from=0, page_to=300, count=count)
             else:
-                Chanks.objects.update(page_from=0, page_to=100, count=count)
+                Chanks.objects.update(page_from=0, page_to=300, count=count)
         elif count == 10 and ditrection == "next":
             query = Chanks.objects
             page = query.all()
             page_from = page[0].page_from
             page_to = page[0].page_to
-            query.update(page_from=page_from + 100, page_to=page_to + 100, count=chank)
+            query.update(page_from=page_from + 300, page_to=page_to + 300, count=chank)
             query.all()
             page_from = page[0].page_from
             page_to = page[0].page_to
@@ -50,7 +50,7 @@ class ArticleAPIView(APIView):
             page_to = page[0].page_to
             if page_from - 10 < 0:
                 page_from = 10
-                page_to = 100 + 10
+                page_to = 300 + 10
             query.update(page_from=page_from - 10, page_to=page_to - 10, count=chank)
             query.all()
             page_from = page[0].page_from

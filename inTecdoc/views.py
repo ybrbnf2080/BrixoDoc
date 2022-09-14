@@ -13,8 +13,90 @@ from django.core.management import call_command
 
 class ArticleAPIView(APIView):
 
-    def get(self, request):        
-        chank = request.GET.get('page')
+    # def get(self, request):
+    #     chank = request.GET.get('page')
+    #     ditrection = request.GET.get('direction')
+    #     nextPage = request.GET.get('next')
+    #     previousPage = request.GET.get('prev')
+    #
+    #     page_from = 0
+    #     page_to = 300
+    #
+    #     try:
+    #         query = Chanks.objects
+    #         page = query.all()
+    #         count = page[0].count
+    #     except:
+    #         count = 1
+    #     if chank is None:
+    #         query0 = Chanks.objects.all()
+    #         if not query0:
+    #             Chanks.objects.create(page_from=0, page_to=300, count=count)
+    #         else:
+    #             Chanks.objects.update(page_from=0, page_to=300, count=count)
+    #     elif count == 10 and ditrection == "next":
+    #         query = Chanks.objects
+    #         page = query.all()
+    #         page_from = page[0].page_from
+    #         page_to = page[0].page_to
+    #         query.update(page_from=page_from + 300, page_to=page_to + 300, count=chank)
+    #         query.all()
+    #         page_from = page[0].page_from
+    #         page_to = page[0].page_to
+    #     elif count < 10 and ditrection == "prev":
+    #         query = Chanks.objects
+    #         page = query.all()
+    #         page_from = page[0].page_from
+    #         page_to = page[0].page_to
+    #         if page_from - 10 < 0:
+    #             page_from = 10
+    #             page_to = 300 + 10
+    #         query.update(page_from=page_from - 10, page_to=page_to - 10, count=chank)
+    #         query.all()
+    #         page_from = page[0].page_from
+    #         page_to = page[0].page_to
+    #     elif chank and count < 10:
+    #         query = Chanks.objects
+    #         page = query.all()
+    #         page_from = page[0].page_from
+    #         page_to = page[0].page_to
+    #         query.update(count=chank)
+    #
+    #     customers = Article200.objects.all()[page_from:page_to]
+    #     page = request.GET.get('page', 1)
+    #     paginator = Paginator(customers, 10)
+    #
+    #     try:
+    #         data = paginator.page(page)
+    #     except PageNotAnInteger:
+    #         data = paginator.page(1)
+    #     except EmptyPage:
+    #         data = paginator.page(paginator.num_pages)
+    #
+    #     serializer = ArticleSerializer(data, context={'request': request}, many=True)
+    #
+    #     if data.has_next():
+    #         nextPage = data.next_page_number()
+    #     if data.has_previous():
+    #         previousPage = data.previous_page_number()
+    #
+    #     queryset1 = Ref203.objects.filter(art_no_id__in=customers)
+    #     queryset2 = Suppliers200.objects.all().values('brand_no', 'name')
+    #     reference = ReferenceSerializer(queryset1, many=True)
+    #
+    #     return Response({'article': serializer.data,
+    #                      "reference": reference.data,
+    #                      'count': paginator.count,
+    #                      'numpages': paginator.num_pages,
+    #                      'brand_no': queryset2,
+    #                      'nextlink': '/api/v1/article/?page=' + str(nextPage),
+    #                      'prevlink': '/api/v1/article/?page=' + str(previousPage),
+    #                      'chank': {"from": page_from, "to": page_to}
+    #                      })
+
+
+    def get(self, request):
+        chank = request.GET.get('pages')
         ditrection = request.GET.get('direction')
         nextPage = request.GET.get('next')
         previousPage = request.GET.get('prev')
@@ -22,49 +104,9 @@ class ArticleAPIView(APIView):
         page_from = 0
         page_to = 300
 
-        try:
-            query = Chanks.objects
-            page = query.all()
-            count = page[0].count
-        except:
-            count = 1
-        if chank is None:
-            query0 = Chanks.objects.all()
-            if not query0:
-                Chanks.objects.create(page_from=0, page_to=300, count=count)
-            else:
-                Chanks.objects.update(page_from=0, page_to=300, count=count)
-        elif count == 10 and ditrection == "next":
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            query.update(page_from=page_from + 300, page_to=page_to + 300, count=chank)
-            query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-        elif count < 10 and ditrection == "prev":
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            if page_from - 10 < 0:
-                page_from = 10
-                page_to = 300 + 10
-            query.update(page_from=page_from - 10, page_to=page_to - 10, count=chank)
-            query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-        elif chank and count < 10:
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            query.update(count=chank)
-
         customers = Article200.objects.all()[page_from:page_to]
         page = request.GET.get('page', 1)
-        paginator = Paginator(customers, 10)
+        paginator = Paginator(customers, chank)
 
         try:
             data = paginator.page(page)

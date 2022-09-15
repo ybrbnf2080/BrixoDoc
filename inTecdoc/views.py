@@ -12,6 +12,8 @@ from django.core.management import call_command
 
 from inTecdoc.management.commands import export_taf24
 BASE_DIR = settings.BASE_DIR
+MEDIA_ROOT = settings.MEDIA_ROOT
+ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 
 class ArticleAPIView(APIView):
@@ -401,15 +403,18 @@ class DocAPIViewItem(APIView):
     def get(self, request, art_no_id):
         queryset1 = Article200.objects.filter(id=art_no_id).values('doc_no_id__doc_name')
         queryset2 = Doc231and232.objects.filter(doc_name__in=queryset1)
-        dir_name_image = BASE_DIR / 'ImportTAF' / 'sources_tec' / 'image'
+
+        domen = request.META['HTTP_HOST']
+
+        dir_name_image = MEDIA_ROOT
+        new_dir = f'http://{domen}/ImportTAF/sources_tec/image'
         files = os.listdir(dir_name_image)
         path_image = []
         for query in queryset2:
             if f'{query}.BMP' in files:
-                path_image.append(f'{dir_name_image}/{query}.BMP')
+                path_image.append(f'{new_dir}/{query}.BMP')
         doc = DocsSerializer(queryset2, many=True)
-        doc_image = path_image
-        serializer = {"doc": doc.data, "doc_image": doc_image}
+        serializer = {"doc": doc.data, "doc_image": path_image}
         return Response(serializer)
 
 

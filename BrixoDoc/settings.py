@@ -138,9 +138,13 @@ USE_TZ = True
 
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#
+# MEDIA_URL = '/media/'
 
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'ImportTAF/sources_tec/image/')
+
+MEDIA_URL = '/ImportTAF/sources_tec/image/'
 
 
 STATIC_URL = "/static/"

@@ -398,16 +398,18 @@ class CharacteristicsAPIViewItem(APIView):
 
 
 class DocAPIViewItem(APIView):
-    def get(self, request, doc_name):
-        queryset1 = Doc231and232.objects.filter(doc_name=doc_name)
-        doc = DocsSerializer(queryset1, many=True)
+    def get(self, request, art_no_id):
+        queryset1 = Article200.objects.filter(id=art_no_id).values('doc_no_id__doc_name')
+        queryset2 = Doc231and232.objects.filter(doc_name__in=queryset1)
         dir_name_image = BASE_DIR / 'ImportTAF' / 'sources_tec' / 'image'
         files = os.listdir(dir_name_image)
-        path_image = ''
-        if f'{doc_name}.BMP' in files:
-            path_image = f'{dir_name_image}/{doc_name}.BMP'
-
-        serializer = {"ref_no": doc.data, "path": path_image}
+        path_image = []
+        for query in queryset2:
+            if f'{query}.BMP' in files:
+                path_image.append(f'{dir_name_image}/{query}.BMP')
+        doc = DocsSerializer(queryset2, many=True)
+        doc_image = path_image
+        serializer = {"doc": doc.data, "doc_image": doc_image}
         return Response(serializer)
 
 

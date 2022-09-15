@@ -15,6 +15,7 @@ from inTecdoc.management.commands import export_taf24
 BASE_DIR = settings.BASE_DIR
 MEDIA_ROOT = settings.MEDIA_ROOT
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
+DIR_OUT = settings.DIR_OUT
 
 
 class ArticleAPIView(APIView):
@@ -357,11 +358,9 @@ class DocAPIViewItem(APIView):
     def get(self, request, art_no_id):
         queryset1 = Article200.objects.filter(id=art_no_id).values('doc_no_id__doc_name')
         queryset2 = Doc231and232.objects.filter(doc_name__in=queryset1)
-
         domen = request.META['HTTP_HOST']
-
-        dir_name_image = MEDIA_ROOT
-        new_dir = f'http://{domen}/ImportTAF/sources_tec/image'
+        dir_name_image = f'{DIR_OUT}/BrixoDocFile/image/'
+        new_dir = f'http://{domen}/BrixoDocFile/image'
         files = os.listdir(dir_name_image)
         path_image = []
         for query in queryset2:

@@ -11,6 +11,7 @@ from .models import *
 from django.core.management import call_command
 
 from inTecdoc.management.commands import export_taf24
+
 BASE_DIR = settings.BASE_DIR
 
 
@@ -18,54 +19,46 @@ class ArticleAPIView(APIView):
 
     def get(self, request):
         chunk = request.GET.get('chunk')
-        direction = request.GET.get('direction')
         nextPage = request.GET.get('next')
         previousPage = request.GET.get('prev')
-        print("Test request ", chunk, direction, nextPage, previousPage)
-        page_from = 0
-        page_to = 100
+        page_from = request.GET.get('page_from')
+        page_to = request.GET.get('page_to')
 
-        try:
-            query = Chanks.objects
-            page = query.all()
-            count = page[0].count
-        except:
-            count = 1
-        if chunk is None:
-            query0 = Chanks.objects.all()
-            if not query0:
-                Chanks.objects.create(page_from=0, page_to=100, count=count)
-            else:
-                Chanks.objects.update(page_from=0, page_to=100, count=count)
-        elif count == 10 and direction == "next":
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            query.update(page_from=page_from + 100, page_to=page_to + 100, count=chunk)
-            query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-        elif count < 10 and direction == "prev":
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            if page_from - 10 < 0:
-                page_from = 10
-                page_to = 100 + 10
-            query.update(page_from=page_from - 10, page_to=page_to - 10, count=chunk)
-            query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-        elif chunk and count < 10:
-            query = Chanks.objects
-            page = query.all()
-            page_from = page[0].page_from
-            page_to = page[0].page_to
-            query.update(count=chunk)
+        # if chunk is None:
+        #     query0 = Chanks.objects.all()
+        #     if not query0:
+        #         Chanks.objects.create(page_from=0, page_to=100, count=count)
+        #     else:
+        #         Chanks.objects.update(page_from=0, page_to=100, count=count)
+        # elif count == 10 and direction == "next":
+        #     query = Chanks.objects
+        #     page = query.all()
+        #     page_from = page[0].page_from
+        #     page_to = page[0].page_to
+        #     query.update(page_from=page_from + 100, page_to=page_to + 100, count=chunk)
+        #     query.all()
+        #     page_from = page[0].page_from
+        #     page_to = page[0].page_to
+        # elif int(count) < 10 and direction == "prev":
+        #     query = Chanks.objects
+        #     page = query.all()
+        #     page_from = page[0].page_from
+        #     page_to = page[0].page_to
+        #     if page_from - 10 < 0:
+        #         page_from = 10
+        #         page_to = 100 + 10
+        #     query.update(page_from=page_from - 10, page_to=page_to - 10, count=chunk)
+        #     query.all()
+        #     page_from = page[0].page_from
+        #     page_to = page[0].page_to
+        # elif chunk and int(count) < 10:
+        #     query = Chanks.objects
+        #     page = query.all()
+        #     page_from = page[0].page_from
+        #     page_to = page[0].page_to
+        #     query.update(count=chunk)
 
-        customers = Article200.objects.all()[page_from:page_to]
+        customers = Article200.objects.all()[int(page_from):int(page_to)]
         page = request.GET.get('page', 1)
         paginator = Paginator(customers, chunk)
 
@@ -97,46 +90,7 @@ class ArticleAPIView(APIView):
                          'chunk': {"from": page_from, "to": page_to}
                          })
 
-    # def get(self, request):
-    #     chunk = request.GET.get('pages')
-    #     direction = request.GET.get('direction')
-    #     nextPage = request.GET.get('next')
-    #     previousPage = request.GET.get('prev')
-    #
-    #     page_from = 0
-    #     page_to = 60
-    #
-    #     customers = Article200.objects.all()[page_from:page_to]
-    #     page = request.GET.get('page', 1)
-    #     paginator = Paginator(customers, chunk)
-    #
-    #     try:
-    #         data = paginator.page(page)
-    #     except PageNotAnInteger:
-    #         data = paginator.page(1)
-    #     except EmptyPage:
-    #         data = paginator.page(paginator.num_pages)
-    #
-    #     serializer = ArticleSerializer(data, context={'request': request}, many=True)
-    #
-    #     if data.has_next():
-    #         nextPage = data.next_page_number()
-    #     if data.has_previous():
-    #         previousPage = data.previous_page_number()
-    #
-    #     queryset1 = Ref203.objects.filter(art_no_id__in=customers)
-    #     queryset2 = Suppliers200.objects.all().values('brand_no', 'name')
-    #     reference = ReferenceSerializer(queryset1, many=True)
-    #
-    #     return Response({'article': serializer.data,
-    #                      "reference": reference.data,
-    #                      'count': paginator.count,
-    #                      'numpages': paginator.num_pages,
-    #                      'brand_no': queryset2,
-    #                      'nextlink': '/api/v1/article/?page=' + str(nextPage),
-    #                      'prevlink': '/api/v1/article/?page=' + str(previousPage),
-    #                      'chunk': {"from": page_from, "to": page_to}
-    #                      })
+
 
     def post(self, request):
         brand_name = Suppliers200.objects.filter(name=request.data['brand_no_id']['name']).first()
@@ -426,7 +380,7 @@ class ArticleSearchAPIViewItem(APIView):
 
     def get(self, request, art_no):
         queryset1 = Article200.objects.filter(art_no__icontains=art_no)[:10]
-        article = ArticleSearchSerializer(queryset1, many=True)
+        article = ArticleSerializer(queryset1, many=True)
         serializer = {"article": article.data}
         return Response(serializer)
 

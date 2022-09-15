@@ -230,9 +230,3 @@ class Table410(models.Model):
 
     def __str__(self):
         return self.art_no_id.art_no
-
-
-class Chanks(models.Model):
-    page_from = models.BigIntegerField(blank=True, null=True)
-    page_to = models.BigIntegerField(blank=True, null=True)
-    count = models.IntegerField(blank=True, null=True)

@@ -138,15 +138,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         ]
 
 
-class ArticleSearchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article200
-        fields = [
-            'id',
-            'art_no'
-        ]
-
-
 class ApplicabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Table410

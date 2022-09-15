@@ -144,9 +144,9 @@ USE_TZ = True
 #
 # MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(DIR_OUT, 'BrixoDocFile/image/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'image/')
 
-MEDIA_URL = '/BrixoDocFile/image/'
+MEDIA_URL = '/image/'
 
 
 STATIC_URL = "/static/"

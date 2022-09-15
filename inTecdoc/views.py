@@ -11,6 +11,7 @@ from .models import *
 from django.core.management import call_command
 
 from inTecdoc.management.commands import export_taf24
+BASE_DIR = settings.BASE_DIR
 
 
 class ArticleAPIView(APIView):
@@ -394,6 +395,20 @@ class CharacteristicsAPIViewItem(APIView):
             crit_val=new_crit_val,
         )
         return Response(request.data)
+
+
+class DocAPIViewItem(APIView):
+    def get(self, request, doc_name):
+        queryset1 = Doc231and232.objects.filter(doc_name=doc_name)
+        doc = DocsSerializer(queryset1, many=True)
+        dir_name_image = BASE_DIR / 'ImportTAF' / 'sources_tec' / 'image'
+        files = os.listdir(dir_name_image)
+        path_image = ''
+        if f'{doc_name}.BMP' in files:
+            path_image = f'{dir_name_image}/{doc_name}.BMP'
+
+        serializer = {"ref_no": doc.data, "path": path_image}
+        return Response(serializer)
 
 
 class ArticleFilterBrandAPIViewItem(APIView):

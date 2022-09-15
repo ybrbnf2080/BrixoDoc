@@ -355,7 +355,7 @@ def get_article_in_ref():
             art_no_id=art_no_id,
             man_no_id=man_no_id,
             ref_no=ref_no,
-            country_code=country_code
+            country_code_id=country_code
         ))
     Ref203.objects.bulk_create(ref_res_list, batch_size=500, ignore_conflicts=True)
 
@@ -560,15 +560,14 @@ def clear_data():
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         start_time = time.time()
-        clear_data()
-        get_manufacturer()
-        get_country()
-        get_suppliers()
-        get_reference()
-        get_document()
-        get_pre_article()
-        get_article_in_country()
-        # get_article_in_supers()
+        # clear_data()
+        # get_manufacturer()
+        # get_country()
+        # get_suppliers()
+        # get_reference()
+        # get_document()
+        # get_pre_article()
+        # get_article_in_country()
         get_article_in_ref()
         get_article_in_doc()
         get_criteria()

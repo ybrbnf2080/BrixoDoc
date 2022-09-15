@@ -1,4 +1,8 @@
 from django.db import models
+from django.conf import settings
+
+BASE_DIR = settings.BASE_DIR
+import os
 
 
 class Suppliers200(models.Model):
@@ -59,6 +63,9 @@ class Manufacture203(models.Model):
         return self.short_name
 
 
+# BASE_DIR = 'C:/Users/Sirius_McLine/PycharmProjects/BrixoDoc/'
+
+
 class Doc231and232(models.Model):
     doc_no = models.BigIntegerField(verbose_name="DocNo", blank=True, null=True)  # DocNo 231
     doc_name = models.CharField(max_length=255, verbose_name="DocName", blank=True, null=True)  # DocName 231
@@ -112,7 +119,7 @@ class Ref203(models.Model):
                                   null=True)  # ManNo 203
     ref_no = models.CharField(max_length=255, verbose_name="RefNo", blank=True, null=True)  # RefNo 203
     country_code_id = models.ForeignKey(Country202, on_delete=models.CASCADE, verbose_name='country_code', blank=True,
-                                     null=True)  # CountryCode 203
+                                        null=True)  # CountryCode 203
 
     # class Meta:
     #     verbose_name = """Комплектующая от производителя авто"""
